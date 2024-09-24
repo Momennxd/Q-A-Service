@@ -1,5 +1,4 @@
 ﻿using Core_Layer.AppDbContext;
-using DataAccess_Layer;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,6 +7,10 @@ namespace API_Layer.Authorization
 {
     public class PermissionBasedAuthorizationFilters : IAsyncAuthorizationFilter
     {
+
+
+
+
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             var attribute = (CheckPermissionAttribute?)context.ActionDescriptor.EndpointMetadata
@@ -27,11 +30,11 @@ namespace API_Layer.Authorization
 
             
 
-            using (AppDbContext EF_Core_Context = await clsService.contextFactory!.CreateDbContextAsync())
-            {
+            //using (AppDbContext EF_Core_Context = await clsService.contextFactory!.CreateDbContextAsync())
+            //{
 
-                // logic perform permissions proces
-            }
+            //    // logic perform permissions proces
+            //}
         }
     }
 }
