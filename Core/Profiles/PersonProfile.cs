@@ -15,7 +15,11 @@ namespace Core.Profiles
         public PersonProfile()
         {
 
-            CreateMap<Person, DTOs.People.PeopleDTOs.AddPersonDTO>();
+            CreateMap<DTOs.People.PeopleDTOs.AddPersonDTO, Person>()
+            .ForMember(dest => dest.JoinedDate, opt => opt.MapFrom(src => DateTime.Now));
+        
+            CreateMap<Person, DTOs.People.PeopleDTOs.SendPersonDTO>();
+
 
         }
 

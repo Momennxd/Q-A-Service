@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,13 @@ namespace Data.Repositories
         public Task<List<T>?> GetAllItemsAsync();
 
 
-        public Task AddItemAsync(T Item);
+        public Task<EntityEntry> AddItemAsync(T Item);
 
 
         public Task UpdateItemAsync(dynamic Id, T UpdatedItem);
 
 
-        public Task DeleteItemAsync(T ItemPK);
+        public Task DeleteItemAsync(dynamic ItemPK);
 
 
         public T PatchItem(JsonPatchDocument<T> NewItem, dynamic ItemPK);

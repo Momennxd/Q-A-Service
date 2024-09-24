@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Core.Services.Concrete
+namespace Core.Services.Concrete.Security
 {
     /// <summary>
     /// Hashing and compare data

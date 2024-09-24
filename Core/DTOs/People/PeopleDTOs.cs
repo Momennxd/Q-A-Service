@@ -3,9 +3,10 @@
 namespace Core.DTOs.People
 {
 
-    public class PeopleDTOs 
+    public sealed class PeopleDTOs 
     {
-        public class AddPersonDTO
+
+        public class BasePersonDTO
         {
             public string FirstName { get; set; }
             public string? SecondName { get; set; }
@@ -24,42 +25,21 @@ namespace Core.DTOs.People
 
         }
 
-
-
-
-
-        public class AddUserDTO
+        public class AddPersonDTO : BasePersonDTO
         {
-            AddPersonDTO person;
+          
 
-            public string username;
         }
 
+        public class SendPersonDTO : BasePersonDTO
+        {
+            public int PersonID { get; set; }
+
+            public DateTime JoinedDate { get; set; }
 
 
+        }
 
-        //public static Entities.People.ePersonDA? ConvertFromDTOtoEntity(AddPersonDTO dto)
-        //{
-        //    if(dto == null) return null;
-
-
-
-        //    return new ePersonDA() 
-        //    { 
-        //        FirstName = dto.FirstName,
-        //        SecondName = dto.SecondName,
-        //        LastName = dto.LastName,
-        //        Address = dto.Address, 
-        //        Gender = dto.Gender,
-        //        CountryID = dto.CountryID,
-        //        DateOfBirth = dto.DateOfBirth,
-        //        JoinedDate = DateTime.Now,
-        //        Email = dto.Email,
-        //        Notes = dto.Notes,
-        //        PreferredLanguageID = dto.PreferredLanguageID,
-        //        ProfilePicURL = dto.ProfilePicURL
-        //    };
-        //}
 
     }
 }

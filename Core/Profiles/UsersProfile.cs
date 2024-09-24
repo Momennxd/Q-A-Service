@@ -16,7 +16,6 @@ namespace Core.Profiles
         {
 
             CreateMap<User, Core.DTOs.People.UsersDTOs.AddUserDTO>();
-            //CreateMap<PeopleDTOs.AddPersonDTO, UsersDTOs.AddUserDTO>();
 
         }
 

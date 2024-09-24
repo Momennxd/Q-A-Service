@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core_Layer.models.People;
 
 public partial class Person
 {
-    public int PersonId { get; set; }
+    [Key]
+    public int PersonID { get; set; }
 
     public string FirstName { get; set; } = null!;
 

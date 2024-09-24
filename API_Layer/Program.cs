@@ -15,6 +15,7 @@ using System.Net;
 using API_Layer.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using Core.Services.Concrete.Users;
+using Core.Services.Concrete.People;
 
 
 
@@ -37,6 +38,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PeopleService>();
 
 
 
@@ -124,8 +126,11 @@ app.UseExceptionHandler(config =>
                 case UnauthorizedAccessException:
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     break;
+                case KeyNotFoundException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    break;
 
-                
+
                     // Add more cases as needed
             }
 

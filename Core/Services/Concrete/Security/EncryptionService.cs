@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace Core.Services.Concrete
+namespace Core.Services.Concrete.Security
 {
     public class EncryptionService
     {

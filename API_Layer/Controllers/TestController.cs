@@ -1,5 +1,7 @@
 ﻿using API_Layer.Security;
 using AutoMapper;
+using Core.DTOs.People;
+using Core.Services.Concrete.People;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
@@ -15,24 +17,22 @@ using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
-    [Route("API/People")]
+    [Route("API/Test")]
     [ApiController]
     public class TestController : ControllerBase
     {
 
-        public TestController(IMapper mapper, UserService userService)
+        public TestController(UserService userService, PeopleService ps)
         {
-            _mapper = mapper;
-
-
+            PeopleService = ps;
             userSerivce = userService;
         }
 
         //private ILogger _Logger;
 
-        private IMapper _mapper;
 
         private readonly IUserService userSerivce;
+        private readonly IPersonService PeopleService;
 
 
         //[HttpGet]
@@ -70,5 +70,27 @@ namespace API_Layer.Controllers.Collections
             return Ok(userDto);
         }
 
+
+        [HttpGet("People")]
+        public async Task<IActionResult> GetPeople()
+        {
+            var userDto = await PeopleService.GetAllPersonsAsync();
+            return Ok(userDto);
+        }
+
+        [HttpPost("Person")]
+        public async Task<IActionResult> AddPerson([FromBody] PeopleDTOs.AddPersonDTO dto)
+        {
+            var userDto = await PeopleService.CreatePersonAsync(dto);
+            return Ok(userDto);
+        }
+
+
+        [HttpDelete("Person")]
+        public async Task<IActionResult> deletePerson(int id)
+        {
+            var userDto = await PeopleService.DeletePersonAsync(id);
+            return Ok(userDto);
+        }
     }
 }

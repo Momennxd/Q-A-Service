@@ -1,6 +1,7 @@
 using Core_Layer.AppDbContext;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories
@@ -42,22 +43,30 @@ namespace Data.Repositories
 
 
 
-        public virtual async Task AddItemAsync(T Item)
+        public virtual async Task<EntityEntry> AddItemAsync(T Item)
         {
-            await _dbSet.AddAsync(Item);
+            return await _dbSet.AddAsync(Item);
         }
 
 
         public virtual async Task UpdateItemAsync(dynamic Id, T UpdatedItem)
         {
-
+            // Find the existing item in the database
             T? item = await _dbSet.FindAsync(Id);
 
+            if (item == null)
+            {
+                // Optionally, handle the case where the item is not found
+                throw new ArgumentException($"Item with Id {Id} not found");
+            }
+
+            // Update the existing entity's values with the new data
             _appDbContext.Entry(item).CurrentValues.SetValues(UpdatedItem);
 
         }
 
-        public virtual async Task DeleteItemAsync(T ItemPK)
+
+        public virtual async Task DeleteItemAsync(dynamic ItemPK)
         {
             T? item = await _dbSet.FindAsync(ItemPK);
 

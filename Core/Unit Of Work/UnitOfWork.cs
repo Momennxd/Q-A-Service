@@ -2,6 +2,7 @@
 using Core_Layer.AppDbContext;
 using Core_Layer.models.People;
 using Data.Repositories;
+using Data.Repository.Entities_Repositories.People_Repo;
 using Microsoft.Extensions.Logging;
 
 
@@ -10,7 +11,15 @@ namespace Core.Unit_Of_Work
 {
     public class UnitOfWork : IUnitOfWork
     {
+
+
+        //REPOs
         public IUserRepo Users { get;}
+
+        public IPersonRepo People { get; }
+
+
+
 
 
         private AppDbContext _appDbContext;
@@ -27,6 +36,7 @@ namespace Core.Unit_Of_Work
             _appDbContext = context;
 
             Users = new UserRepo(logger, context);
+            People = new PersonRepo(logger, context);
 
         }
 
@@ -34,7 +44,7 @@ namespace Core.Unit_Of_Work
 
         public async Task<int> CompleteAsync()
         {
-           return await _appDbContext.SaveChangesAsync();
+            return await _appDbContext.SaveChangesAsync();
         }
 
         public async void Dispose()
