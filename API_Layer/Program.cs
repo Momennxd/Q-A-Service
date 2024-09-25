@@ -1,4 +1,3 @@
-using API_Layer;
 using API_Layer.Authorization;
 using API_Layer.Security;
 using Core_Layer.AppDbContext;
@@ -6,9 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Core.Unit_Of_Work;
-using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
@@ -16,6 +12,9 @@ using API_Layer.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using Core.Services.Concrete.Users;
 using Core.Services.Concrete.People;
+using Core.Services.Concrete.Collections;
+using Core.Authorization_Services.Concrete;
+using System.Linq.Expressions;
 
 
 
@@ -39,6 +38,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PeopleService>();
+builder.Services.AddScoped<CollectionService>();
+builder.Services.AddScoped<CollectionsAuthService>();
 
 
 
@@ -115,7 +116,7 @@ app.UseExceptionHandler(config =>
             var ex = error.Error;
 
             // Default to 500 Internal Server Error
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             // Check for specific exceptions
             switch (ex)
@@ -129,7 +130,13 @@ app.UseExceptionHandler(config =>
                 case KeyNotFoundException:
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
-
+                case ArgumentNullException:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+                case FormatException:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+               
 
                     // Add more cases as needed
             }

@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core_Layer.models.Collections;
 
-public partial class Qcollection
+public partial class QCollection
 {
+
     [Key]
     public int CollectionId { get; set; }
 
-    public string CollectionName { get; set; } = null!;
+    public string CollectionName { get; set; }
 
     public string? Description { get; set; }
 

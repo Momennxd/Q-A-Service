@@ -66,7 +66,7 @@ namespace Data.Repositories
         }
 
 
-        public virtual async Task DeleteItemAsync(dynamic ItemPK)
+        public async virtual Task DeleteItemAsync(dynamic ItemPK)
         {
             T? item = await _dbSet.FindAsync(ItemPK);
 
@@ -75,26 +75,7 @@ namespace Data.Repositories
 
 
 
-        public virtual T PatchItem(JsonPatchDocument<T> NewItem, dynamic ItemPK)
-        {
-
-
-            if (NewItem == null || _appDbContext == null)
-                return null;
-
-             
-            T Item = _dbSet.Find(ItemPK);
-
-            //id does not exist
-            if (Item == null)
-                return null;
-
-            NewItem.ApplyTo(Item);
-            return Item;
-
-          
-           
-        }
+       
 
 
     }

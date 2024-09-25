@@ -17,7 +17,7 @@ namespace Core_Layer.AppDbContext
         public virtual DbSet<Person> People { get; set; }
 
 
-        public virtual DbSet<Qcollection> Qcollections { get; set; }
+        public virtual DbSet<QCollection> QCollections { get; set; }
 
        
 

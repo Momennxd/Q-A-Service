@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core_Layer.models.Collections;
+using Core.DTOs.Collections;
 
 namespace Core.Profiles
 {
@@ -16,11 +17,15 @@ namespace Core.Profiles
         public CollectionsProfile()
         {
 
-            CreateMap<Qcollection, DTOs.Collections.QCollectionsDTOs.SendQCollectionDTO>();
+            CreateMap<QCollection, CollectionsDTOs.CreateQCollectionDTO>();
 
 
+            CreateMap<QCollection, CollectionsDTOs.SendCollectionDTO>();
 
-            CreateMap<Qcollection, DTOs.Collections.QCollectionsDTOs.CreateQCollectionDTO>();
+            CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
+           .ForMember(dest => dest.AddedTime, opt => opt.MapFrom(src => DateTime.Now))
+           .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
+
 
 
         }

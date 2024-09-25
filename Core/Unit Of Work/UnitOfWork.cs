@@ -1,7 +1,10 @@
 ﻿using Core.Services.Concrete;
+using Core.Services.Interfaces;
 using Core_Layer.AppDbContext;
+using Core_Layer.models.Collections;
 using Core_Layer.models.People;
 using Data.Repositories;
+using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.People_Repo;
 using Microsoft.Extensions.Logging;
 
@@ -18,6 +21,7 @@ namespace Core.Unit_Of_Work
 
         public IPersonRepo People { get; }
 
+        public ICollectionRepo Collections { get; }
 
 
 
@@ -37,6 +41,7 @@ namespace Core.Unit_Of_Work
 
             Users = new UserRepo(logger, context);
             People = new PersonRepo(logger, context);
+            Collections = new CollectionRepo(logger, context);
 
         }
 

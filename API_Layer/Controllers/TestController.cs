@@ -35,62 +35,28 @@ namespace API_Layer.Controllers.Collections
         private readonly IPersonService PeopleService;
 
 
-        //[HttpGet]
-        //[Route("GetClaims")]
-        //[Authorize]
-        //public IActionResult GetClaims()
-        //{
-        //    var claims = HttpContext.User.Identity as ClaimsIdentity;
-
-        //    var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        //    return Ok(new { UserId = userId });
-        //}
-        //[HttpPost]
-        //public ActionResult CreateNewToken(int userID)
-        //{
-        //    return Ok(clsToken.CreateToken(userID));
-        //}
-
-        //EndPoints------------------------------------------------------->
-
-
-        [HttpGet("Users")]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet]
+        [Route("GetClaims")]
+        [Authorize]
+        public IActionResult GetClaims()
         {
-            var userDto = await userSerivce.GetAllUsersAsync();
-            return Ok(userDto);
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+
+            var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Ok(new { UserId = userId });
         }
 
 
-        [HttpGet("User")]
-        public async Task<IActionResult> GetUsers(int id)
+
+        [HttpPost]
+        public ActionResult CreateNewToken(int userID)
         {
-            var userDto = await userSerivce.GetUserByIdAsync(id);
-            return Ok(userDto);
+            return Ok(clsToken.CreateToken(userID));
         }
 
-
-        [HttpGet("People")]
-        public async Task<IActionResult> GetPeople()
-        {
-            var userDto = await PeopleService.GetAllPersonsAsync();
-            return Ok(userDto);
-        }
-
-        [HttpPost("Person")]
-        public async Task<IActionResult> AddPerson([FromBody] PeopleDTOs.AddPersonDTO dto)
-        {
-            var userDto = await PeopleService.CreatePersonAsync(dto);
-            return Ok(userDto);
-        }
+     
 
 
-        [HttpDelete("Person")]
-        public async Task<IActionResult> deletePerson(int id)
-        {
-            var userDto = await PeopleService.DeletePersonAsync(id);
-            return Ok(userDto);
-        }
     }
 }

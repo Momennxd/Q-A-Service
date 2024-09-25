@@ -10,6 +10,10 @@ namespace API_Layer.Security
         public static JwtOptions? jwtOptions { get; set; }
         public static string CreateToken(int UserID)
         {
+
+            //taking a username and password and validating them against the db and returning the userid.
+
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
