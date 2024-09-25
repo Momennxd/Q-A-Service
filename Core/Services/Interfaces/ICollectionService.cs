@@ -13,14 +13,15 @@ namespace Core.Services.Interfaces
     public interface ICollectionService
     {
 
-        public JsonPatchDocument<QCollection> ConvertPatchDocToDocEntity(
-           JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> DtoPatchDoc);
-
 
         Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id);
 
 
-        Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync();
+        Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID, bool IsPublic);
+
+
+        public Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID);
+        
 
 
         Task<int> CreateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO createQCollectionDTO, int UserID);

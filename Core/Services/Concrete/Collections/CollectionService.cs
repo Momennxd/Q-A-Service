@@ -98,12 +98,21 @@ namespace Core.Services.Concrete.Collections
 
 
 
-        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync()
+        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
+            (int UserID, bool IsPublic)
         {
-            var collections = await _unitOfWork.Collections.GetAllItemsAsync();
+            var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID, IsPublic);
 
             return _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
         }
+
+        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
+        {
+            var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID);
+
+            return _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
+        }
+
 
         public Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id)
         {
@@ -117,34 +126,5 @@ namespace Core.Services.Concrete.Collections
 
 
 
-        public JsonPatchDocument<QCollection> ConvertPatchDocToEntity
-            (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JsonPatchDocument<QCollection> ConvertPatchDocToDocEntity
-            (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> DtoPatchDoc)
-        {
-            // Create a new JsonPatchDocument for the target type (QCollection)
-            var patchDocForEntity = new JsonPatchDocument<QCollection>();
-
-            // Loop through each operation in the original patch document
-            foreach (var operation in DtoPatchDoc.Operations)
-            {
-                // Create a new operation for QCollection with the same values
-                var newOperation = new Operation<QCollection>(
-                    op: operation.op,
-                    path: operation.path,
-                    from: operation.from,
-                    value: operation.value
-                );
-
-                // Add the new operation to the patchDoc for QCollection
-                patchDocForEntity.Operations.Add(newOperation);
-            }
-
-            return patchDocForEntity;
-        }
     }
 }

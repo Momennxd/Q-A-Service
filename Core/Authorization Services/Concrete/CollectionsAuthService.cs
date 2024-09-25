@@ -22,7 +22,7 @@ namespace Core.Authorization_Services.Concrete
             _unitOfWork = new UnitOfWork(logger, context);
         }
 
-        public async Task<bool> IsUserOwner(int collecID, int userID)
+        public async Task<bool> IsUserCollecOwner(int collecID, int userID)
         {
             // Await the result from FindAsync asynchronously
             var collection = await _unitOfWork.Collections.FindAsync(collecID);

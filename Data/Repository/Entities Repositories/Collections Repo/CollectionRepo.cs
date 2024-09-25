@@ -25,12 +25,17 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             _logger = Logger;
         }
 
+
         public async Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic)
         {
             return await _appDbContext.QCollections.
                 Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic && !coll.IsDeleted).ToListAsync();
         }
 
-       
+        public async Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID)
+        {
+            return await _appDbContext.QCollections.
+                Where(coll => coll.CreatedByUserId == UserID && !coll.IsDeleted).ToListAsync();
+        }
     }
 }

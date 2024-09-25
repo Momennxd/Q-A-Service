@@ -18,10 +18,11 @@ namespace API_Layer.Controllers
 
     [Route("API/Collections")]
     [ApiController]
+    [Authorize]
     public class CollectionsController : Controller
     {
 
-        //private ILogger _Logger;
+       // private ILogger _Logger;
 
         private readonly ICollectionService _collectionService;
         private readonly ICollectionsAuthService _collectionsAuthService;
@@ -37,7 +38,6 @@ namespace API_Layer.Controllers
 
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddCollection([FromBody] CollectionsDTOs.CreateQCollectionDTO createDTO)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -50,14 +50,13 @@ namespace API_Layer.Controllers
 
 
         [HttpPatch]
-        [Authorize]
         public async Task<IActionResult> PatchCollection
             ([FromBody]JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (!await _collectionsAuthService.IsUserOwner(CollecID, userId))
+            if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
                return Unauthorized();
 
 
@@ -68,13 +67,12 @@ namespace API_Layer.Controllers
 
 
         [HttpDelete]
-        [Authorize]
         public async Task<IActionResult> DeleteCollection(int CollecID)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (!await _collectionsAuthService.IsUserOwner(CollecID, userId))
+            if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
                 return Unauthorized();
 
 
@@ -87,7 +85,54 @@ namespace API_Layer.Controllers
         }
 
 
+        /// <summary>
+        /// Gets all the public collections by userID.
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpGet("All")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPublicCollections(int UserID)
+        {
+            var collec = await _collectionService.GetAllCollectionsAsync(UserID, true);
+          
+            return Ok(collec);
+        }
 
+        
+        /// <summary>
+        /// Gets all the public/Private collections by the current logged in user..
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpGet(@"library/custome")]
+
+        public async Task<IActionResult> GetAllLoggedInUserCollections(bool Public)
+        {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var collec = await _collectionService.GetAllCollectionsAsync(userId, Public);
+
+            return Ok(collec);
+        }
+
+
+        /// <summary>
+        /// Gets all the public/Private collections by the current logged in user..
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        [HttpGet("library")]
+        public async Task<IActionResult> GetAllLoggedInUserCollections()
+        {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var collec = await _collectionService.GetAllCollectionsAsync(userId);
+
+            return Ok(collec);
+        }
 
     }
 }

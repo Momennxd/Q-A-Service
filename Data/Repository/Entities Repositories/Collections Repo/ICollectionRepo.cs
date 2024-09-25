@@ -15,13 +15,18 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
 
         /// <summary>
-        /// Gets all the collections by the user id who created them.
+        /// Gets all the collections public/private by the user id who created them.
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
         public Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic);
 
-
+        /// <summary>
+        /// Gets ALL the collections by the user id who created them.
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID);
 
 
 
