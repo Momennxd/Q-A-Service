@@ -8,7 +8,7 @@ using Core_Layer.models.People;
 
 namespace Data.Repositories
 {
-    public interface IUserRepo : IRespository<User>
+    public interface IUserRepo : IRepository<User>
     {
 
 

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Core;
 using Core_Layer.models.People;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core_Layer.models.Collections;
 
-public partial class QCollection
+public partial class QCollection : IBaseEntity
 {
 
     [Key]

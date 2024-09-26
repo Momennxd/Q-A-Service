@@ -7,21 +7,13 @@ using System.Threading.Tasks;
 
 namespace Core.Unit_Of_Work
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork<T, U> where T : IRepository<U> where U : IBaseEntity
     {
+   
 
-
-        IUserRepo Users { get; }
-
-        IPersonRepo People { get; }
-
-        ICollectionRepo Collections { get; }
-
-        ICollectionCategoriesRepo CollectionCategoriesRepo { get; }
+        T EntityRepo { get; set; }
 
         Task<int> CompleteAsync();
-
-
 
     }
 }

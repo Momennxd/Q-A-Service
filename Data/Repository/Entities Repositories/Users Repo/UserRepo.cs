@@ -16,7 +16,7 @@ namespace Data.Repositories
 
 
 
-        public UserRepo(ILogger Logger, AppDbContext context) : base(Logger, context)
+        public UserRepo(AppDbContext context) : base(context)
         {
             
         }

@@ -15,7 +15,7 @@ namespace Data.Repository.Entities_Repositories.People_Repo
 
 
 
-        public PersonRepo(ILogger Logger, AppDbContext context) : base(Logger, context)
+        public PersonRepo(ILogger Logger, AppDbContext context) : base(context)
         {
 
         }

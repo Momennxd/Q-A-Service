@@ -22,12 +22,11 @@ namespace API_Layer.Controllers
     public class CollectionsController : Controller
     {
 
-       // private ILogger _Logger;
-
         private readonly ICollectionService _collectionService;
         private readonly ICollectionsAuthService _collectionsAuthService;
 
-        public CollectionsController(CollectionService collectionService, CollectionsAuthService collectionsAuthService)
+        public CollectionsController(ICollectionService collectionService,
+            ICollectionsAuthService collectionsAuthService)
         {
             this._collectionService = collectionService;
             this._collectionsAuthService = collectionsAuthService;
@@ -106,7 +105,6 @@ namespace API_Layer.Controllers
         /// <param name="UserID"></param>
         /// <returns></returns>
         [HttpGet(@"library/custome")]
-
         public async Task<IActionResult> GetAllLoggedInUserCollections(bool Public)
         {
 

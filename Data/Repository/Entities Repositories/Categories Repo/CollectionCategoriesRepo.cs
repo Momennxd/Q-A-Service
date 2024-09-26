@@ -17,13 +17,13 @@ namespace Data.Repository.Entities_Repositories.Categories_Repo
 
 
         AppDbContext _appDbContext;
-        ILogger _logger;
+       //ILogger _logger;
 
 
-        public CollectionCategoriesRepo(ILogger Logger, AppDbContext context) : base(Logger, context)
+        public CollectionCategoriesRepo(ILogger Logger, AppDbContext context) : base(context)
         {
             _appDbContext = context;
-            _logger = Logger;
+           // _logger = Logger;
         }
 
         public async Task<IEnumerable<CollectionsCategories>> GetAllByCollectionIDAsync(int CollectionID)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Categories_Repo
 {
-    public interface ICollectionCategoriesRepo : IRespository<CollectionsCategories>
+    public interface ICollectionCategoriesRepo : IRepository<CollectionsCategories>
     {
 
 

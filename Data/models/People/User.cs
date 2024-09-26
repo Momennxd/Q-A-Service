@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core;
 using Core_Layer.models.Collections;
 
 namespace Core_Layer.models.People;
 
-public partial class User
+public partial class User : IBaseEntity
 {
     public int UserId { get; set; }
 

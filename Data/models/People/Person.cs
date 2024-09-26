@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core_Layer.models.People;
 
-public partial class Person
+public partial class Person : IBaseEntity
 {
     [Key]
     public int PersonID { get; set; }

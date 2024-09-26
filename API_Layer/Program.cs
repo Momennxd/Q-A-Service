@@ -15,6 +15,11 @@ using Core.Services.Concrete.People;
 using Core.Services.Concrete.Collections;
 using Core.Authorization_Services.Concrete;
 using System.Linq.Expressions;
+using Core.Services.Interfaces;
+using Core.Authorization_Services.Interfaces;
+using Data.Repository.Entities_Repositories.Collections_Repo;
+using Core;
+using Core_Layer.models.Collections;
 
 
 
@@ -34,12 +39,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<PeopleService>();
-builder.Services.AddScoped<CollectionService>();
-builder.Services.AddScoped<CollectionsAuthService>();
+
+builder.Services.AddScoped<ICollectionService, CollectionService>();
+builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
+builder.Services.AddScoped<ICollectionRepo, CollectionRepo>();
+
+builder.Services.AddScoped<IUnitOfWork<ICollectionRepo, QCollection>, UnitOfWork<ICollectionRepo, QCollection>>();
+
+
+
+
+//builder.Services.AddScoped<UserService>();
+//builder.Services.AddScoped<PeopleService>();
+//builder.Services.AddScoped<CollectionsAuthService>();
+
+//builder.Services.AddScoped<ICollectionService, CollectionService>();
+//builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
+
+//builder.Services.AddScoped<IPersonService, PeopleService>();
+//builder.Services.AddScoped<IUserService, UserService>();
 
 
 

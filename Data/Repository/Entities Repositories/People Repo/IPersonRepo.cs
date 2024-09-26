@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.People_Repo
 {
-    public interface IPersonRepo : IRespository<Person>
+    public interface IPersonRepo : IRepository<Person>
     {
 
 

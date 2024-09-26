@@ -1,6 +1,7 @@
 ﻿using Core.DTOs.Collections;
 using Core_Layer.models.Collections;
 using Core_Layer.models.People;
+using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace Core.Services.Interfaces
 {
     public interface ICollectionService
     {
+
+
 
 
         Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id);

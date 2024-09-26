@@ -6,6 +6,8 @@ using Core.Unit_Of_Work;
 using Core_Layer.AppDbContext;
 using Core_Layer.models.Collections;
 using Core_Layer.models.People;
+using Data.Repositories;
+using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -24,14 +26,20 @@ namespace Core.Services.Concrete.Collections
     public class CollectionService : ICollectionService
     {
 
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
+
+
+
         private readonly IMapper _mapper;
 
 
-        public CollectionService(ILogger<IUnitOfWork> logger, AppDbContext context, IMapper mapper)
+
+        //temp
+        public CollectionService(IMapper mapper, IUnitOfWork<ICollectionRepo, QCollection> uowCollections)
         {
-            _unitOfWork = new UnitOfWork(logger, context);
+            _unitOfWork = uowCollections;
             _mapper = mapper;
+
         }
 
         public async Task<int> CreateCollectionAsync
@@ -40,7 +48,7 @@ namespace Core.Services.Concrete.Collections
             var collEntity = _mapper.Map<QCollection>(createQCollectionDTO);
             collEntity.CreatedByUserId = UserID;
 
-            await _unitOfWork.Collections.AddItemAsync(collEntity);
+            await _unitOfWork.EntityRepo.AddItemAsync(collEntity);
 
 
             return await _unitOfWork.CompleteAsync();
@@ -53,7 +61,7 @@ namespace Core.Services.Concrete.Collections
             JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int collecID)
         {
             // Await the result of FindAsync to retrieve the actual entity
-            var entity = await _unitOfWork.Collections.FindAsync(collecID);
+            var entity = await _unitOfWork.EntityRepo.FindAsync(collecID);
 
             if (entity == null)
             {
@@ -81,7 +89,8 @@ namespace Core.Services.Concrete.Collections
 
         public async Task DeleteCollectionAsync(int id)
         {
-            await _unitOfWork.Collections.DeleteItemAsync(id);
+            await _unitOfWork.EntityRepo.DeleteItemAsync(id);
+
 
 
             // Save changes
@@ -102,14 +111,14 @@ namespace Core.Services.Concrete.Collections
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
         {
-            var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID, IsPublic);
+            var collections = await _unitOfWork.EntityRepo.GetAllByUserIDAsync(UserID, IsPublic);
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
             foreach(var dto in sentDto)
             {
                 var categories =
-                    await _unitOfWork.Collections.GetAllCategoriesAsync(dto.CollectionID);
+                    await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
 
                 foreach (var categ in categories)
                 {
@@ -124,7 +133,7 @@ namespace Core.Services.Concrete.Collections
 
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
         {
-            var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID);
+            var collections = await _unitOfWork.EntityRepo.GetAllByUserIDAsync(UserID);
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
@@ -132,7 +141,7 @@ namespace Core.Services.Concrete.Collections
             foreach (var dto in sentDto)
             {
                 var categories =
-                    await _unitOfWork.Collections.GetAllCategoriesAsync(dto.CollectionID);
+                    await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
 
                 foreach (var categ in categories)
                 {

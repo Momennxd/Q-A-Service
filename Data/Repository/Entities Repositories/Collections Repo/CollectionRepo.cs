@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,13 +19,12 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
     {
 
         AppDbContext _appDbContext;
-        ILogger _logger;
 
 
-        public CollectionRepo(ILogger Logger, AppDbContext context) : base(Logger, context)
+        public CollectionRepo(AppDbContext context) : base(context)
         {
             _appDbContext = context;
-            _logger = Logger;
+            //_logger = Logger;
         }
 
 

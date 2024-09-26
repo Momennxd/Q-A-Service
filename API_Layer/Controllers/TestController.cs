@@ -22,38 +22,38 @@ namespace API_Layer.Controllers.Collections
     public class TestController : ControllerBase
     {
 
-        public TestController(UserService userService, PeopleService ps)
-        {
-            PeopleService = ps;
-            userSerivce = userService;
-        }
+        //public TestController(UserService userService, PeopleService ps)
+        //{
+        //    PeopleService = ps;
+        //    userSerivce = userService;
+        //}
 
-        //private ILogger _Logger;
-
-
-        private readonly IUserService userSerivce;
-        private readonly IPersonService PeopleService;
+        ////private ILogger _Logger;
 
 
-        [HttpGet]
-        [Route("GetClaims")]
-        [Authorize]
-        public IActionResult GetClaims()
-        {
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-
-            var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            return Ok(new { UserId = userId });
-        }
+        //private readonly IUserService userSerivce;
+        //private readonly IPersonService PeopleService;
 
 
+        //[HttpGet]
+        //[Route("GetClaims")]
+        //[Authorize]
+        //public IActionResult GetClaims()
+        //{
+        //    var claims = HttpContext.User.Identity as ClaimsIdentity;
 
-        [HttpPost]
-        public ActionResult CreateNewToken(int userID)
-        {
-            return Ok(clsToken.CreateToken(userID));
-        }
+        //    var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    return Ok(new { UserId = userId });
+        //}
+
+
+
+        //[HttpPost]
+        //public ActionResult CreateNewToken(int userID)
+        //{
+        //    return Ok(clsToken.CreateToken(userID));
+        //}
 
      
 

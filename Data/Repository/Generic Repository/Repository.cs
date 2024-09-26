@@ -1,3 +1,4 @@
+using Core;
 using Core_Layer.AppDbContext;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -6,23 +7,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories
 {
-    public class Repository<T> : IRespository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : IBaseEntity
     {
 
 
         private AppDbContext _appDbContext;
 
-        private ILogger _Logger;
+        //private ILogger _Logger;
 
-        DbSet<T> _dbSet;
+        DbSet<IBaseEntity> _dbSet;
 
 
 
-        public  Repository(ILogger Logger, AppDbContext context)
+        public  Repository(AppDbContext context)
         {
-            _Logger = Logger;
+            //_Logger = Logger;
             _appDbContext = context;
-            _dbSet = context.Set<T>();
+            _dbSet = context.Set<IBaseEntity>();
 
         }
 
@@ -36,7 +37,7 @@ namespace Data.Repositories
 
 
 
-        public virtual async Task<List<T>?> GetAllItemsAsync()
+        public virtual async Task<List<IBaseEntity>?> GetAllItemsAsync()
         {
             return await _dbSet.ToListAsync();
         }

@@ -13,37 +13,27 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Unit_Of_Work
 {
-    public class UnitOfWork : IUnitOfWork, IAsyncDisposable
+    public class UnitOfWork<T, U> :
+        IAsyncDisposable, IUnitOfWork<T, U>  where T : IRepository<U> where U : IBaseEntity
     {
 
 
-        //REPOs
-        public IUserRepo Users { get;}
+      
 
-        public IPersonRepo People { get; }
-
-        public ICollectionRepo Collections { get; }
-
-        public ICollectionCategoriesRepo CollectionCategoriesRepo { get; }
+        public T EntityRepo { get; set; }
 
         private AppDbContext _appDbContext;
 
-        private ILogger _Logger;
 
 
 
 
-        public UnitOfWork(ILogger<IUnitOfWork> logger, AppDbContext context)
+
+        public UnitOfWork(AppDbContext context, T Er)
         {
-            _Logger = logger;
-
             _appDbContext = context;
 
-            Users = new UserRepo(logger, context);
-            People = new PersonRepo(logger, context);
-            Collections = new CollectionRepo(logger, context);
-            CollectionCategoriesRepo = new CollectionCategoriesRepo(logger, context);
-
+            EntityRepo = Er;
         }
 
 

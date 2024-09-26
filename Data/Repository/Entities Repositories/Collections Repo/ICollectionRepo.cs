@@ -1,4 +1,5 @@
-﻿using Core_Layer.models.Collections;
+﻿using Core;
+using Core_Layer.models.Collections;
 using Data.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Collections_Repo
 {
-    public interface ICollectionRepo : IRespository<QCollection>
+    public interface ICollectionRepo : IRepository<QCollection>
     {
 
 

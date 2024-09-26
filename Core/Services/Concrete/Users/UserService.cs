@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Concrete.Users
 {
-    public class UserService : IUserService
+    public class UserService 
     {
-        private readonly IUnitOfWork _unitOfWork;
+        //private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(ILogger<IUnitOfWork> logger, AppDbContext context)
-        {
-            _unitOfWork = new UnitOfWork(logger, context);
-        }
+        //public UserService(ILogger<IUnitOfWork> logger, AppDbContext context)
+        //{
+        //    _unitOfWork = new UnitOfWork(logger, context);
+        //}
 
         //public async Task<User> GetUserByIdAsync(int id)
         //{

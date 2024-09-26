@@ -2,6 +2,8 @@
 using Core.Authorization_Services.Interfaces;
 using Core.Unit_Of_Work;
 using Core_Layer.AppDbContext;
+using Core_Layer.models.Collections;
+using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,18 +16,18 @@ namespace Core.Authorization_Services.Concrete
     public class CollectionsAuthService : ICollectionsAuthService
     {
 
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
 
 
-        public CollectionsAuthService(ILogger<IUnitOfWork> logger, AppDbContext context)
+        public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections)
         {
-            _unitOfWork = new UnitOfWork(logger, context);
+            _unitOfWork = uowCollections;
         }
 
         public async Task<bool> IsUserCollecOwner(int collecID, int userID)
         {
             // Await the result from FindAsync asynchronously
-            var collection = await _unitOfWork.Collections.FindAsync(collecID);
+            var collection = await _unitOfWork.EntityRepo.FindAsync(collecID);
 
             // Ensure collection is not null and check if the user is the owner
             if (collection == null)

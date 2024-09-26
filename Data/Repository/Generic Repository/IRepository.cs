@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Core;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public interface IRespository<T> where T : class
+    public interface IRepository<T> where T : IBaseEntity
     {
 
 
         public Task<T?> FindAsync(dynamic ItemPK);
 
 
-        public Task<List<T>?> GetAllItemsAsync();
+        public Task<List<IBaseEntity>?> GetAllItemsAsync();
 
 
         public Task<EntityEntry> AddItemAsync(T Item);
