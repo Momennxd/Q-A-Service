@@ -4,6 +4,7 @@ using Core_Layer.AppDbContext;
 using Core_Layer.models.Collections;
 using Core_Layer.models.People;
 using Data.Repositories;
+using Data.Repository.Entities_Repositories.Categories_Repo;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.People_Repo;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Unit_Of_Work
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IAsyncDisposable
     {
 
 
@@ -23,8 +24,7 @@ namespace Core.Unit_Of_Work
 
         public ICollectionRepo Collections { get; }
 
-
-
+        public ICollectionCategoriesRepo CollectionCategoriesRepo { get; }
 
         private AppDbContext _appDbContext;
 
@@ -42,6 +42,7 @@ namespace Core.Unit_Of_Work
             Users = new UserRepo(logger, context);
             People = new PersonRepo(logger, context);
             Collections = new CollectionRepo(logger, context);
+            CollectionCategoriesRepo = new CollectionCategoriesRepo(logger, context);
 
         }
 
@@ -52,11 +53,12 @@ namespace Core.Unit_Of_Work
             return await _appDbContext.SaveChangesAsync();
         }
 
-        public async void Dispose()
+
+        public async ValueTask DisposeAsync()
         {
             await _appDbContext.DisposeAsync();
         }
 
-        
+
     }
 }

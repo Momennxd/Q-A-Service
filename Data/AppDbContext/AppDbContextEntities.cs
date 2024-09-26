@@ -2,6 +2,7 @@
 
 using Core_Layer.models.Collections;
 using Core_Layer.models.People;
+using Data.models._SP_;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core_Layer.AppDbContext
@@ -19,7 +20,8 @@ namespace Core_Layer.AppDbContext
 
         public virtual DbSet<QCollection> QCollections { get; set; }
 
-       
+
+        public virtual DbSet<SPCollectionCetagory> SpCollectionCetagories { get; set; }
 
     }
 }

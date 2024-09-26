@@ -24,6 +24,5 @@ public partial class QCollection
 
     public bool IsPublic { get; set; }
 
-  
 
 }

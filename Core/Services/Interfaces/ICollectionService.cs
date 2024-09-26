@@ -17,10 +17,10 @@ namespace Core.Services.Interfaces
         Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id);
 
 
-        Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID, bool IsPublic);
+        Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID, bool IsPublic);
 
 
-        public Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID);
+        public Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID);
         
 
 

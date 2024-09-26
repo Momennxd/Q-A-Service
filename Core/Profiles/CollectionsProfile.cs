@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core_Layer.models.Collections;
 using Core.DTOs.Collections;
+using Data.Repositories;
 
 namespace Core.Profiles
 {

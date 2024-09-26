@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,20 +99,63 @@ namespace Core.Services.Concrete.Collections
 
 
 
-        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
+        public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
         {
             var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID, IsPublic);
 
-            return _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
+            var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
+
+            foreach(var dto in sentDto)
+            {
+                var categories =
+                    await _unitOfWork.Collections.GetAllCategoriesAsync(dto.CollectionID);
+
+                foreach (var categ in categories)
+                {
+                    dto.Categories.Add(categ);
+                }
+
+            }
+
+
+            return sentDto;
         }
 
-        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
+        public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
         {
             var collections = await _unitOfWork.Collections.GetAllByUserIDAsync(UserID);
 
-            return _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
+            var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
+
+
+            foreach (var dto in sentDto)
+            {
+                var categories =
+                    await _unitOfWork.Collections.GetAllCategoriesAsync(dto.CollectionID);
+
+                foreach (var categ in categories)
+                {
+                    dto.Categories.Add(categ);
+                }
+
+            }
+
+
+            return sentDto;
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id)

@@ -1,4 +1,5 @@
 ﻿using Core_Layer.models.Collections;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Core.DTOs.Collections
 {
@@ -22,7 +23,7 @@ namespace Core.DTOs.Collections
            public DateTime AddedTime { get; set; }
 
 
-          //public IEnumerable<CollectionsCategories> Categories { get; set; }
+          public ICollection<string> Categories { get; set; } = new List<string>();
 
 
         }

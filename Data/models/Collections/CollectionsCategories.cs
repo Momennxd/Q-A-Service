@@ -21,7 +21,7 @@ namespace Core_Layer.models.Collections
         public int CategoryID { get; set; }
 
 
-       
+
 
 
     }

@@ -19,17 +19,18 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic);
+        public Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic);
 
         /// <summary>
         /// Gets ALL the collections by the user id who created them.
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public Task<IEnumerable<QCollection>> GetAllByUserIDAsync(int UserID);
+        public Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID);
 
 
 
+        public Task<ICollection<string>> GetAllCategoriesAsync(int collectionId);
 
 
 
