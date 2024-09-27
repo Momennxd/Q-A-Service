@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace Core.Unit_Of_Work
 {
     public class UnitOfWork<T, U> :
-        IAsyncDisposable, IUnitOfWork<T, U>  where T : IRepository<U> where U : IBaseEntity
+        IAsyncDisposable, IUnitOfWork<T, U>  where T : IRepository<U> where U : class, IBaseEntity<U>
     {
 
 

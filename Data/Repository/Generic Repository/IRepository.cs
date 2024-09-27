@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public interface IRepository<T> where T : IBaseEntity
+    public interface IRepository<T> where T : class, IBaseEntity<T>
     {
 
 
         public Task<T?> FindAsync(dynamic ItemPK);
 
 
-        public Task<List<IBaseEntity>?> GetAllItemsAsync();
+        public Task<List<T>?> GetAllItemsAsync();
 
 
         public Task<EntityEntry> AddItemAsync(T Item);

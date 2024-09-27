@@ -5,7 +5,7 @@ using Data.models.Base;
 
 namespace Data.models.People;
 
-public partial class User : IBaseEntity
+public partial class User : IBaseEntity<User>
 {
     public int UserId { get; set; }
 

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Data.models.People;
 
-public partial class Person : IBaseEntity
+public partial class Person : IBaseEntity<Person>
 {
     [Key]
     public int PersonID { get; set; }

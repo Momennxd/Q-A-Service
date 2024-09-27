@@ -7,7 +7,7 @@ using Data.DatabaseContext;
 
 namespace Data.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : IBaseEntity
+    public class Repository<T> : IRepository<T> where T : class, IBaseEntity<T>
     {
 
 
@@ -15,7 +15,7 @@ namespace Data.Repositories
 
         //private ILogger _Logger;
 
-        DbSet<IBaseEntity> _dbSet;
+        DbSet<T> _dbSet;
 
 
 
@@ -23,7 +23,7 @@ namespace Data.Repositories
         {
             //_Logger = Logger;
             _appDbContext = context;
-            _dbSet = context.Set<IBaseEntity>();
+            _dbSet = context.Set<T>();
 
         }
 
@@ -37,7 +37,7 @@ namespace Data.Repositories
 
 
 
-        public virtual async Task<List<IBaseEntity>?> GetAllItemsAsync()
+        public virtual async Task<List<T>?> GetAllItemsAsync()
         {
             return await _dbSet.ToListAsync();
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Collections
 {
-    public class CollectionsCategories : IBaseEntity
+    public class CollectionsCategories : IBaseEntity<CollectionsCategories>
     {
 
         [Key]

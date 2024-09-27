@@ -4,8 +4,10 @@ using Core.DTOs.People;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
 using Data.models.Collections;
+using Data.models.People;
 using Data.Repositories;
 using Data.Repository.Entities_Repositories.Collections_Repo;
+using Data.Repository.Entities_Repositories.People_Repo;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -37,7 +39,6 @@ namespace Core.Services.Concrete.Collections
         {
             _unitOfWork = uowCollections;
             _mapper = mapper;
-
         }
 
         public async Task<int> CreateCollectionAsync

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Unit_Of_Work
 {
-    public interface IUnitOfWork<T, U> where T : IRepository<U> where U : IBaseEntity
+    public interface IUnitOfWork<T, U> where T : IRepository<U> where U : class, IBaseEntity<U> 
     {
    
         /// <summary>

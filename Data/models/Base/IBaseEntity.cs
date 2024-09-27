@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Base
 {
-    public interface IBaseEntity
+    public interface IBaseEntity<E> where E : class
     {
 
 

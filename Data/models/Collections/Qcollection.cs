@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.models.Collections;
 
-public partial class QCollection : IBaseEntity
+public partial class QCollection : IBaseEntity<QCollection>
 {
 
     [Key]
