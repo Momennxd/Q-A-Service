@@ -1,9 +1,9 @@
-using Core;
-using Core_Layer.AppDbContext;
+using Data.models.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using Data.DatabaseContext;
 
 namespace Data.Repositories
 {

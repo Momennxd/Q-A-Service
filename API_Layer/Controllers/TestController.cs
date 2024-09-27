@@ -5,8 +5,6 @@ using Core.Services.Concrete.People;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
-using Core_Layer;
-using Core_Layer.models.People;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

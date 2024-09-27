@@ -1,4 +1,4 @@
-﻿using Core_Layer.models.Collections;
+﻿using Data.models.Collections;
 using Data.Repositories;
 using System;
 using System.Collections.Generic;

@@ -1,13 +1,12 @@
-﻿using Core_Layer.models.People;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core_Layer.models.Collections;
 using Core.DTOs.Collections;
 using Data.Repositories;
+using Data.models.Collections;
 
 namespace Core.Profiles
 {

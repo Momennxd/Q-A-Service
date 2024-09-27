@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Data.models.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;

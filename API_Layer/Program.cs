@@ -1,6 +1,5 @@
 using API_Layer.Authorization;
 using API_Layer.Security;
-using Core_Layer.AppDbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +18,8 @@ using Core.Services.Interfaces;
 using Core.Authorization_Services.Interfaces;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Core;
-using Core_Layer.models.Collections;
+using Data.DatabaseContext;
+using Data.models.Collections;
 
 
 
@@ -46,6 +46,8 @@ builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
 builder.Services.AddScoped<ICollectionRepo, CollectionRepo>();
 
 builder.Services.AddScoped<IUnitOfWork<ICollectionRepo, QCollection>, UnitOfWork<ICollectionRepo, QCollection>>();
+
+
 
 
 

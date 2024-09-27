@@ -1,5 +1,4 @@
 ﻿using Core.DTOs.People;
-using Core_Layer.models.People;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;

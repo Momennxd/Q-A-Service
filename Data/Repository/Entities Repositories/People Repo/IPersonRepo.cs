@@ -1,4 +1,4 @@
-﻿using Core_Layer.models.People;
+﻿using Data.models.People;
 using Data.Repositories;
 using System;
 using System.Collections.Generic;

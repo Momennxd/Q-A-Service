@@ -3,9 +3,7 @@ using Core.DTOs.Collections;
 using Core.DTOs.People;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
-using Core_Layer.AppDbContext;
-using Core_Layer.models.Collections;
-using Core_Layer.models.People;
+using Data.models.Collections;
 using Data.Repositories;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -96,15 +94,6 @@ namespace Core.Services.Concrete.Collections
             // Save changes
             await _unitOfWork.CompleteAsync();
         }
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Core_Layer.AppDbContext;
-using Core_Layer.models.Collections;
+using Data.DatabaseContext;
+using Data.models.Collections;
 using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

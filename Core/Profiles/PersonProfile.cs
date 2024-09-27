@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core_Layer.models.People;
+using Data.models.People;
 using System;
 using System.Collections.Generic;
 using System.Linq;

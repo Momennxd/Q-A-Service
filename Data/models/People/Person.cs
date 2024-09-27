@@ -1,9 +1,10 @@
-﻿using Core;
+﻿using Data;
+using Data.models.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core_Layer.models.People;
+namespace Data.models.People;
 
 public partial class Person : IBaseEntity
 {

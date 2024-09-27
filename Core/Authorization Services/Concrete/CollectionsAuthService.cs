@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Core.Authorization_Services.Interfaces;
 using Core.Unit_Of_Work;
-using Core_Layer.AppDbContext;
-using Core_Layer.models.Collections;
+using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.Extensions.Logging;
 using System;

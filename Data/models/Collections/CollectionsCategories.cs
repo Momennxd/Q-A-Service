@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using Data.models.Base;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core_Layer.models.Collections
+namespace Data.models.Collections
 {
     public class CollectionsCategories : IBaseEntity
     {

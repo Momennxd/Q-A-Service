@@ -1,5 +1,5 @@
-﻿using Core_Layer.AppDbContext;
-using Core_Layer.models.People;
+﻿using Data.DatabaseContext;
+using Data.models.People;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using System;

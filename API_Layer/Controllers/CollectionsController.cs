@@ -6,7 +6,6 @@ using Core.Services.Concrete.Collections;
 using Core.Services.Concrete.People;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
-using Core_Layer.models.Collections;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +88,7 @@ namespace API_Layer.Controllers
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        [HttpGet("All")]
+        [HttpGet()]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllPublicCollections(int UserID)
         {
@@ -104,7 +103,7 @@ namespace API_Layer.Controllers
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        [HttpGet(@"library/custome")]
+        [HttpGet(@"library/Visibilty")]
         public async Task<IActionResult> GetAllLoggedInUserCollections(bool Public)
         {
 
@@ -117,11 +116,11 @@ namespace API_Layer.Controllers
 
 
         /// <summary>
-        /// Gets all the public/Private collections by the current logged in user..
+        /// Gets all the public and Private collections by the current logged in user..
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        [HttpGet("library")]
+        [HttpGet("library/All")]
         public async Task<IActionResult> GetAllLoggedInUserCollections()
         {
 

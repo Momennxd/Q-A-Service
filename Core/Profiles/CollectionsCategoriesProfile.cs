@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs.Collections;
-using Core_Layer.models.Collections;
+using Data.models.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;

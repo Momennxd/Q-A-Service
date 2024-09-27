@@ -1,7 +1,5 @@
 ﻿using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
-using Core_Layer.AppDbContext;
-using Core_Layer.models.People;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

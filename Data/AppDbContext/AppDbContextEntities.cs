@@ -1,11 +1,10 @@
 ﻿
-
-using Core_Layer.models.Collections;
-using Core_Layer.models.People;
 using Data.models._SP_;
+using Data.models.Collections;
+using Data.models.People;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core_Layer.AppDbContext
+namespace Data.DatabaseContext
 {
     public partial class AppDbContext
     {

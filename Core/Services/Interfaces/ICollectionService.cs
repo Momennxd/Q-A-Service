@@ -1,6 +1,4 @@
 ﻿using Core.DTOs.Collections;
-using Core_Layer.models.Collections;
-using Core_Layer.models.People;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
 using System;

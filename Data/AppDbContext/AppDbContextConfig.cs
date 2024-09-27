@@ -1,8 +1,7 @@
-﻿using Core_Layer.models.Collections;
-using Data.models._SP_;
+﻿using Data.models._SP_;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core_Layer.AppDbContext
+namespace Data.DatabaseContext
 {
     public partial class AppDbContext : DbContext
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core;
-using Core_Layer.models.Collections;
+using Data.models.Collections;
+using Data.models.Base;
 
-namespace Core_Layer.models.People;
+namespace Data.models.People;
 
 public partial class User : IBaseEntity
 {

@@ -1,6 +1,4 @@
-﻿using Core_Layer.AppDbContext;
-using Core_Layer.models.Collections;
-using Data.Repositories;
+﻿using Data.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core_Layer.models.People;
 using Data.models._SP_;
+using Data.models.Collections;
+using Data.DatabaseContext;
 
 namespace Data.Repository.Entities_Repositories.Collections_Repo
 {

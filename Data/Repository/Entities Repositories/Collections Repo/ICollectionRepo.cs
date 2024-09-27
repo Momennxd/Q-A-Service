@@ -1,5 +1,4 @@
-﻿using Core;
-using Core_Layer.models.Collections;
+﻿using Data.models.Collections;
 using Data.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
