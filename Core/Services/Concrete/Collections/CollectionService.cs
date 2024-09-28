@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Core.Services.Concrete.Collections
 {
@@ -147,20 +148,31 @@ namespace Core.Services.Concrete.Collections
 
 
 
-
-
-
-
-
-
-
-
-
-
-        public Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id)
+        public async Task<CollectionsDTOs.SendCollectionDTO?> GetCollectionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var eCollection = await _unitOfWork.EntityRepo.FindAsync(id);
+
+            if (eCollection == null) return null;
+
+            var dto =  _mapper.Map<CollectionsDTOs.SendCollectionDTO>(eCollection);
+
+            dto.Categories = await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
+
+            return dto;
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         public Task UpdateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO updateQCollectionDTO)
         {

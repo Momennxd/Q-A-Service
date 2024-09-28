@@ -25,6 +25,9 @@ namespace Core.Authorization_Services.Concrete
 
         public async Task<bool> IsUserCollecOwner(int collecID, int userID)
         {
+
+            if (collecID <= 0 || userID <= 0) {  return false; }
+
             // Await the result from FindAsync asynchronously
             var collection = await _unitOfWork.EntityRepo.FindAsync(collecID);
 

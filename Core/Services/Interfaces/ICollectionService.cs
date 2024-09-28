@@ -15,7 +15,7 @@ namespace Core.Services.Interfaces
 
 
 
-        Task<CollectionsDTOs.SendCollectionDTO> GetCollectionByIdAsync(int id);
+        Task<CollectionsDTOs.SendCollectionDTO?> GetCollectionByIdAsync(int id);
 
 
         Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID, bool IsPublic);

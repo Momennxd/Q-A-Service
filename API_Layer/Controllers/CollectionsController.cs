@@ -6,6 +6,7 @@ using Core.Services.Concrete.Collections;
 using Core.Services.Concrete.People;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
+using Data.models.People;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -49,18 +50,18 @@ namespace API_Layer.Controllers
 
         [HttpPatch]
         public async Task<IActionResult> PatchCollection
-            ([FromBody]JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID)
+            ([FromBody] JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
-               return Unauthorized();
+                return Unauthorized();
 
 
             return Ok(await _collectionService.PatchCollection(patchDoc, CollecID));
 
-          
+
         }
 
 
@@ -81,23 +82,23 @@ namespace API_Layer.Controllers
 
 
         }
-         
+
 
         /// <summary>
         /// Gets all the public collections by userID.
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        [HttpGet()]
+        [HttpGet("Public")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllPublicCollections(int UserID)
         {
             var collec = await _collectionService.GetAllCollectionsAsync(UserID, true);
-          
+
             return Ok(collec);
         }
 
-        
+
         /// <summary>
         /// Gets all the public/Private collections by the current logged in user..
         /// </summary>
@@ -130,6 +131,30 @@ namespace API_Layer.Controllers
 
             return Ok(collec);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetCollection(int CollectionID)
+        {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var collec = await _collectionService.GetCollectionByIdAsync(CollectionID);
+
+            if (collec == null)
+                return NotFound();
+
+            if (!await _collectionsAuthService.IsUserCollecOwner(CollectionID, userId) && !collec.IsPublic)
+                return Unauthorized();
+
+
+
+            return Ok(collec);
+        }
+
+
+
+
 
     }
 }
