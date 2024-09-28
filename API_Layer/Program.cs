@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Core.Unit_Of_Work;
+using UoW.Unit_Of_Work;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using API_Layer.Exceptions;
@@ -20,6 +20,10 @@ using Data.Repository.Entities_Repositories.Collections_Repo;
 using Core;
 using Data.DatabaseContext;
 using Data.models.Collections;
+using CloudinaryDotNet;
+using Services.Concrete;
+using Microsoft.Extensions.DependencyInjection;
+using Services.Interfaces;
 
 
 
@@ -38,6 +42,23 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+
+
+
+// Load Cloudinary settings from appsettings.json
+var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
+
+// Initialize Cloudinary with the settings
+var cloudinaryAccount = new Account(cloudinarySettings.CloudName, cloudinarySettings.ApiKey, cloudinarySettings.ApiSecret);
+var cloudinary = new Cloudinary(cloudinaryAccount);
+
+
+// Register Cloudinary as a singleton
+builder.Services.AddSingleton(cloudinary);
+
+
+//adding the scope of clouinary
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 
 

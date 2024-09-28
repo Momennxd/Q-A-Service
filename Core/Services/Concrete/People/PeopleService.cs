@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs.People;
 using Core.Services.Interfaces;
-using Core.Unit_Of_Work;
+using UoW.Unit_Of_Work;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;

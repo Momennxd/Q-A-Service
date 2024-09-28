@@ -2,7 +2,7 @@
 using Core.DTOs.Collections;
 using Core.DTOs.People;
 using Core.Services.Interfaces;
-using Core.Unit_Of_Work;
+using UoW.Unit_Of_Work;
 using Data.models.Collections;
 using Data.models.People;
 using Data.Repositories;

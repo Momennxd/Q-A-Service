@@ -1,5 +1,5 @@
 ﻿using Core.Services.Interfaces;
-using Core.Unit_Of_Work;
+using UoW.Unit_Of_Work;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

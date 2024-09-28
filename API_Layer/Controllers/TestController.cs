@@ -4,7 +4,6 @@ using Core.DTOs.People;
 using Core.Services.Concrete.People;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
-using Core.Unit_Of_Work;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Net.Mail;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Services.Concrete;
+using Services.Interfaces;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -20,40 +25,43 @@ namespace API_Layer.Controllers.Collections
     public class TestController : ControllerBase
     {
 
-        //public TestController(UserService userService, PeopleService ps)
-        //{
-        //    PeopleService = ps;
-        //    userSerivce = userService;
-        //}
-
-        ////private ILogger _Logger;
+        private readonly ICloudinaryService _cloudinary;
 
 
-        //private readonly IUserService userSerivce;
-        //private readonly IPersonService PeopleService;
+        public TestController(ICloudinaryService cloudinary)
+        {
+            _cloudinary = cloudinary;
+        }
+
+        [HttpGet]
+        [Route("GetClaims")]
+        [Authorize]
+        public IActionResult GetClaims()
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Ok(new { UserId = userId });
+        }
+
+        [HttpPost]
+        [Route("CreateNewToken")]
+        public ActionResult CreateNewToken(int userID)
+        {
+            return Ok(clsToken.CreateToken(userID));
+        }
 
 
-        //[HttpGet]
-        //[Route("GetClaims")]
-        //[Authorize]
-        //public IActionResult GetClaims()
-        //{
-        //    var claims = HttpContext.User.Identity as ClaimsIdentity;
+        [HttpPost]
+        [Route("UploadImage")]
+        public async Task<IActionResult> UploadImageAsync([FromForm] IFormFile file, string folderPath, string fileName)
+        {
+            if (string.IsNullOrEmpty(folderPath) || file == null)
+                throw new ArgumentException("Invalid parameters. Folder path, file stream, and file name must be provided.");
 
-        //    var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+           return Ok(await _cloudinary.UploadImageAsync(file.OpenReadStream(), folderPath, fileName));
+        }
 
-        //    return Ok(new { UserId = userId });
-        //}
-
-
-
-        //[HttpPost]
-        //public ActionResult CreateNewToken(int userID)
-        //{
-        //    return Ok(clsToken.CreateToken(userID));
-        //}
-
-     
 
 
     }

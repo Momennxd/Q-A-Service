@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
-    <ProjectReference Include="..\UoW\UoW.csproj" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
   </ItemGroup>
 
 </Project>
