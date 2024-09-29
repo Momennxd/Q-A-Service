@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Data.Repositories
 {
     public interface IUserRepo : IRepository<User>
@@ -20,7 +19,7 @@ namespace Data.Repositories
 
 
 
-
+        Task<User?> GetUserByID(int UserID);
 
 
     }

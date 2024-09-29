@@ -17,11 +17,12 @@ namespace Core.Profiles
         {
 
             CreateMap<AddUserDTO, User >();
+            CreateMap<User, AddUserDTO>();
 
         }
 
 
 
-    
+
     }
 }

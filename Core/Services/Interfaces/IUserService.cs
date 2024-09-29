@@ -1,4 +1,6 @@
-﻿using Data.models.People;
+﻿using Core.DTOs.People;
+using Data.models.People;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +15,12 @@ namespace Core.Services.Interfaces
 
 
 
-        //Task<User> GetUserByIdAsync(int id);
         //Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User?> CreateUserAsync(AddUserDTO addUserDTO);
         Task<User?> Login(LoginDTO loginDTO);
-        //Task UpdateUserAsync(User user);
+        Task<User?> GetUser(int UserID);
+        Task<User?> PatchUserAsync(JsonPatchDocument<User> UpdatedItem, dynamic PrimaryKey);
+        Task<AddUserDTO?> GetUserByIdAsync(int UserID);
         //Task DeleteUserAsync(int id);
     }
 

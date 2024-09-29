@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.DTOs.People
+﻿namespace Core.DTOs.People
 {
     public class UsersDTOs
     {
-        public record AddUserDTO(
-                string Username,
-                string Password,
-                PeopleDTOs.AddPersonDTO Person,
-                bool IsActive,
-                bool IsDeleted
-            );
+        public class AddUserDTO
+        {
+
+            public string Username;
+            public string Password;
+            public PeopleDTOs.AddPersonDTO Person;
+            public bool IsActive;
+            public bool IsDeleted;
+
+        }
 
 
         public record LoginDTO
@@ -23,8 +20,13 @@ namespace Core.DTOs.People
                 string Password
             );
 
+        public record UpdateDTO
+            (
+                string Username,
+                string Password,
+                PeopleDTOs.UpdateDTO PersonInfo
+            );
 
 
-       
     }
 }

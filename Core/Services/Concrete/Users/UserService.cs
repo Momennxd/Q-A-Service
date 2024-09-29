@@ -12,6 +12,8 @@ using AutoMapper;
 using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repositories;
+using Microsoft.AspNetCore.JsonPatch;
+using static Core.DTOs.People.UsersDTOs;
 
 namespace Core.Services.Concrete.Users
 {
@@ -36,12 +38,34 @@ namespace Core.Services.Concrete.Users
             return user;
         }
 
+        public async Task<User?> GetUser(int UserID)
+        {
+            var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
+            return user;
+        }
+
+        public async Task<UsersDTOs.AddUserDTO?> GetUserByIdAsync(int UserID)
+        {
+            var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
+
+            return _mapper.Map<AddUserDTO>(user);
+        }
+
         public async Task<User?> Login(UsersDTOs.LoginDTO loginDTO)
         {
             var user = await _unitOfWork.EntityRepo.LoginAsync(loginDTO.Username, loginDTO.Password);
 
             return user;
         }
+
+        public async Task<User?> PatchUserAsync(JsonPatchDocument<User> UpdatedItem, dynamic PrimaryKey)
+        {
+            var user = await _unitOfWork.EntityRepo.PatchItemAsync(UpdatedItem, PrimaryKey);
+            await _unitOfWork.CompleteAsync();
+            return user;
+        }
+    
+    
     }
 
 }

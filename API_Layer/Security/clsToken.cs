@@ -40,6 +40,14 @@ namespace API_Layer.Security
 
             return accessToken;
         }
+
+        public static int GetUserID(HttpContext httpContext)
+        {
+            int UserID = int.Parse( httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            return UserID;
+
+        }
     }
 
 }

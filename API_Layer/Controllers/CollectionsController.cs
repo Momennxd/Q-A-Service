@@ -1,16 +1,9 @@
-﻿using Core.Authorization_Services.Concrete;
-using Core.Authorization_Services.Interfaces;
+﻿using Core.Authorization_Services.Interfaces;
 using Core.DTOs.Collections;
-using Core.DTOs.People;
-using Core.Services.Concrete.Collections;
-using Core.Services.Concrete.People;
-using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
-using Data.models.People;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
 
 namespace API_Layer.Controllers
