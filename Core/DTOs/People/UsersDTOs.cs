@@ -5,12 +5,15 @@
         public class AddUserDTO
         {
 
-            public string Username;
-            public string Password;
-            public PeopleDTOs.AddPersonDTO Person;
-            public bool IsActive;
-            public bool IsDeleted;
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public PeopleDTOs.AddPersonDTO Person { get; set; }
 
+        }
+
+        public class SendUserDTO : AddUserDTO
+        {
+            public int UserID { get; set; }
         }
 
 
@@ -20,12 +23,6 @@
                 string Password
             );
 
-        public record UpdateDTO
-            (
-                string Username,
-                string Password,
-                PeopleDTOs.UpdateDTO PersonInfo
-            );
 
 
     }

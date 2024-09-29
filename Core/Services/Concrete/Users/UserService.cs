@@ -14,6 +14,7 @@ using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repositories;
 using Microsoft.AspNetCore.JsonPatch;
 using static Core.DTOs.People.UsersDTOs;
+using Core.DTOs.Collections;
 
 namespace Core.Services.Concrete.Users
 {
@@ -65,14 +66,40 @@ namespace Core.Services.Concrete.Users
             return user;
         }
 
-        public async Task<User?> PatchUserAsync(JsonPatchDocument<User> UpdatedItem, dynamic PrimaryKey)
+
+
+        public async Task<SendUserDTO> PatchUser(JsonPatchDocument<AddUserDTO> patchDoc, int UserID)
         {
-            var user = await _unitOfWork.EntityRepo.PatchItemAsync(UpdatedItem, PrimaryKey);
+            // Await the result of FindAsync to retrieve the actual entity
+            var entity = await _unitOfWork.EntityRepo.FindAsync(UserID);
+
+            if (entity == null)
+            {
+                // Handle the case where the collection is not found
+                throw new KeyNotFoundException($"User with ID {UserID} not found.");
+            }
+
+
+
+            // Map the entity to a DTO to apply the patch
+            var UserDTOToPatch = _mapper.Map<AddUserDTO>(entity);
+
+            // Apply the patch to the DTO
+            patchDoc.ApplyTo(UserDTOToPatch);
+
+            // Map the patched DTO back to the original entity
+            _mapper.Map(UserDTOToPatch, entity);
+
+            // Save changes
             await _unitOfWork.CompleteAsync();
-            return user;
+
+            // Return the updated collection as a DTO
+            return _mapper.Map<SendUserDTO>(entity);
         }
-    
-    
+
+
+
+
     }
 
 }

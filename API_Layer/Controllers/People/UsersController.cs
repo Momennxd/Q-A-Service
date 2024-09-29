@@ -45,9 +45,9 @@ namespace API_Layer.Controllers.People
 
         [HttpPatch]
         [Authorize]
-        public async Task<ActionResult> UpdateUserInfo(JsonPatchDocument<User> UpdatedItem)
+        public async Task<ActionResult> UpdateUserInfo(JsonPatchDocument<AddUserDTO> UpdatedItem)
         {
-            var user = await _userService.PatchUserAsync(UpdatedItem, clsToken.GetUserID(HttpContext));
+            var user = await _userService.PatchUser(UpdatedItem, clsToken.GetUserID(HttpContext));
 
 
             return Ok();
@@ -70,5 +70,7 @@ namespace API_Layer.Controllers.People
             return Ok(await _userService.DeleteUserAsync(clsToken.GetUserID(HttpContext)));
 
         }
+
+
     }
 }
