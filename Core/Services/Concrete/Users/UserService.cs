@@ -38,6 +38,13 @@ namespace Core.Services.Concrete.Users
             return user;
         }
 
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            await _unitOfWork.EntityRepo.DeleteItemAsync(id);
+            await _unitOfWork.CompleteAsync();
+            return true;
+        }
+
         public async Task<User?> GetUser(int UserID)
         {
             var user = await _unitOfWork.EntityRepo.FindAsync(UserID);

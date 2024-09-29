@@ -21,7 +21,7 @@ namespace Core.Services.Interfaces
         Task<User?> GetUser(int UserID);
         Task<User?> PatchUserAsync(JsonPatchDocument<User> UpdatedItem, dynamic PrimaryKey);
         Task<AddUserDTO?> GetUserByIdAsync(int UserID);
-        //Task DeleteUserAsync(int id);
+        Task<bool> DeleteUserAsync(int id);
     }
 
 }

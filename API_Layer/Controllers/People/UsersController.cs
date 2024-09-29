@@ -63,5 +63,12 @@ namespace API_Layer.Controllers.People
             return Ok(user);
         }
 
+        [HttpDelete]
+        [Authorize]
+        public async Task<ActionResult> Delete()
+        {
+            return Ok(await _userService.DeleteUserAsync(clsToken.GetUserID(HttpContext)));
+
+        }
     }
 }
