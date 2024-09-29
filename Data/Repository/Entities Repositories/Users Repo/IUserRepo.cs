@@ -16,7 +16,7 @@ namespace Data.Repositories
         Task<User> FindUserByUsernameAsync(string Username);
 
 
-
+        Task<User?> LoginAsync(string Username, string Password);
 
 
 

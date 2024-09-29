@@ -10,7 +10,6 @@ namespace UoW.Unit_Of_Work
 {
     public interface IUnitOfWork<T, U> where T : IRepository<U> where U : class, IBaseEntity<U> 
     {
-   
         /// <summary>
         /// Represents the Entity Repository that interact with the database.
         /// </summary>

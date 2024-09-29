@@ -37,7 +37,7 @@ public partial class Person : IBaseEntity<Person>
 
     public string? NationalNumber { get; set; }
 
-    public string? ProfilePicUrl { get; set; }
+    //public string? ProfilePicUrl { get; set; }
 
     //public virtual Country Country { get; set; } = null!;
 

@@ -18,8 +18,6 @@ namespace Core.DTOs.People
             public string? Email { get; set; }
             public string? Notes { get; set; }
             public short PreferredLanguageID { get; set; }
-            public string? ProfilePicURL { get; set; }
-
 
 
 

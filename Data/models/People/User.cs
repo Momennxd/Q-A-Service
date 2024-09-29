@@ -19,4 +19,5 @@ public partial class User : IBaseEntity<User>
 
     public bool IsDeleted { get; set; }
 
+    public Person Person { get; set; }
 }

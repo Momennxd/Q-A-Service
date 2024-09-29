@@ -6,68 +6,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.models.People;
+using Core.DTOs.People;
+using AutoMapper;
+using Data.models.Collections;
+using Data.Repository.Entities_Repositories.Collections_Repo;
+using Data.Repositories;
 
 namespace Core.Services.Concrete.Users
 {
-    public class UserService 
+    public class UserService : IUserService
     {
-        //private readonly IUnitOfWork _unitOfWork;
 
-        //public UserService(ILogger<IUnitOfWork> logger, AppDbContext context)
-        //{
-        //    _unitOfWork = new UnitOfWork(logger, context);
-        //}
 
-        //public async Task<User> GetUserByIdAsync(int id)
-        //{
-        //    // Business logic: Fetch user by ID, including related data if necessary
-        //    var user = await _unitOfWork.Users.FindAsync(id);
-        //    if (user == null)
-        //    {
-        //        throw new KeyNotFoundException("User not found.");
-        //    }
-        //    return user;
-        //}
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork<IUserRepo, User> _unitOfWork;
 
-        //public async Task<User> GetUserByUsernameAsync(string Username)
-        //{
-        //    // Business logic: Fetch user by ID, including related data if necessary
-        //    var user = await _unitOfWork.Users.FindUserByUsernameAsync(Username);
-        //    if (user == null)
-        //    {
-        //        throw new KeyNotFoundException("User not found.");
-        //    }
-        //    return user;
-        //}
+        public UserService(IMapper mapper, IUnitOfWork<IUserRepo, User> unitOfWork)
+        {
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
 
-        //public async Task<IEnumerable<User>> GetAllUsersAsync()
-        //{
-        //    return await _unitOfWork.Users.GetAllItemsAsync();
-        //}
+        public async Task<User?> CreateUserAsync(UsersDTOs.AddUserDTO addUserDTO)
+        {
+            var user = _mapper.Map<User>(addUserDTO);
+            await _unitOfWork.EntityRepo.AddItemAsync(user);
+            await _unitOfWork.CompleteAsync();
+            return user;
+        }
 
-        //public async Task<User> CreateUserAsync(User user)
-        //{
-        //    // Business logic: Add any necessary validation
-        //    if (string.IsNullOrEmpty(user.Username))
-        //    {
-        //        throw new ArgumentException("User email is required.");
-        //    }
+        public async Task<User?> Login(UsersDTOs.LoginDTO loginDTO)
+        {
+            var user = await _unitOfWork.EntityRepo.LoginAsync(loginDTO.Username, loginDTO.Password);
 
-        //    await _unitOfWork.Users.AddItemAsync(user);
-        //    await _unitOfWork.CompleteAsync();
-        //    return user;
-        //}
-
-        //public async Task UpdateUserAsync(User user)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task DeleteUserAsync(int id)
-        //{
-        //    throw new NotImplementedException();
-
-        //}
+            return user;
+        }
     }
 
 }
