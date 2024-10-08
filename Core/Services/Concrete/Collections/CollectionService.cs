@@ -1,40 +1,18 @@
 ﻿using AutoMapper;
 using Core.DTOs.Collections;
-using Core.DTOs.People;
 using Core.Services.Interfaces;
-using UoW.Unit_Of_Work;
 using Data.models.Collections;
-using Data.models.People;
-using Data.Repositories;
 using Data.Repository.Entities_Repositories.Collections_Repo;
-using Data.Repository.Entities_Repositories.People_Repo;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
+using UoW.Unit_Of_Work;
 
 namespace Core.Services.Concrete.Collections
 {
     public class CollectionService : ICollectionService
     {
 
-        private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
-
-
-
         private readonly IMapper _mapper;
-
-
-
+        private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
         //temp
         public CollectionService(IMapper mapper, IUnitOfWork<ICollectionRepo, QCollection> uowCollections)
         {
@@ -52,7 +30,7 @@ namespace Core.Services.Concrete.Collections
 
 
             return await _unitOfWork.CompleteAsync();
-          
+
         }
 
 
@@ -105,7 +83,7 @@ namespace Core.Services.Concrete.Collections
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
-            foreach(var dto in sentDto)
+            foreach (var dto in sentDto)
             {
                 var categories =
                     await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
@@ -153,7 +131,7 @@ namespace Core.Services.Concrete.Collections
 
             if (eCollection == null) return null;
 
-            var dto =  _mapper.Map<CollectionsDTOs.SendCollectionDTO>(eCollection);
+            var dto = _mapper.Map<CollectionsDTOs.SendCollectionDTO>(eCollection);
 
             dto.Categories = await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
 

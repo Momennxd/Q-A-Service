@@ -1,6 +1,7 @@
 ﻿
 using Data.DatabaseContext;
 using Data.models.People;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,11 @@ namespace Data.Repositories
     public class UserRepo : Repository<User>, IUserRepo
     {
 
-
+        AppDbContext _context;
 
         public UserRepo(AppDbContext context) : base(context)
         {
-            
+            _context = context;
         }
 
         public Task<User?> FindUserByUsernameAsync(string Username)
@@ -26,6 +27,23 @@ namespace Data.Repositories
             return null;
         }
 
-       
+        public async Task<User?> GetUserByID(int UserID)
+        {
+            var user =await _context
+                .Users
+                .Include(u => u.Person)
+                .FirstOrDefaultAsync(u => u.UserId == UserID);
+
+            return user;
+        }
+
+        public async Task<User?> LoginAsync(string Username, string Password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u=> u.Username == Username && u.Password == Password);
+
+            return user;
+        }
+
+        
     }
 }

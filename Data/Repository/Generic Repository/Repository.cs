@@ -1,9 +1,8 @@
+using Data.DatabaseContext;
 using Data.models.Base;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Logging;
-using Data.DatabaseContext;
 
 namespace Data.Repositories
 {
@@ -19,7 +18,7 @@ namespace Data.Repositories
 
 
 
-        public  Repository(AppDbContext context)
+        public Repository(AppDbContext context)
         {
             //_Logger = Logger;
             _appDbContext = context;
@@ -75,8 +74,19 @@ namespace Data.Repositories
         }
 
 
+        #region Patch item
 
-       
+        public async Task<T?> PatchItemAsync(JsonPatchDocument<T> NewItem, dynamic ItemPK)
+        {
+            T Item = await _dbSet.FindAsync(ItemPK);
+            NewItem.ApplyTo(Item);
+            return Item;
+        }
+
+        #endregion
+
+
+
 
 
     }

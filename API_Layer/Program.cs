@@ -1,29 +1,27 @@
 using API_Layer.Authorization;
-using API_Layer.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using UoW.Unit_Of_Work;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 using API_Layer.Exceptions;
-using System.ComponentModel.DataAnnotations;
-using Core.Services.Concrete.Users;
-using Core.Services.Concrete.People;
-using Core.Services.Concrete.Collections;
+using API_Layer.Security;
+using CloudinaryDotNet;
 using Core.Authorization_Services.Concrete;
-using System.Linq.Expressions;
-using Core.Services.Interfaces;
 using Core.Authorization_Services.Interfaces;
-using Data.Repository.Entities_Repositories.Collections_Repo;
-using Core;
+using Core.Services.Concrete.Collections;
+using Core.Services.Concrete.Users;
+using Core.Services.Interfaces;
 using Data.DatabaseContext;
 using Data.models.Collections;
-using CloudinaryDotNet;
+using Data.models.People;
+using Data.Repositories;
+using Data.Repository.Entities_Repositories.Collections_Repo;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.Concrete;
-using Microsoft.Extensions.DependencyInjection;
 using Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Text;
+using UoW.Unit_Of_Work;
 
 
 
@@ -45,28 +43,36 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
-// Load Cloudinary settings from appsettings.json
-var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
+//// Load Cloudinary settings from appsettings.json
+//var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
 
-// Initialize Cloudinary with the settings
-var cloudinaryAccount = new Account(cloudinarySettings.CloudName, cloudinarySettings.ApiKey, cloudinarySettings.ApiSecret);
-var cloudinary = new Cloudinary(cloudinaryAccount);
-
-
-// Register Cloudinary as a singleton
-builder.Services.AddSingleton(cloudinary);
+//// Initialize Cloudinary with the settings
+//var cloudinaryAccount = new Account(cloudinarySettings.CloudName, cloudinarySettings.ApiKey, cloudinarySettings.ApiSecret);
+//var cloudinary = new Cloudinary(cloudinaryAccount);
 
 
-//adding the scope of clouinary
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+//// Register Cloudinary as a singleton
+//builder.Services.AddSingleton(cloudinary);
 
 
+////adding the scope of clouinary
+//builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
+
+#region Collections injection
 builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
 builder.Services.AddScoped<ICollectionRepo, CollectionRepo>();
-
 builder.Services.AddScoped<IUnitOfWork<ICollectionRepo, QCollection>, UnitOfWork<ICollectionRepo, QCollection>>();
+#endregion
+
+#region Users injection
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IUnitOfWork<IUserRepo, User>, UnitOfWork<IUserRepo, User>>();
+
+#endregion
+
 
 
 
@@ -165,7 +171,7 @@ app.UseExceptionHandler(config =>
             {
                 case ValidationException:
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;           
+                    break;
                 case UnauthorizedAccessException:
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     break;
@@ -178,7 +184,7 @@ app.UseExceptionHandler(config =>
                 case FormatException:
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     break;
-               
+
 
                     // Add more cases as needed
             }

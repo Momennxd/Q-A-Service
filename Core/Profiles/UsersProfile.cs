@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.People.UsersDTOs;
 
 namespace Core.Profiles
 {
@@ -15,12 +16,15 @@ namespace Core.Profiles
         public UsersProfile()
         {
 
-            CreateMap<User, Core.DTOs.People.UsersDTOs.AddUserDTO>();
+            CreateMap<AddUserDTO, User >();
+            CreateMap<User, AddUserDTO>();
+            CreateMap<SendUserDTO, User>();
+            CreateMap< User, SendUserDTO>();
 
         }
 
 
 
-    
+
     }
 }

@@ -27,6 +27,7 @@ namespace Data.Repositories
 
         public Task DeleteItemAsync(dynamic ItemPK);
 
+        public Task<T?> PatchItemAsync(JsonPatchDocument<T> NewItem, dynamic ItemPK);
 
     }
 }
