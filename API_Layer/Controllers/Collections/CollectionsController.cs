@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Security.Claims;
 
-namespace API_Layer.Controllers
+namespace API_Layer.Controllers.Collections
 {
 
     [Route("API/Collections")]
@@ -28,8 +28,8 @@ namespace API_Layer.Controllers
         public CollectionsController(ICollectionService collectionService,
             ICollectionsAuthService collectionsAuthService)
         {
-            this._collectionService = collectionService;
-            this._collectionsAuthService = collectionsAuthService;
+            _collectionService = collectionService;
+            _collectionsAuthService = collectionsAuthService;
         }
 
 

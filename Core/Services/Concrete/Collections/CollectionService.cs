@@ -92,7 +92,6 @@ namespace Core.Services.Concrete.Collections
             await _unitOfWork.EntityRepo.DeleteItemAsync(id);
 
 
-
             // Save changes
             await _unitOfWork.CompleteAsync();
         }
