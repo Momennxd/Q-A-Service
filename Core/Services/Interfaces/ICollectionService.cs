@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Collections;
+using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Collections.CollectionsDTOs;
 
 namespace Core.Services.Interfaces
 {
@@ -35,8 +37,9 @@ namespace Core.Services.Interfaces
 
         public Task<CollectionsDTOs.SendCollectionDTO> PatchCollection
             (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID);
-       
 
+
+        public Task<IEnumerable<CollectionDTO>> GetTop20Collections();
 
 
     }

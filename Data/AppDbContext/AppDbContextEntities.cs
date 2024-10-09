@@ -13,6 +13,7 @@ namespace Data.DatabaseContext
 
         public virtual DbSet<User> Users {  get; set; }
 
+        public virtual DbSet<Category> Categories {  get; set; }
  
         public virtual DbSet<Person> People { get; set; }
 

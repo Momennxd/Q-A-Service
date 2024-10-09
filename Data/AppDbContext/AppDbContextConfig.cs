@@ -1,4 +1,5 @@
 ﻿using Data.models._SP_;
+using Data.models.Collections;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.DatabaseContext
@@ -17,7 +18,24 @@ namespace Data.DatabaseContext
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<SPCollectionCetagory>().HasNoKey(); // Indicate that this is a keyless entity
+
+            // Configure the primary key for the join entity
+            modelBuilder.Entity<CollectionsCategories>()
+                .HasKey(cc => new { cc.CollectionID, cc.CategoryID });
+
+            // Configure the relationship between QCollection and CollectionCategory
+            modelBuilder.Entity<CollectionsCategories>()
+                .HasOne(cc => cc.QCollection)
+                .WithMany(q => q.CollectionCategories)
+                .HasForeignKey(cc => cc.CollectionID);
+
+            // Configure the relationship between Category and CollectionCategory
+            modelBuilder.Entity<CollectionsCategories>()
+                .HasOne(cc => cc.Category)
+                .WithMany(c => c.CollectionCategories)
+                .HasForeignKey(cc => cc.CategoryID);
         }
+
 
     }
 }

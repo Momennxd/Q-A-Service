@@ -7,6 +7,7 @@ using AutoMapper;
 using Core.DTOs.Collections;
 using Data.Repositories;
 using Data.models.Collections;
+using static Core.DTOs.Collections.CollectionsDTOs;
 
 namespace Core.Profiles
 {
@@ -28,7 +29,13 @@ namespace Core.Profiles
            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
 
 
-
+            CreateMap<QCollection, CollectionDTO>()
+                .ForMember(
+                    dest => dest.Categories,
+                    opt => opt.MapFrom(
+                            src => src.CollectionCategories.Select(cc => cc.Category))
+                    );
+            CreateMap<Category, CategoryDTO>();
         }
 
     }

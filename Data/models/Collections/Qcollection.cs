@@ -24,5 +24,5 @@ public partial class QCollection : IBaseEntity<QCollection>
 
     public bool IsPublic { get; set; }
 
-
+    public ICollection<CollectionsCategories> CollectionCategories { get; set; }
 }

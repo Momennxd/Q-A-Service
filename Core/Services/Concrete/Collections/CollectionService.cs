@@ -5,6 +5,7 @@ using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
 using UoW.Unit_Of_Work;
+using static Core.DTOs.Collections.CollectionsDTOs;
 
 namespace Core.Services.Concrete.Collections
 {
@@ -158,6 +159,12 @@ namespace Core.Services.Concrete.Collections
         }
 
 
+        public async Task<IEnumerable<CollectionDTO>> GetTop20Collections()
+        {
 
+            var collections = await _unitOfWork.EntityRepo.GetTop20Collections();
+            return _mapper.Map<IEnumerable<CollectionDTO>>(collections);
+
+        }
     }
 }

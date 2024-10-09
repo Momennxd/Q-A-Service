@@ -36,7 +36,18 @@ namespace Core.DTOs.Collections
         }
 
 
+        public class CollectionDTO
+        {
+            public int CollectionID { get; set; }
+            public string CollectionName { get; set; }
+            public List<CategoryDTO> Categories { get; set; }
+        }
 
+        public class CategoryDTO
+        {
+            public int CategoryID { get; set; }
+            public string CategoryName { get; set; }
+        }
 
     }
 }
