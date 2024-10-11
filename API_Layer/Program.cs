@@ -62,6 +62,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #region Collections injection
 builder.Services.AddScoped<ICollectionService, CollectionService>();
 builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
+
 builder.Services.AddScoped<ICollectionRepo, CollectionRepo>();
 builder.Services.AddScoped<IUnitOfWork<ICollectionRepo, QCollection>, UnitOfWork<ICollectionRepo, QCollection>>();
 #endregion

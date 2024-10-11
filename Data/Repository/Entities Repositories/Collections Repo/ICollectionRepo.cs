@@ -35,5 +35,8 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
         public Task<IEnumerable<QCollection>> GetTop20Collections();
 
+        public Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);
+
+        Task<bool> DeleteLikeAsync(int CollectionID, int UserID);
     }
 }

@@ -166,5 +166,17 @@ namespace Core.Services.Concrete.Collections
             return _mapper.Map<IEnumerable<CollectionDTO>>(collections);
 
         }
+
+        public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
+        {
+            await _unitOfWork.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
+            return await _unitOfWork.CompleteAsync() == 1;
+        }
+
+        public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
+        {
+            await _unitOfWork.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
+            return await _unitOfWork.CompleteAsync() == 1;
+        }
     }
 }

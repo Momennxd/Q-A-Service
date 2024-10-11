@@ -19,6 +19,7 @@ namespace Data.DatabaseContext
 
 
         public virtual DbSet<QCollection> QCollections { get; set; }
+        public virtual DbSet<CollectionsLikes> Collections_Likes { get; set; }
 
 
         public virtual DbSet<SPCollectionCetagory> SpCollectionCetagories { get; set; }

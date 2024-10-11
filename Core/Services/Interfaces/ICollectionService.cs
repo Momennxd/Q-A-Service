@@ -41,6 +41,11 @@ namespace Core.Services.Interfaces
 
         public Task<IEnumerable<CollectionDTO>> GetTop20Collections();
 
+        Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);
 
+
+
+
+        Task<bool> DeleteLikeAsync(int CollectionID, int UserID);
     }
 }

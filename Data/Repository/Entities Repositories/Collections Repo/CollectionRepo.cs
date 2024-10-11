@@ -19,6 +19,15 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             //_logger = Logger;
         }
 
+        public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
+        {
+            var collLikes = await _appDbContext.Collections_Likes.FirstOrDefaultAsync(cl=> cl.LikedUserID == UserID);
+            if (collLikes ==  null)
+                return false;
+
+            _appDbContext.Collections_Likes.Remove(collLikes);
+            return true;
+        }
 
         public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic)
         {
@@ -73,5 +82,36 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
             return collections;
         }
+        public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
+        {
+            // Check if the user has already interacted with the collection
+            var existingItem = await _appDbContext.Collections_Likes
+                .FirstOrDefaultAsync(cl => cl.CollectionID == CollectionID && cl.LikedUserID == UserId);
+
+            if (existingItem != null)
+            {
+                // Toggle the LikeDislike value
+                existingItem.Like_Dislike = !existingItem.Like_Dislike;
+                existingItem.LikeDate = DateTime.Now;
+                _appDbContext.Collections_Likes.Update(existingItem);
+            }
+            else
+            {
+                // Insert a new record
+                var NewItem = new CollectionsLikes()
+                {
+                    CollectionID = CollectionID,
+                    LikeDate = DateTime.Now,
+                    Like_Dislike = IsLike,
+                    LikedUserID = UserId
+                };
+
+                await _appDbContext.Collections_Likes.AddAsync(NewItem);
+            }
+
+            // Save changes and return true if successful
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
     }
 }
