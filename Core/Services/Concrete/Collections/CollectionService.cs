@@ -4,7 +4,7 @@ using Core.Services.Interfaces;
 using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
-using UoW.Unit_Of_Work;
+using Core.Unit_Of_Work;
 
 namespace Core.Services.Concrete.Collections
 {
@@ -13,7 +13,7 @@ namespace Core.Services.Concrete.Collections
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
-        //temp
+
         public CollectionService(IMapper mapper, IUnitOfWork<ICollectionRepo, QCollection> uowCollections)
         {
             _unitOfWork = uowCollections;

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Core.DTOs.Questions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Core.DTOs.Collections
 {
 
-    public sealed class CollectionsDTOs
+    public static class CollectionsDTOs
     {
 
 
@@ -14,17 +15,13 @@ namespace Core.DTOs.Collections
             public bool IsPublic { get; set; }
         }
 
-
+        
 
         public class SendCollectionDTO : CollectionBaseDTO
         { 
            public int CollectionID { get; set; }
            public DateTime AddedTime { get; set; }
-
-           
-
            public ICollection<string> Categories { get; set; } = new List<string>();
-
 
         }
 
@@ -35,8 +32,7 @@ namespace Core.DTOs.Collections
 
         }
 
-
-
+      
 
     }
 }

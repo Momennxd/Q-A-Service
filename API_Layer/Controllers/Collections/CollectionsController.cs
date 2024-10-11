@@ -51,10 +51,7 @@ namespace API_Layer.Controllers.Collections
             if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
                 return Unauthorized();
 
-
             return Ok(await _collectionService.PatchCollection(patchDoc, CollecID));
-
-
         }
 
 

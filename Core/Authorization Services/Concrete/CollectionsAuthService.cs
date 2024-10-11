@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Authorization_Services.Interfaces;
-using UoW.Unit_Of_Work;
+using Core.Unit_Of_Work;
 using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.Extensions.Logging;

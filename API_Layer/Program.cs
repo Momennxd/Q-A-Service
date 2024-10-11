@@ -5,13 +5,16 @@ using CloudinaryDotNet;
 using Core.Authorization_Services.Concrete;
 using Core.Authorization_Services.Interfaces;
 using Core.Services.Concrete.Collections;
+using Core.Services.Concrete.Pictures;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
 using Data.DatabaseContext;
 using Data.models.Collections;
 using Data.models.People;
+using Data.models.Pictures;
 using Data.Repositories;
 using Data.Repository.Entities_Repositories.Collections_Repo;
+using Data.Repository.Entities_Repositories.Pictures.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +24,7 @@ using Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text;
-using UoW.Unit_Of_Work;
+using Core.Unit_Of_Work;
 
 
 
@@ -44,19 +47,19 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 //// Load Cloudinary settings from appsettings.json
-//var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
+var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
 
 //// Initialize Cloudinary with the settings
-//var cloudinaryAccount = new Account(cloudinarySettings.CloudName, cloudinarySettings.ApiKey, cloudinarySettings.ApiSecret);
-//var cloudinary = new Cloudinary(cloudinaryAccount);
+var cloudinaryAccount = new Account(cloudinarySettings.CloudName, cloudinarySettings.ApiKey, cloudinarySettings.ApiSecret);
+var cloudinary = new Cloudinary(cloudinaryAccount);
 
 
 //// Register Cloudinary as a singleton
-//builder.Services.AddSingleton(cloudinary);
+builder.Services.AddSingleton(cloudinary);
 
 
 ////adding the scope of clouinary
-//builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 
 #region Collections injection
@@ -74,20 +77,13 @@ builder.Services.AddScoped<IUnitOfWork<IUserRepo, User>, UnitOfWork<IUserRepo, U
 #endregion
 
 
+builder.Services.AddScoped<IPicsService, PicsService>();
+builder.Services.AddScoped<IPicsRepo, PicsRepo>();
+builder.Services.AddScoped<IUnitOfWork<IPicsRepo, Pics>, UnitOfWork<IPicsRepo, Pics>>();
 
 
 
 
-
-//builder.Services.AddScoped<UserService>();
-//builder.Services.AddScoped<PeopleService>();
-//builder.Services.AddScoped<CollectionsAuthService>();
-
-//builder.Services.AddScoped<ICollectionService, CollectionService>();
-//builder.Services.AddScoped<ICollectionsAuthService, CollectionsAuthService>();
-
-//builder.Services.AddScoped<IPersonService, PeopleService>();
-//builder.Services.AddScoped<IUserService, UserService>();
 
 
 

@@ -74,16 +74,7 @@ namespace Data.Repositories
         }
 
 
-        #region Patch item
-
-        public async Task<T?> PatchItemAsync(JsonPatchDocument<T> NewItem, dynamic ItemPK)
-        {
-            T Item = await _dbSet.FindAsync(ItemPK);
-            NewItem.ApplyTo(Item);
-            return Item;
-        }
-
-        #endregion
+       
 
 
 

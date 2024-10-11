@@ -21,7 +21,6 @@ namespace Data.models.Questions
 
         public DateTime AddedDate { get; set; }
 
-        public int ExplanationID { get; set; }
 
         public bool IsDeleted { get; set; }
 

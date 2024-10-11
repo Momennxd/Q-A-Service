@@ -9,22 +9,36 @@ namespace Core.DTOs.Questions
     public static class QuestionsDTOs
     {    
     
-    
-        private class QuestionDTOBase
+
+        public class CreateQuestionDTO
         {
+
             public string QuestionText { get; set; }
+
+            public int UserID { get; set; }
+
+            public bool IsMCQ { get; set; }
+
+
+            public List<QuestionsChoicesDTOs.CreateChoiceDTO> Choices { get; set; }
 
 
 
         }
 
 
-
-        public class CreateQuestionDTO
+        public class SendQuestionDTO
         {
 
+            public int QuestionID { get; set; }
 
+            public string QuestionText { get; set; }
 
+            public bool IsMCQ { get; set; }
+
+            public DateTime AddedDate { get; set; }
+
+            public List<QuestionsChoicesDTOs.SendChoiceDTO> Choices { get; set; }
 
 
         }
