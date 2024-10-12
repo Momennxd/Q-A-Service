@@ -21,15 +21,14 @@ namespace Core.Services.Concrete.Pictures
         private readonly IMapper _mapper;
 
         private readonly IUnitOfWork<IChoicesPicsRepo, Choices_Pics> Choices_unitOfWork;
-        private readonly IUnitOfWork<IPicsRepo, Pics> Pics_unitOfWork;
-
+        private readonly IPicsService _picsService;
 
 
         public ChoicesPicsService(IMapper mapper, IUnitOfWork<IChoicesPicsRepo, Choices_Pics> uow,
-            IUnitOfWork<IPicsRepo, Pics> PicsUnitOfWork)
+            IPicsService picsService)
         {
             Choices_unitOfWork = uow;
-            Pics_unitOfWork = PicsUnitOfWork;
+            _picsService = picsService;
             _mapper = mapper;
         }
 
@@ -37,22 +36,19 @@ namespace Core.Services.Concrete.Pictures
             (ChoicesPicsDTOs.CreateChoicePicDTO createChoicePicDTO)
         {
 
-            var picEntity = _mapper.Map<Pics>(createChoicePicDTO.Pic);
-            await Pics_unitOfWork.EntityRepo.AddItemAsync(picEntity);
-
-            if (await Pics_unitOfWork.CompleteAsync() != 1)
-                return null;
-                    
-
+            var sendPicDto = await _picsService.CreatePicAsync(createChoicePicDTO.Pic);
 
             var choicePicEntity = _mapper.Map<Choices_Pics>(createChoicePicDTO);
-            choicePicEntity.PicID = picEntity.PicID;
+
+            choicePicEntity.PicID = sendPicDto.PicID;
+
             await Choices_unitOfWork.EntityRepo.AddItemAsync(choicePicEntity);
+
             await Choices_unitOfWork.CompleteAsync();
 
-
             var outputDTO = _mapper.Map<ChoicesPicsDTOs.SendChoicePicDTO>(choicePicEntity);
-            outputDTO.Pic = _mapper.Map<PicsDTOs.SendPicDTOs>(picEntity);
+
+            outputDTO.Pic = sendPicDto;
 
             return outputDTO;
         }
