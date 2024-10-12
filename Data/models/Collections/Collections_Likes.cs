@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Collections
 {
-    public class CollectionsLikes : IBaseEntity<CollectionsLikes>
+    public class Collections_Likes : IBaseEntity<Collections_Likes>
     {
         [Key]
         public int LikeID { get; set; }

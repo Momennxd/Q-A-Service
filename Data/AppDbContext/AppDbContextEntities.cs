@@ -10,6 +10,10 @@ namespace Data.DatabaseContext
 {
     public partial class AppDbContext
     {
+        
+        public virtual DbSet<Categories> Categories { get; set; }
+
+        public virtual DbSet<Collections_Likes> Collections_Likes { get; set; }
 
         public virtual DbSet<CollectionsCategories> Collections_Categories { get; set; }
 
@@ -24,8 +28,10 @@ namespace Data.DatabaseContext
 
         public virtual DbSet<QCollection> QCollections { get; set; }
 
+        public virtual DbSet<Choices_Pics> Choices_Pics { get; set; }
+        public virtual DbSet<Pics> Pics { get; set; }
 
         public virtual DbSet<SPCollectionCetagory> SpCollectionCetagories { get; set; }
-
+        
     }
 }

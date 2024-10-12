@@ -39,7 +39,7 @@ namespace Core.Services.Interfaces
             (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID);
 
 
-        public Task<IEnumerable<CollectionDTO>> GetTop20Collections();
+        public Task<IEnumerable<SendCollectionDTO>> GetTop20Collections();
 
         Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);
 

@@ -18,10 +18,8 @@ namespace Core.Profiles
         public CollectionsProfile()
         {
 
-            CreateMap<QCollection, CollectionsDTOs.CreateQCollectionDTO>();
 
-
-            CreateMap<QCollection, CollectionsDTOs.SendCollectionDTO>();
+            CreateMap<QCollection, SendCollectionDTO>();
 
 
             CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
@@ -29,13 +27,6 @@ namespace Core.Profiles
            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
 
 
-            CreateMap<QCollection, CollectionDTO>()
-                .ForMember(
-                    dest => dest.Categories,
-                    opt => opt.MapFrom(
-                            src => src.CollectionCategories.Select(cc => cc.Category))
-                    );
-            CreateMap<Category, CategoryDTO>();
         }
 
     }

@@ -22,8 +22,8 @@ namespace API_Layer.Controllers.Collections
         public async Task<IActionResult> LikeDislike(int CollectionId, bool IsLike)
         {
             int UserId = clsToken.GetUserID(HttpContext);
-            await _collectionService.LikeAsync(UserId, CollectionId, IsLike);
-            return Ok();
+            bool Res = await _collectionService.LikeAsync(UserId, CollectionId, IsLike);
+            return Res ? Ok() : BadRequest();
         }
 
         [HttpDelete]
@@ -31,8 +31,8 @@ namespace API_Layer.Controllers.Collections
         public async Task<IActionResult> Delete(int CollectionId)
         {
             int UserId = clsToken.GetUserID(HttpContext);
-            await _collectionService.DeleteLikeAsync(CollectionId, UserId);
-            return Ok();
+            bool Res =  await _collectionService.DeleteLikeAsync(CollectionId, UserId);
+            return Res ? Ok() : BadRequest();
         }
     }
 }

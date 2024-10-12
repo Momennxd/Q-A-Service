@@ -17,11 +17,13 @@ namespace Data.models.Collections
 
 
         public int CollectionID { get; set; }
+
         public QCollection QCollection { get; set; }
 
 
         public int CategoryID { get; set; }
-        public Category Category { get; set; }
+
+        public Categories Category { get; set; }
        
 
     }

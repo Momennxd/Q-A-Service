@@ -98,7 +98,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             else
             {
                 // Insert a new record
-                var NewItem = new CollectionsLikes()
+                var NewItem = new Collections_Likes()
                 {
                     CollectionID = CollectionID,
                     LikeDate = DateTime.Now,

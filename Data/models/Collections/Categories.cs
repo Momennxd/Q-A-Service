@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Collections
 {
-    public class Category : IBaseEntity<Category>
+    public class Categories : IBaseEntity<Categories>
     {
         [Key]
         public int CategoryID { get; set; } // Primary Key
