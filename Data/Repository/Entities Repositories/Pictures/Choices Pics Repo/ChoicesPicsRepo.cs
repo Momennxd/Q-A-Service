@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo
 {
-    public class ChoicesPicsRepo : Repository<ChoicesPics>, IChoicesPicsRepo
+    public class ChoicesPicsRepo : Repository<Choices_Pics>, IChoicesPicsRepo
     {
         private AppDbContext _appDbContext;
         public ChoicesPicsRepo(AppDbContext context) : base(context)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo
 {
-    public interface IChoicesPicsRepo : IRepository<ChoicesPics>
+    public interface IChoicesPicsRepo : IRepository<Choices_Pics>
     {
 
 

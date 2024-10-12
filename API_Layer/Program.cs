@@ -25,6 +25,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text;
 using Core.Unit_Of_Work;
+using Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo;
 
 
 
@@ -80,6 +81,14 @@ builder.Services.AddScoped<IUnitOfWork<IUserRepo, User>, UnitOfWork<IUserRepo, U
 builder.Services.AddScoped<IPicsService, PicsService>();
 builder.Services.AddScoped<IPicsRepo, PicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPicsRepo, Pics>, UnitOfWork<IPicsRepo, Pics>>();
+
+
+
+
+builder.Services.AddScoped<IChoicesPicsService, ChoicesPicsService>();
+builder.Services.AddScoped<IChoicesPicsRepo, ChoicesPicsRepo>();
+builder.Services.AddScoped<IUnitOfWork<IChoicesPicsRepo, Choices_Pics>, UnitOfWork<IChoicesPicsRepo, Choices_Pics>>();
+
 
 
 

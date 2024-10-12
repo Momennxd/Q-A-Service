@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Pictures
 {
-    public class ChoicesPics : IBaseEntity<ChoicesPics>
+    public class Choices_Pics : IBaseEntity<Choices_Pics>
     {
 
         [Key]        
@@ -17,8 +17,7 @@ namespace Data.models.Pictures
 
         public int PicID { get; set; }
 
-
-
         public int ChoiceID { get; set; }
+
     }
 }

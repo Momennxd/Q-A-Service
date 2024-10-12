@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +26,8 @@ namespace Core.DTOs.Pictures
         {
             public int PicID { get; set; }
 
+            
             public PicsDTOs.SendPicDTOs Pic { get; set; }
-
 
             public int ChoiceID { get; set; }
         }

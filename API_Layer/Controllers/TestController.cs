@@ -27,10 +27,10 @@ namespace API_Layer.Controllers.Collections
     {
 
         private readonly ICloudinaryService _cloudinary;
-        private readonly IPicsService _PicsService;
+        private readonly IChoicesPicsService _PicsService;
 
 
-        public TestController(ICloudinaryService cloudinary, IPicsService picsService)
+        public TestController(ICloudinaryService cloudinary, IChoicesPicsService picsService)
         {
             _cloudinary = cloudinary;
             _PicsService = picsService;
@@ -72,9 +72,9 @@ namespace API_Layer.Controllers.Collections
 
         [HttpPost]
         [Route("CreatePic")]
-        public async Task<IActionResult> CreatePic([FromBody] PicsDTOs.CreatePicDTOs createPicDTOs)
+        public async Task<IActionResult> CreatePic([FromBody] ChoicesPicsDTOs.CreateChoicePicDTO createPicDTOs)
         {
-            return Ok(await _PicsService.CreatePicAsync(createPicDTOs));
+            return Ok(await _PicsService.CreateChoicePicAsync(createPicDTOs));
         }
 
     }

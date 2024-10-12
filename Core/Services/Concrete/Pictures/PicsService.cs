@@ -30,8 +30,9 @@ namespace Core.Services.Concrete.Pictures
             _mapper = mapper;
         }
 
-        public async Task<PicsDTOs.SendPicDTOs> CreatePicAsync(PicsDTOs.CreatePicDTOs createPicDTO)
+        public async Task<PicsDTOs.SendPicDTOs?> CreatePicAsync(PicsDTOs.CreatePicDTOs createPicDTO)
         {
+            if (createPicDTO == null || createPicDTO.Rank < 0) return null;
 
             var entity = _mapper.Map<Pics>(createPicDTO);
 

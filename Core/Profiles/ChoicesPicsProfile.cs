@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.DTOs.Pictures;
 using Data.models.Pictures;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,12 @@ namespace Core.Profiles
 
         public ChoicesPicsProfile() {
 
-            CreateMap<ChoicesPics, DTOs.Pictures.ChoicesPicsDTOs.SendChoicePicDTO>();
+            CreateMap<Choices_Pics, DTOs.Pictures.ChoicesPicsDTOs.SendChoicePicDTO>();
 
-            CreateMap<DTOs.Pictures.ChoicesPicsDTOs.CreateChoicePicDTO, ChoicesPics>();
+            CreateMap<DTOs.Pictures.ChoicesPicsDTOs.CreateChoicePicDTO, Choices_Pics>();
+
+
+            
         }
 
 
