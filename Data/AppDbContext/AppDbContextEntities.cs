@@ -18,14 +18,11 @@ namespace Data.DatabaseContext
 
         public virtual DbSet<User> Users {  get; set; }
 
-        public virtual DbSet<Pics> Pics { get; set; }
-
-
+ 
         public virtual DbSet<Person> People { get; set; }
 
 
         public virtual DbSet<QCollection> QCollections { get; set; }
-        public virtual DbSet<Choices_Pics> Choices_Pics { get; set; }
 
 
         public virtual DbSet<SPCollectionCetagory> SpCollectionCetagories { get; set; }

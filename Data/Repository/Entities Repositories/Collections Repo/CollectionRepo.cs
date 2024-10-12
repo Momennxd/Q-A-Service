@@ -1,16 +1,9 @@
-﻿using Data.Repositories;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.DatabaseContext;
 using Data.models._SP_;
 using Data.models.Collections;
-using Data.DatabaseContext;
+using Data.Repositories;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repository.Entities_Repositories.Collections_Repo
 {
@@ -26,16 +19,25 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             //_logger = Logger;
         }
 
+        public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
+        {
+            var collLikes = await _appDbContext.Collections_Likes.FirstOrDefaultAsync(cl=> cl.LikedUserID == UserID);
+            if (collLikes ==  null)
+                return false;
+
+            _appDbContext.Collections_Likes.Remove(collLikes);
+            return true;
+        }
 
         public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic)
         {
 
             return await _appDbContext.QCollections
         .Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic && !coll.IsDeleted)
-            
-        .ToListAsync(); 
 
-        
+        .ToListAsync();
+
+
         }
 
 
@@ -57,9 +59,59 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             return categories.Select(c => c.CategoryName).ToList();
         }
 
+        public async Task<IEnumerable<QCollection>> GetTop20Collections()
+        {
+            var collections = await _appDbContext.QCollections
+               .FromSqlRaw("EXEC GetTop20Collection")
+               .ToListAsync();
 
+            // Load related data for each collection
+            foreach (var collection in collections)
+            {
+                await _appDbContext.Entry(collection)
+                    .Collection(c => c.CollectionCategories)
+                    .LoadAsync();
 
+                foreach (var collectionCategory in collection.CollectionCategories)
+                {
+                    await _appDbContext.Entry(collectionCategory)
+                        .Reference(cc => cc.Category)
+                        .LoadAsync();
+                }
+            }
 
+            return collections;
+        }
+        public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
+        {
+            // Check if the user has already interacted with the collection
+            var existingItem = await _appDbContext.Collections_Likes
+                .FirstOrDefaultAsync(cl => cl.CollectionID == CollectionID && cl.LikedUserID == UserId);
+
+            if (existingItem != null)
+            {
+                // Toggle the LikeDislike value
+                existingItem.Like_Dislike = !existingItem.Like_Dislike;
+                existingItem.LikeDate = DateTime.Now;
+                _appDbContext.Collections_Likes.Update(existingItem);
+            }
+            else
+            {
+                // Insert a new record
+                var NewItem = new CollectionsLikes()
+                {
+                    CollectionID = CollectionID,
+                    LikeDate = DateTime.Now,
+                    Like_Dislike = IsLike,
+                    LikedUserID = UserId
+                };
+
+                await _appDbContext.Collections_Likes.AddAsync(NewItem);
+            }
+
+            // Save changes and return true if successful
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
 
     }
 }

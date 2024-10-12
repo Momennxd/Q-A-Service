@@ -4,7 +4,7 @@ using Core.Services.Interfaces;
 using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
-using Core.Unit_Of_Work;
+using UoW.Unit_Of_Work;
 
 namespace Core.Services.Concrete.Collections
 {
@@ -157,6 +157,24 @@ namespace Core.Services.Concrete.Collections
         }
 
 
+        public async Task<IEnumerable<CollectionDTO>> GetTop20Collections()
+        {
 
+            var collections = await _unitOfWork.EntityRepo.GetTop20Collections();
+            return _mapper.Map<IEnumerable<CollectionDTO>>(collections);
+
+        }
+
+        public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
+        {
+            await _unitOfWork.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
+            return await _unitOfWork.CompleteAsync() == 1;
+        }
+
+        public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
+        {
+            await _unitOfWork.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
+            return await _unitOfWork.CompleteAsync() == 1;
+        }
     }
 }
