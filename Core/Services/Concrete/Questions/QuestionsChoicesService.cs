@@ -64,7 +64,24 @@ namespace Core.Services.Concrete.Questions
 
         }
 
-        public async Task<List<SendChoiceDTO>> GetChoices(int QuestionID)
+
+        public async Task<List<SendChoiceDTO>> GetAllRightAnswersAsync(int Questionid)
+        {
+
+            var entities = await _unitOfWork.EntityRepo.GetAllRightAnswersAsync(Questionid);
+
+            List<SendChoiceDTO> sendChoiceDTOs = new List<SendChoiceDTO>();
+
+            foreach (var entity in entities) {
+                sendChoiceDTOs.Add(_mapper.Map<SendChoiceDTO>(entity));
+            }
+
+            return sendChoiceDTOs;
+        }
+
+
+
+        public async Task<List<SendChoiceDTO>> GetChoicesAsync(int QuestionID)
         {
             
             var entities = await _unitOfWork.EntityRepo.GetAllByQuestionIDAsync(QuestionID);
@@ -77,6 +94,11 @@ namespace Core.Services.Concrete.Questions
 
             return sendChoiceDTOs;
 
+        }
+
+        public async Task<bool> IsRightAnswerAsync(int choiceid)
+        {
+           return await _unitOfWork.EntityRepo.IsRightAnswerAsync(choiceid);
         }
     }
 }

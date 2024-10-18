@@ -29,6 +29,9 @@ using Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
 using Core.Services.Concrete.Questions;
 using Data.models.Questions;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
+using Data.Repository.Entities_Repositories.Questions_Repo;
 
 
 
@@ -94,6 +97,13 @@ builder.Services.AddScoped<IChoicesPicsRepo, ChoicesPicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IChoicesPicsRepo, Choices_Pics>, UnitOfWork<IChoicesPicsRepo, Choices_Pics>>();
 
 
+builder.Services.AddScoped<IQuestionRepo, QuestionRepo>();
+builder.Services.AddScoped<IUnitOfWork<IQuestionRepo, Questions>, UnitOfWork<IQuestionRepo, Questions>>();
+
+
+////builder.Services.AddScoped<ICollectionsQuestionRepo, CollectionsQuestionRepo>();
+////builder.Services.AddScoped<IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions>,
+////    UnitOfWork<ICollectionsQuestionRepo, Collections_Questions>>();
 
 
 

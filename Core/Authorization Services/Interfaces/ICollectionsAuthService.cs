@@ -16,9 +16,10 @@ namespace Core.Authorization_Services.Interfaces
         /// <param name="collecID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public Task<bool> IsUserCollecOwner(int collecID, int UserID);
-       
+        public Task<bool> IsUserCollecOwnerAsync(int collecID, int UserID);
 
+
+        public Task<bool> IsUserQuestionOwnerAsync(int QuestionID, int UserID);
 
 
 

@@ -48,7 +48,7 @@ namespace API_Layer.Controllers.Collections
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
+            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();
 
             return Ok(await _collectionService.PatchCollection(patchDoc, CollecID));
@@ -61,7 +61,7 @@ namespace API_Layer.Controllers.Collections
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (!await _collectionsAuthService.IsUserCollecOwner(CollecID, userId))
+            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();
 
 
@@ -134,7 +134,7 @@ namespace API_Layer.Controllers.Collections
             if (collec == null)
                 return NotFound();
 
-            if (!await _collectionsAuthService.IsUserCollecOwner(CollectionID, userId) && !collec.IsPublic)
+            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, userId) && !collec.IsPublic)
                 return Unauthorized();
 
 

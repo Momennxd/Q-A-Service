@@ -10,7 +10,9 @@ namespace Data.DatabaseContext
 {
     public partial class AppDbContext
     {
-        
+        public virtual DbSet<Collections_Questions> Collections_Questions { get; set; }
+        public virtual DbSet<Questions> Questions { get; set; }
+
         public virtual DbSet<Categories> Categories { get; set; }
 
         public virtual DbSet<Collections_Likes> Collections_Likes { get; set; }
