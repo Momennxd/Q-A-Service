@@ -73,12 +73,11 @@ namespace Data.Repositories
             _appDbContext.Remove(item);
         }
 
-
-       
-
-
-
-
+        public async Task<List<T>> AddItemsAsync(List<T> Items)
+        {
+            await _appDbContext.AddRangeAsync(Items);
+            return Items;
+        }
 
     }
 }

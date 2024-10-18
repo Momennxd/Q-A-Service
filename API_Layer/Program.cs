@@ -26,6 +26,9 @@ using System.Net;
 using System.Text;
 using Core.Unit_Of_Work;
 using Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo;
+using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Core.Services.Concrete.Questions;
+using Data.models.Questions;
 
 
 
@@ -94,6 +97,11 @@ builder.Services.AddScoped<IUnitOfWork<IChoicesPicsRepo, Choices_Pics>, UnitOfWo
 
 
 
+
+builder.Services.AddScoped<IQuestionsChoicesService, QuestionsChoicesService>();
+builder.Services.AddScoped<IQuestionsChoicesRepo, QuestionsChoicesRepo>();
+builder.Services.AddScoped<IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices>,
+    UnitOfWork<IQuestionsChoicesRepo, QuestionsChoices>>();
 
 
 

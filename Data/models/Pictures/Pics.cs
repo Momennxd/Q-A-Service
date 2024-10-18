@@ -16,7 +16,7 @@ namespace Data.models.Pictures
         public int PicID { get; set; }
 
 
-        public int PublicID { get; set; }
+        public string PublicID { get; set; }
 
 
         public decimal Rank { get; set; }

@@ -18,6 +18,9 @@ using CloudinaryDotNet.Actions;
 using Services.Concrete;
 using Services.Interfaces;
 using Core.DTOs.Pictures;
+using Core.Services.Concrete.Questions;
+using Core.DTOs.Questions;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -28,12 +31,16 @@ namespace API_Layer.Controllers.Collections
 
         private readonly ICloudinaryService _cloudinary;
         private readonly IChoicesPicsService _PicsService;
+        private readonly IPicsService PicsService;
+        private readonly IQuestionsChoicesService choicesService;
 
-
-        public TestController(ICloudinaryService cloudinary, IChoicesPicsService picsService)
+        public TestController(ICloudinaryService cloudinary, IChoicesPicsService picsService,
+            IPicsService pics, IQuestionsChoicesService questionsChoicesService)
         {
+            this.PicsService = pics;
             _cloudinary = cloudinary;
             _PicsService = picsService;
+            choicesService = questionsChoicesService;
         }
 
         [HttpGet]
@@ -64,18 +71,27 @@ namespace API_Layer.Controllers.Collections
                 throw new ArgumentException("Invalid parameters. Folder path," +
                     " file stream, and file name must be provided.");
 
-           return Ok(await _cloudinary.UploadImageAsync(file.OpenReadStream(), folderPath, fileName));
+            var createDto = new PicsDTOs.CreatePicDTO()
+            {
+                pic = new PicsDTOs.PicDTO() { file = (FormFile)file, FileName = fileName, FolderPath = folderPath },
+                Rank = 0
+
+            };
+
+
+
+
+           return Ok(await PicsService.CreatePicAsync(createDto));
         }
 
 
 
 
-        [HttpPost]
-        [Route("CreatePic")]
-        public async Task<IActionResult> CreatePic([FromBody] ChoicesPicsDTOs.CreateChoicePicDTO createPicDTOs)
-        {
-            return Ok(await _PicsService.CreateChoicePicAsync(createPicDTOs));
-        }
+
+
+      
+
+      
 
     }
 }

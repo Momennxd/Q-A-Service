@@ -21,6 +21,9 @@ namespace Data.Repositories
 
         public Task<EntityEntry> AddItemAsync(T Item);
 
+        public Task<List<T>> AddItemsAsync(List<T> Items);
+
+
 
         public Task UpdateItemAsync(dynamic Id, T UpdatedItem);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -10,11 +11,9 @@ namespace Core.DTOs.Pictures
     public class ChoicesPicsDTOs
     {
 
-
         public class CreateChoicePicDTO
         {
-
-            public PicsDTOs.CreatePicDTOs Pic { get; set; }
+            public PicsDTOs.CreatePicDTO Pic { get; set; }
 
 
             public int ChoiceID { get; set; }
@@ -27,7 +26,7 @@ namespace Core.DTOs.Pictures
             public int PicID { get; set; }
 
             
-            public PicsDTOs.SendPicDTOs Pic { get; set; }
+            public PicsDTOs.SendPicDTO Pic { get; set; }
 
             public int ChoiceID { get; set; }
         }

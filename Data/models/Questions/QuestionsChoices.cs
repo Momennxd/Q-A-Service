@@ -22,5 +22,8 @@ namespace Data.models.Questions
 
         public bool IsRightAnswer { get; set; }
 
+        public decimal Rank { get; set; }
+
+
     }
 }

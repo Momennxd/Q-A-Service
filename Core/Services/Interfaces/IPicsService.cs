@@ -6,7 +6,7 @@ namespace Core.Services.Interfaces
     {
 
 
-        public Task<PicsDTOs.SendPicDTOs> CreatePicAsync(PicsDTOs.CreatePicDTOs createPicDTO);
+        public Task<PicsDTOs.SendPicDTO> CreatePicAsync(PicsDTOs.CreatePicDTO createPicDTO);
 
 
 

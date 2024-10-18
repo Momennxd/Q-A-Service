@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.DTOs.Pictures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,9 @@ namespace Core.DTOs.Questions
 
             public bool IsRightAnswer { get; set; }
 
+            public decimal Rank { get; set; }
+
+
         }
 
 
@@ -30,11 +34,9 @@ namespace Core.DTOs.Questions
 
             public string ChoiceText { get; set; }
 
+            public decimal Rank { get; set; }
+
 
         }
-
-
-
-
     }
 }

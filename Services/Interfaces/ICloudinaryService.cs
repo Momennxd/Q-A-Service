@@ -12,7 +12,7 @@ namespace Services.Interfaces
         Task<ImageUploadResult?> UploadImageAsync(Stream filestream, string folderPath, string fileName);
 
 
-        string FetchUrlAsync(string publicId);
+        string? FetchUrl(string publicId);
 
     }
 }

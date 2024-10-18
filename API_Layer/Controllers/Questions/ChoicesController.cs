@@ -1,15 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.DTOs.Questions;
+using Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API_Layer.Controllers.Questions
 {
 
     [Route("API/Collections/Choices")]
     [ApiController]
-    [Authorize]
     public class ChoicesController : Controller
     {
+        private readonly IQuestionsChoicesService _QuestionsChoicesService;
 
+        public ChoicesController(IQuestionsChoicesService QuestionsChoicesService)
+        {
+            _QuestionsChoicesService = QuestionsChoicesService;
+        }
+
+
+
+
+        [HttpPost("")]
+        public async Task<IActionResult> AddNewChoice(List<QuestionsChoicesDTOs.CreateChoiceDTO> createDtos)
+        {
+            return Ok(await _QuestionsChoicesService.AddChoiceAsync(createDtos));
+        }
 
 
 

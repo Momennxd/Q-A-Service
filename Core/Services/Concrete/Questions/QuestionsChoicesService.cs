@@ -11,6 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Services.Interfaces;
+using System.IO.Compression;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging.Abstractions;
+using Core.DTOs.Pictures;
+using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 
 namespace Core.Services.Concrete.Questions
 {
@@ -30,35 +36,34 @@ namespace Core.Services.Concrete.Questions
 
 
 
-        public Task<QuestionsChoicesDTOs.SendChoiceDTO> AddChoiceAsync
-            (QuestionsChoicesDTOs.CreateChoiceDTO createChoiceDto)
+        public async Task<List<SendChoiceDTO>> AddChoiceAsync 
+            (List<CreateChoiceDTO>  lstcreateChoiceDto)
         {
-            throw new NotImplementedException();
+            List<QuestionsChoices> CreateChoicesEnities = new List<QuestionsChoices>();
+
+            foreach (var choice in lstcreateChoiceDto) {
+                CreateChoicesEnities.Add(_mapper.Map<QuestionsChoices>(choice));
+            }
+
+            //entity.ChoiceText = createChoiceDto.ChoiceText;
+
+            await _unitOfWork.EntityRepo.AddItemsAsync(CreateChoicesEnities);
+
+            await _unitOfWork.CompleteAsync();
+
+
+            List<SendChoiceDTO> QSendchoicesDTOs = new List<SendChoiceDTO>();
+
+            foreach (var e in CreateChoicesEnities) {
+                QSendchoicesDTOs.Add(_mapper.Map<SendChoiceDTO>(e));
+            }
+
+            return QSendchoicesDTOs;
+
+
+
         }
 
 
-        public Task<bool> DeleteChoiceAsync(int choiceID)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public Task<QuestionsChoicesDTOs.SendChoiceDTO> FindAsync(int choice)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public Task<List<QuestionsChoicesDTOs.SendChoiceDTO>> GetAllQuestionChoiceAsync(int QuestionID)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public Task<QuestionsChoicesDTOs.SendChoiceDTO> UpdateChoiceAsync
-            (QuestionsChoicesDTOs.CreateChoiceDTO updateChoiceDto, int choiceID)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

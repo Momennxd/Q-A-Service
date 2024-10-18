@@ -21,7 +21,7 @@ namespace Services.Concrete
             _cloudinary = cloudinary;
         }
 
-        public string FetchUrlAsync(string publicId)
+        public string? FetchUrl(string publicId)
         {
             return _cloudinary.Api.UrlImgUp.BuildUrl(publicId + ".jpg");
         }

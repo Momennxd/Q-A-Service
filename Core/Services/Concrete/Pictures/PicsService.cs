@@ -6,8 +6,11 @@ using Data.models.Collections;
 using Data.models.Pictures;
 using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Pictures.Base;
+using Services.Concrete;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,26 +24,44 @@ namespace Core.Services.Concrete.Pictures
         private readonly IMapper _mapper;
 
         private readonly IUnitOfWork<IPicsRepo, Pics> _unitOfWork;
+        private readonly ICloudinaryService _cloudinary;
 
 
 
-        public PicsService (IMapper mapper, IUnitOfWork<IPicsRepo, Pics> uow)
+        public PicsService (IMapper mapper, IUnitOfWork<IPicsRepo, Pics> uow, ICloudinaryService cloudinaryService)
         {
+            _cloudinary = cloudinaryService;
             _unitOfWork = uow;
             _mapper = mapper;
         }
 
-        public async Task<PicsDTOs.SendPicDTOs?> CreatePicAsync(PicsDTOs.CreatePicDTOs createPicDTO)
+        public async Task<PicsDTOs.SendPicDTO?> CreatePicAsync(PicsDTOs.CreatePicDTO createPicDTO)
         {
             if (createPicDTO == null || createPicDTO.Rank < 0) return null;
 
-            var entity = _mapper.Map<Pics>(createPicDTO);
+
+            var pic = createPicDTO.pic;
+
+            var imageUpload = await _cloudinary.UploadImageAsync(
+                pic.file.OpenReadStream(), pic.FolderPath, pic.FileName);
+
+
+            var entity = new Pics()
+            {
+                PublicID = imageUpload.PublicId,
+                Rank = createPicDTO.Rank
+
+            };
 
             await _unitOfWork.EntityRepo.AddItemAsync(entity);
 
             await _unitOfWork.CompleteAsync();
 
-            return _mapper.Map<PicsDTOs.SendPicDTOs>(entity);
+            var output = _mapper.Map<PicsDTOs.SendPicDTO>(entity);
+
+            output.Url = _cloudinary.FetchUrl(entity.PublicID);
+
+            return output;
 
         }
     }

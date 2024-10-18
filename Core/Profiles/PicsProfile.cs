@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs.Pictures;
 using Data.models.Pictures;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,10 @@ namespace Core.Profiles
     {
 
 
-
         public PicsProfile() {
 
-            CreateMap<PicsDTOs.CreatePicDTOs, Pics>();
 
-            CreateMap<Pics, PicsDTOs.SendPicDTOs>();
-
+            CreateMap<Pics, PicsDTOs.SendPicDTO>();
 
         }
     }
