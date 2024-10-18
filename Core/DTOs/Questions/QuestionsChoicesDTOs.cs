@@ -19,7 +19,7 @@ namespace Core.DTOs.Questions
 
             public bool IsRightAnswer { get; set; }
 
-            public decimal Rank { get; set; }
+            public byte Rank { get; set; }
 
 
         }
@@ -34,7 +34,7 @@ namespace Core.DTOs.Questions
 
             public string ChoiceText { get; set; }
 
-            public decimal Rank { get; set; }
+            public byte Rank { get; set; }
 
 
         }

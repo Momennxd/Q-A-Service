@@ -17,7 +17,7 @@ namespace Core.Services.Interfaces
              (List<QuestionsChoicesDTOs.CreateChoiceDTO> lstcreateChoiceDto);
 
 
-
+        public Task<List<QuestionsChoicesDTOs.SendChoiceDTO>> GetChoices(int QuestionID);
 
 
 

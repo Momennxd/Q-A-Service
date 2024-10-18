@@ -28,7 +28,13 @@ namespace API_Layer.Controllers.Questions
         }
 
 
+        [HttpGet("")]
+        public async Task<IActionResult> GetChoices(int questionID)
+        {
+             var output = await _QuestionsChoicesService.GetChoices(questionID);
 
+            return output.Count == 0 ? StatusCode(201) : Ok(output); 
+        }
 
 
 

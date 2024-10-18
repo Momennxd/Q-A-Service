@@ -64,6 +64,19 @@ namespace Core.Services.Concrete.Questions
 
         }
 
+        public async Task<List<SendChoiceDTO>> GetChoices(int QuestionID)
+        {
+            
+            var entities = await _unitOfWork.EntityRepo.GetAllByQuestionIDAsync(QuestionID);
 
+            List<SendChoiceDTO> sendChoiceDTOs = new List<SendChoiceDTO>();
+
+            foreach (var entity in entities) {
+                sendChoiceDTOs.Add(_mapper.Map<SendChoiceDTO>(entity));
+            }
+
+            return sendChoiceDTOs;
+
+        }
     }
 }
