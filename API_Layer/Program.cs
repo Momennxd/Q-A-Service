@@ -101,9 +101,9 @@ builder.Services.AddScoped<IQuestionRepo, QuestionRepo>();
 builder.Services.AddScoped<IUnitOfWork<IQuestionRepo, Questions>, UnitOfWork<IQuestionRepo, Questions>>();
 
 
-////builder.Services.AddScoped<ICollectionsQuestionRepo, CollectionsQuestionRepo>();
-////builder.Services.AddScoped<IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions>,
-////    UnitOfWork<ICollectionsQuestionRepo, Collections_Questions>>();
+builder.Services.AddScoped<ICollectionsQuestionRepo, CollectionsQuestionRepo>();
+builder.Services.AddScoped<IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions>,
+    UnitOfWork<ICollectionsQuestionRepo, Collections_Questions>>();
 
 
 

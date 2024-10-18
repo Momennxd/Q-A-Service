@@ -22,6 +22,13 @@ namespace Core.Authorization_Services.Interfaces
         public Task<bool> IsUserQuestionOwnerAsync(int QuestionID, int UserID);
 
 
+        /// <summary>
+        /// Determines if the user could retrieve this choice
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserQuestionAccessAsync(int QuestionID, int UserID);
 
 
 

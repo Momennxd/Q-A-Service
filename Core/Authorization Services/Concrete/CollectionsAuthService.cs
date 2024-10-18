@@ -4,6 +4,7 @@ using Core.Unit_Of_Work;
 using Data.models.Collections;
 using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Microsoft.Extensions.Logging;
@@ -20,13 +21,35 @@ namespace Core.Authorization_Services.Concrete
 
         private readonly IUnitOfWork<ICollectionRepo, QCollection> _uowCollec;
         private readonly IUnitOfWork<IQuestionRepo, Questions> _uowQuestion;
+        private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
 
         public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections,
-            IUnitOfWork<IQuestionRepo, Questions> uowQuestion)
+            IUnitOfWork<IQuestionRepo, Questions> uowQuestion,
+            IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion)
         {
+            _uowCollecQuestion = uowcollectionsQuestion;
             _uowCollec = uowCollections;
             _uowQuestion = uowQuestion;
         }
+
+
+
+        public async Task<bool> IsUserQuestionAccessAsync(int QuestionID, int UserID)
+        {
+            var question = await _uowQuestion.EntityRepo.FindAsync(QuestionID);
+            if (question == null) throw new ArgumentNullException();
+
+            var collectionsQuestions = await _uowCollecQuestion.EntityRepo.GetCollectionQuestionsAsync(QuestionID);
+            if (collectionsQuestions == null) throw new ArgumentNullException();
+
+            var collection = await _uowCollec.EntityRepo.FindAsync(collectionsQuestions.CollectionID);
+            if (collection == null) throw new ArgumentNullException();
+
+            //if the question is not the users's and the question's collection is private means no access
+            return !(question.UserID != UserID && !collection.IsPublic);
+        }
+
+
 
         public async Task<bool> IsUserCollecOwnerAsync(int collecID, int userID)
         {
@@ -40,9 +63,6 @@ namespace Core.Authorization_Services.Concrete
             
             return collection.CreatedByUserId == userID;
         }
-
-
-
 
         public async Task<bool> IsUserQuestionOwnerAsync(int QuestionID, int UserID)
         {

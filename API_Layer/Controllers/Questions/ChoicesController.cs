@@ -6,6 +6,7 @@ using Data.models.People;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Linq;
 using System.Security.Claims;
 
 namespace API_Layer.Controllers.Questions
@@ -13,6 +14,7 @@ namespace API_Layer.Controllers.Questions
 
     [Route("API/Choices")]
     [ApiController]
+    [Authorize]
     public class ChoicesController : Controller
     {
         private readonly IQuestionsChoicesService _QuestionsChoicesService;
@@ -27,36 +29,49 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPost("")]
-        [Authorize]
-        public async Task<IActionResult> AddNewChoice(List<QuestionsChoicesDTOs.CreateChoiceDTO> createDtos)
+        public async Task<IActionResult> AddNewChoice(LinkedList<QuestionsChoicesDTOs.CreateChoiceDTO> createDtos)
         {
             if (createDtos.Count == 0) return Ok();
-
-             
+         
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             if (userId == null) return Unauthorized();
 
-            HashSet<int> questionIDsSet = new HashSet<int>();
-            foreach(var dto in createDtos) { questionIDsSet.Add(dto.QuestionID); }
+            Dictionary<int, bool> questionIDsMap = new();
 
-            foreach(var id in  questionIDsSet) {
-                if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(
-                    id, userId == null ? -1 : (int)userId)) return Unauthorized();
+            List<QuestionsChoicesDTOs.CreateChoiceDTO> validatedCreateDtos = new(createDtos.Count);
+
+            foreach (var dto in createDtos) {
+
+                if (!questionIDsMap.ContainsKey(dto.QuestionID))
+                {
+                    if (await _collectionsAuthService.IsUserQuestionOwnerAsync(
+                     dto.QuestionID, userId == null ? -1 : (int)userId))
+                    {
+                        validatedCreateDtos.Add(dto); questionIDsMap.Add(dto.QuestionID, true);
+                    }
+                    else questionIDsMap.Add(dto.QuestionID, false);                  
+                }
+                else             
+                    if (questionIDsMap[dto.QuestionID])  validatedCreateDtos.Add(dto);                                    
             }
-           
 
-            return Ok(await _QuestionsChoicesService.AddChoiceAsync(createDtos));
+
+            if (validatedCreateDtos.Count == 0 && createDtos.Count != 0) return Unauthorized();
+
+            return Ok(await _QuestionsChoicesService.AddChoiceAsync(validatedCreateDtos));
         }
 
 
         [HttpGet("")]
         public async Task<IActionResult> GetChoices(int questionID)
         {
-
-            //authorization ---> TODO
-
-
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
+            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
+                    questionID, userId == null ? -1 : (int)userId)) {
+                return Unauthorized();
+            }
 
             return Ok(await _QuestionsChoicesService.GetChoicesAsync(questionID));
         }
