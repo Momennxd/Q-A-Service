@@ -74,5 +74,17 @@ namespace Core.Authorization_Services.Concrete
             return question.UserID == UserID;
 
         }
+
+        public async Task<bool> IsRightsAnswersAccessAsync(int QuestionID, int UserID)
+        {
+
+            //authorization:
+            //1- if the caller is the creater, then no auth needed.
+            //2- if the caller is the consumer, then the consumer must answer the question first to call the API
+            //to prevent asnwers leak.
+
+            return await _uowQuestion.EntityRepo.IsUserRightAnswerAccess(QuestionID, UserID);
+
+        }
     }
 }

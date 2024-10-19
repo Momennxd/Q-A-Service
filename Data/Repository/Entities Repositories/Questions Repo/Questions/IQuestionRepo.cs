@@ -12,7 +12,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
     {
 
 
-
+        public Task<bool> IsUserRightAnswerAccess(int QuestionID, int UserID);
 
 
 
