@@ -193,23 +193,18 @@ app.UseExceptionHandler(config =>
             // Check for specific exceptions
             switch (ex)
             {
-                case ValidationException:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
                 case UnauthorizedAccessException:
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     break;
                 case KeyNotFoundException:
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    break;
-                case ArgumentNullException:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-                case FormatException:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;             
+                case NotImplementedException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
 
 
+                    //anything else if 'BadRequest'
                     // Add more cases as needed
             }
 

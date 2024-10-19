@@ -81,9 +81,15 @@ namespace API_Layer.Controllers.Questions
         public async Task<IActionResult> GetRightAnswers(int questionID)
         {
 
-            //authuntication ---> TODO
+            //authorization:
+            //1- if the caller is the creater, then no auth needed.
+            //2- if the caller is the consumer, then the consumer must answer the question first to call the API
+            //to prevent asnwers leak.
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
 
-
+            if (!await _collectionsAuthService.IsRightsAnswersAccessAsync(questionID, (int)userId))
+                return Unauthorized();
 
             return Ok(await _QuestionsChoicesService.GetAllRightAnswersAsync(questionID));
         }

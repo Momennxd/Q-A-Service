@@ -31,6 +31,13 @@ namespace Core.Authorization_Services.Interfaces
         public Task<bool> IsUserQuestionAccessAsync(int QuestionID, int UserID);
 
 
+        /// <summary>
+        /// Determines if the user could retrieve the right answers of a question.
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsRightsAnswersAccessAsync(int QuestionID, int UserID);
 
 
 
