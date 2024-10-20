@@ -11,7 +11,7 @@ namespace Data.DatabaseContext
         {
 
         }
-
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

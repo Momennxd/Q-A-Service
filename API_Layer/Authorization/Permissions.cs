@@ -2,6 +2,6 @@
 {
     public enum Permissions
     {
-
+        GetUser = 2
     }
 }

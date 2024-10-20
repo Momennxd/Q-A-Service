@@ -37,6 +37,16 @@ namespace Data.Repositories
             return user;
         }
 
+        public async Task<User?> GetUserUsernameAsync(string Username)
+        {
+            var user = await _context
+                .Users
+                .Include(u => u.Person)
+                .FirstOrDefaultAsync(u => u.Username == Username);
+
+            return user;
+        }
+
         public async Task<User?> LoginAsync(string Username, string Password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u=> u.Username == Username && u.Password == Password);

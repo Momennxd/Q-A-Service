@@ -20,4 +20,6 @@ public partial class User : IBaseEntity<User>
     public bool IsDeleted { get; set; }
 
     public Person Person { get; set; }
+
+    public byte Permissions { get; set; } = 0;
 }

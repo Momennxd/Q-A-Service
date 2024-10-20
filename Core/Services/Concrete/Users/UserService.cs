@@ -52,12 +52,8 @@ namespace Core.Services.Concrete.Users
             return user;
         }
 
-        public async Task<UsersDTOs.AddUserDTO?> GetUserByIdAsync(int UserID)
-        {
-            var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
 
-            return _mapper.Map<AddUserDTO>(user);
-        }
+
 
         public async Task<User?> Login(UsersDTOs.LoginDTO loginDTO)
         {
@@ -99,7 +95,20 @@ namespace Core.Services.Concrete.Users
 
 
 
+        public async Task<UsersDTOs.AddUserDTO?> GetUserByIdAsync(int UserID)
+        {
+            var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
 
+            return _mapper.Map<AddUserDTO>(user);
+        }
+
+
+        public async Task<AddUserDTO?> GetUserByUsernameAsync(string Username)
+        {
+            var user = await _unitOfWork.EntityRepo.GetUserUsernameAsync(Username);
+
+            return _mapper.Map<AddUserDTO>(user);  
+        }
     }
 
 }
