@@ -86,5 +86,13 @@ namespace Core.Authorization_Services.Concrete
             return await _uowQuestion.EntityRepo.IsUserRightAnswerAccess(QuestionID, UserID);
 
         }
+
+        public async Task<bool> IsUserQuestionAccessAsync(HashSet<int> setQuestionIDs, int UserID)
+        {
+            foreach (var id in setQuestionIDs)
+                if (!await IsUserQuestionAccessAsync(id, UserID)) return false;
+
+            return true;
+        }
     }
 }

@@ -17,6 +17,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging.Abstractions;
 using Core.DTOs.Pictures;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
+using Microsoft.AspNetCore.JsonPatch;
+using Core.DTOs.Collections;
 
 namespace Core.Services.Concrete.Questions
 {
@@ -33,7 +35,6 @@ namespace Core.Services.Concrete.Questions
             _unitOfWork = uowChoices;
             _mapper = mapper;
         }
-
 
 
         public async Task<List<SendChoiceDTO>> AddChoiceAsync 
@@ -64,6 +65,12 @@ namespace Core.Services.Concrete.Questions
 
         }
 
+        public async Task<bool> DeleteChoice(int choiceid)
+        {
+            await _unitOfWork.EntityRepo.DeleteItemAsync(choiceid);
+
+            return await _unitOfWork.CompleteAsync() > 0;
+        }
 
         public async Task<List<SendChoiceDTO>> GetAllRightAnswersAsync(int Questionid)
         {
@@ -78,8 +85,6 @@ namespace Core.Services.Concrete.Questions
 
             return sendChoiceDTOs;
         }
-
-
 
         public async Task<List<SendChoiceDTO>> GetChoicesAsync(int QuestionID)
         {
@@ -96,9 +101,60 @@ namespace Core.Services.Concrete.Questions
 
         }
 
+        public async Task<Dictionary<int, List<SendChoiceDTO>>> GetChoicesAsync(HashSet<int> QuestionsIDs)
+        {
+            Dictionary<int, List<SendChoiceDTO>> sendChoiceDTOs = new(QuestionsIDs.Count);
+
+            var QuestionsChoicesMap = await _unitOfWork.EntityRepo.GetAllByQuestionIDsAsync(QuestionsIDs);
+
+            foreach (var QuestionID in QuestionsChoicesMap.Keys) {
+
+                sendChoiceDTOs.Add(QuestionID, new(QuestionsChoicesMap[QuestionID].Count));
+                foreach (var choiceEntity in QuestionsChoicesMap[QuestionID]) 
+                {
+                    sendChoiceDTOs[QuestionID].Add(_mapper.Map<SendChoiceDTO>(choiceEntity));
+                }
+
+            }
+
+            return sendChoiceDTOs;
+        }
+
         public async Task<bool> IsRightAnswerAsync(int choiceid)
         {
            return await _unitOfWork.EntityRepo.IsRightAnswerAsync(choiceid);
+        }
+
+
+
+
+
+        public async Task<SendChoiceDTO> PatchChoice(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID)
+        {
+            var entity = await _unitOfWork.EntityRepo.FindAsync(ChoiceID);
+
+            if (entity == null)
+            {
+                // Handle the case where the collection is not found
+                throw new KeyNotFoundException($"Choice with ID {ChoiceID} not found.");
+            }
+
+            // Map the entity to a DTO to apply the patch
+            var ChoiceToPatch = _mapper.Map<PatchChoiceDTO>(entity);
+
+            // Apply the patch to the DTO
+            //here an exception might be thrown if the user tried to patch a property that is not 
+            //included within the patch doc itself
+            patchDoc.ApplyTo(ChoiceToPatch);
+
+            // Map the patched DTO back to the original entity
+            _mapper.Map(ChoiceToPatch, entity);
+
+            // Save changes
+            await _unitOfWork.CompleteAsync();
+
+            // Return the updated collection as a DTO
+            return _mapper.Map<SendChoiceDTO>(entity);
         }
     }
 }

@@ -13,6 +13,9 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 
         public Task<List<QuestionsChoices>> GetAllByQuestionIDAsync(int Questionid);
 
+        public Task<Dictionary<int, List<QuestionsChoices>>> GetAllByQuestionIDsAsync(HashSet<int> QuestionsIDs);
+
+
         public Task<List<QuestionsChoices>> GetAllRightAnswersAsync(int Questionid);
 
         public Task<bool> IsRightAnswerAsync(int choiceid);

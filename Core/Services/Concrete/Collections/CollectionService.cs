@@ -185,13 +185,13 @@ namespace Core.Services.Concrete.Collections
         public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
         {
             await _unitOfWork.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
-            return await _unitOfWork.CompleteAsync() == 1;
+            return await _unitOfWork.CompleteAsync() > 0;
         }
 
         public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
         {
             await _unitOfWork.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
-            return await _unitOfWork.CompleteAsync() == 1;
+            return await _unitOfWork.CompleteAsync() > 0;
         }
     }
 }

@@ -20,7 +20,12 @@ namespace Core.Profiles
         {
 
             CreateMap<QuestionsChoices, QuestionsChoicesDTOs.SendChoiceDTO>();
+
             CreateMap<QuestionsChoicesDTOs.CreateChoiceDTO, QuestionsChoices>();
+
+
+            CreateMap<QuestionsChoices, QuestionsChoicesDTOs.PatchChoiceDTO>();
+            CreateMap<QuestionsChoicesDTOs.PatchChoiceDTO, QuestionsChoices>();
 
 
         }

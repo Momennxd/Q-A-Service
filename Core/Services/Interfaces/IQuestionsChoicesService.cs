@@ -1,5 +1,7 @@
-﻿using Core.DTOs.Questions;
+﻿using Core.DTOs.Collections;
+using Core.DTOs.Questions;
 using Data.models.Questions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -18,13 +20,23 @@ namespace Core.Services.Interfaces
         public Task<List<SendChoiceDTO>> AddChoiceAsync
              (List<CreateChoiceDTO> lstcreateChoiceDto);
 
+    
 
         public Task<List<SendChoiceDTO>> GetChoicesAsync(int QuestionID);
+
+        public Task<Dictionary<int, List<SendChoiceDTO>>> GetChoicesAsync(HashSet<int> QuestionsIDs);
 
 
         public Task<List<SendChoiceDTO>> GetAllRightAnswersAsync(int Questionid);
 
         public Task<bool> IsRightAnswerAsync(int choiceid);
+
+        public Task<bool> DeleteChoice(int choiceid);
+
+
+        public Task<SendChoiceDTO> PatchChoice(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID);
+
+
 
 
     }

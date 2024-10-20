@@ -32,6 +32,16 @@ namespace Core.Authorization_Services.Interfaces
 
 
         /// <summary>
+        /// Determines if the user could retrieve this choice
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserQuestionAccessAsync(HashSet<int> setQuestionIDs, int UserID);
+
+
+
+        /// <summary>
         /// Determines if the user could retrieve the right answers of a question.
         /// </summary>
         /// <param name="QuestionID"></param>
@@ -41,6 +51,7 @@ namespace Core.Authorization_Services.Interfaces
 
 
 
+      
 
 
 

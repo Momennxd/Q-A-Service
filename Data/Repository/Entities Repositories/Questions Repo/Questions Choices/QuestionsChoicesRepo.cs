@@ -24,8 +24,31 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
         public async Task<List<QuestionsChoices>> GetAllByQuestionIDAsync(int Questionid)
         {
            return await _appDbContext.Questions_Choices.Select(c => c).
-                Where(c => c.QuestionID == Questionid).ToListAsync();
+                Where(c => c.QuestionID == Questionid).OrderBy(c => c.Rank).ToListAsync();
         }
+
+        public async Task<Dictionary<int, List<QuestionsChoices>>> GetAllByQuestionIDsAsync(HashSet<int> QuestionsIDs)
+        {
+            Dictionary<int, List<QuestionsChoices>> QuestionsMap = new(QuestionsIDs.Count);
+            if (QuestionsIDs == null || QuestionsIDs.Count == 0) return QuestionsMap;
+
+            var choices = await _appDbContext.Questions_Choices
+                .Where(c => QuestionsIDs.Contains(c.QuestionID))
+                .ToListAsync();
+
+
+
+            QuestionsMap = choices
+                .GroupBy(c => c.QuestionID)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderBy(c => c.Rank).ToList() // Sorting by Rank in ascending order
+                );
+
+
+            return QuestionsMap;
+        }
+
 
         public async Task<List<QuestionsChoices>> GetAllRightAnswersAsync(int Questionid)
         {

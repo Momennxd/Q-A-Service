@@ -25,6 +25,19 @@ namespace Core.DTOs.Questions
         }
 
 
+        public class PatchChoiceDTO
+        {
+
+            public string ChoiceText { get; set; }
+
+            public bool IsRightAnswer { get; set; }
+
+            public byte Rank { get; set; }
+
+
+        }
+
+
         public class SendChoiceDTO
         {
 
