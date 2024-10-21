@@ -20,6 +20,9 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 
         public Task<bool> IsRightAnswerAsync(int choiceid);
 
+        public Task<List<QuestionsChoices>> GetCollectionChoices(int CollectionID);
+
+
 
     }
 }

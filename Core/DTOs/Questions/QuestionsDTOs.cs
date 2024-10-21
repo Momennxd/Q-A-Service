@@ -15,9 +15,13 @@ namespace Core.DTOs.Questions
 
             public string QuestionText { get; set; }
 
-            public int UserID { get; set; }
 
             public bool IsMCQ { get; set; }
+
+            public int QuestionPoints { get; set; }
+
+            public byte Rank { get; set; }
+
 
 
             public List<QuestionsChoicesDTOs.CreateChoiceDTO> Choices { get; set; }
@@ -33,10 +37,16 @@ namespace Core.DTOs.Questions
             public int QuestionID { get; set; }
 
             public string QuestionText { get; set; }
+            public int UserID { get; set; }
 
             public bool IsMCQ { get; set; }
 
             public DateTime AddedDate { get; set; }
+
+            public int QuestionPoints { get; set; }
+
+            public byte Rank { get; set; }
+
 
             public List<QuestionsChoicesDTOs.SendChoiceDTO> Choices { get; set; }
 

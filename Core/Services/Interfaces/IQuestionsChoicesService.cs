@@ -18,7 +18,7 @@ namespace Core.Services.Interfaces
 
 
         public Task<List<SendChoiceDTO>> AddChoiceAsync
-             (List<CreateChoiceDTO> lstcreateChoiceDto);
+             (List<CreateChoiceDTO> lstcreateChoiceDto, int QuestionID);
 
     
 

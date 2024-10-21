@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.models.Questions
 {
-    public class Questions : IBaseEntity<Questions>
+    public class Question : IBaseEntity<Question>
     {
         [Key]
         public int QuestionID { get; set; }
@@ -21,6 +21,7 @@ namespace Data.models.Questions
 
         public DateTime AddedDate { get; set; }
 
+        public byte Rank { get; set; }
 
         public bool IsDeleted { get; set; }
 

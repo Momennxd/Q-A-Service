@@ -1,5 +1,6 @@
 ﻿using Data.DatabaseContext;
 using Data.models._SP_;
+using Data.models.People;
 using Data.models.Questions;
 using Data.Repositories;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Questions_Repo
 {
-    public class QuestionRepo : Repository<Questions>, IQuestionRepo
+    public class QuestionRepo : Repository<Question>, IQuestionRepo
     {
 
 
@@ -25,7 +26,19 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             _appDbContext = context;
         }
 
-        public async Task<bool> IsUserRightAnswerAccess(int QuestionID, int UserID)
+        public async Task<List<SP_Question>> GetAllQuestionsAsync(int CollectionID)
+        {
+
+            // Execute the stored procedure and map results to the SP_Question
+            return await _appDbContext.Set<SP_Question>()
+                .FromSqlRaw("EXEC SP_GetCollectionQuestions @CollectionID",
+                             new SqlParameter("@CollectionID", CollectionID))
+                .ToListAsync();
+
+
+        }
+
+        public async Task<bool> IsUserRightAnswerAccessAsync(int QuestionID, int UserID)
         {
             var hasAccessParam = new SqlParameter
             {

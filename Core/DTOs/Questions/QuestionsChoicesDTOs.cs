@@ -13,8 +13,6 @@ namespace Core.DTOs.Questions
         public class CreateChoiceDTO
         {
 
-            public int QuestionID { get; set; }
-
             public string ChoiceText { get; set; }
 
             public bool IsRightAnswer { get; set; }
@@ -25,15 +23,10 @@ namespace Core.DTOs.Questions
         }
 
 
-        public class PatchChoiceDTO
+        public class PatchChoiceDTO : CreateChoiceDTO
         {
 
-            public string ChoiceText { get; set; }
-
-            public bool IsRightAnswer { get; set; }
-
-            public byte Rank { get; set; }
-
+          
 
         }
 

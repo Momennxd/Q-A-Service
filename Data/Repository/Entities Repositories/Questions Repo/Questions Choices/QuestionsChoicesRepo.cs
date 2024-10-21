@@ -1,6 +1,8 @@
 ﻿using Data.DatabaseContext;
+using Data.models._SP_;
 using Data.models.Questions;
 using Data.Repositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -56,11 +58,25 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
                Where(c => c.QuestionID == Questionid && c.IsRightAnswer).ToListAsync();
         }
 
+        public async Task<List<QuestionsChoices>> GetCollectionChoices(int CollectionID)
+        {
+            // Execute the stored procedure and map results to the QuestionsChoices
+            return await _appDbContext.Set<QuestionsChoices>()
+                .FromSqlRaw("EXEC SP_GetCollectionChoices @CollectionID",
+                             new SqlParameter("@CollectionID", CollectionID))
+                .ToListAsync();
+        }
+
         public async Task<bool> IsRightAnswerAsync(int choiceid)
         {
             var choice = await FindAsync(choiceid);
             return choice?.IsRightAnswer ?? false;
         }
+
+
+
+
+
 
     }
 }

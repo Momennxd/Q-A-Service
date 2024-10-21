@@ -96,9 +96,9 @@ builder.Services.AddScoped<IChoicesPicsService, ChoicesPicsService>();
 builder.Services.AddScoped<IChoicesPicsRepo, ChoicesPicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IChoicesPicsRepo, Choices_Pics>, UnitOfWork<IChoicesPicsRepo, Choices_Pics>>();
 
-
+builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IQuestionRepo, QuestionRepo>();
-builder.Services.AddScoped<IUnitOfWork<IQuestionRepo, Questions>, UnitOfWork<IQuestionRepo, Questions>>();
+builder.Services.AddScoped<IUnitOfWork<IQuestionRepo, Question>, UnitOfWork<IQuestionRepo, Question>>();
 
 
 builder.Services.AddScoped<ICollectionsQuestionRepo, CollectionsQuestionRepo>();

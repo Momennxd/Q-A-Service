@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Questions.QuestionsDTOs;
 
 namespace Core.Services.Interfaces
 {
@@ -10,8 +11,12 @@ namespace Core.Services.Interfaces
     {
 
 
+        public Task<List<SendQuestionDTO>> CreateQuestions(
+            List<CreateQuestionDTO> createQuestionsDTO, int CollectionID, int UserID);
 
 
+
+        public Task<List<SendQuestionDTO>> GetAllQuestions(int CollectionID);
 
 
 

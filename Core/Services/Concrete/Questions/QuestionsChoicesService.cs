@@ -38,15 +38,17 @@ namespace Core.Services.Concrete.Questions
 
 
         public async Task<List<SendChoiceDTO>> AddChoiceAsync 
-            (List<CreateChoiceDTO>  lstcreateChoiceDto)
+            (List<CreateChoiceDTO>  lstcreateChoiceDto, int QuestionID)
         {
             List<QuestionsChoices> CreateChoicesEnities = new List<QuestionsChoices>();
 
             foreach (var choice in lstcreateChoiceDto) {
-                CreateChoicesEnities.Add(_mapper.Map<QuestionsChoices>(choice));
-            }
 
-            //entity.ChoiceText = createChoiceDto.ChoiceText;
+                var e = _mapper.Map<QuestionsChoices>(choice);
+                e.QuestionID = QuestionID;
+                CreateChoicesEnities.Add(e);
+
+            }
 
             await _unitOfWork.EntityRepo.AddItemsAsync(CreateChoicesEnities);
 

@@ -33,36 +33,20 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPost]
-        public async Task<IActionResult> AddNewChoice(List<CreateChoiceDTO> createDtos)
+        public async Task<IActionResult> AddNewChoices([FromBody]List<CreateChoiceDTO> createDtos, int QuestionID)
         {
          
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             if (userId == null) return Unauthorized();
-
-            Dictionary<int, bool> questionIDsMap = new();
-
-            List<QuestionsChoicesDTOs.CreateChoiceDTO> validatedCreateDtos = new(createDtos.Count);
-
-            foreach (var dto in createDtos) {
-
-                if (!questionIDsMap.ContainsKey(dto.QuestionID))
-                {
-                    if (await _collectionsAuthService.IsUserQuestionOwnerAsync(
-                     dto.QuestionID, userId == null ? -1 : (int)userId))
-                    {
-                        validatedCreateDtos.Add(dto); questionIDsMap.Add(dto.QuestionID, true);
-                    }
-                    else questionIDsMap.Add(dto.QuestionID, false);                  
-                }
-                else             
-                    if (questionIDsMap[dto.QuestionID])  validatedCreateDtos.Add(dto);                                    
+                
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(
+                QuestionID, userId == null ? -1 : (int)userId))
+            {
+                return Unauthorized();
             }
 
-
-            if (validatedCreateDtos.Count == 0 && createDtos.Count != 0) return Unauthorized();
-
-            return Ok(await _QuestionsChoicesService.AddChoiceAsync(validatedCreateDtos));
+            return Ok(await _QuestionsChoicesService.AddChoiceAsync(createDtos, QuestionID));
         }
 
 

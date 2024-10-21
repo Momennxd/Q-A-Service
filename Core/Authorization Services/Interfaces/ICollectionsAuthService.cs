@@ -19,6 +19,12 @@ namespace Core.Authorization_Services.Interfaces
         public Task<bool> IsUserCollecOwnerAsync(int collecID, int UserID);
 
 
+        /// <summary>
+        /// checks if the user is the  creater  of the question.
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public Task<bool> IsUserQuestionOwnerAsync(int QuestionID, int UserID);
 
 
@@ -51,7 +57,14 @@ namespace Core.Authorization_Services.Interfaces
 
 
 
-      
+        /// <summary>
+        /// Determines if the user could access this collection (Can not if they are not the owner and it's private)
+        /// </summary>
+        /// <param name="CollectionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserCollectionAccess(int CollectionID, int UserID);
+
 
 
 
