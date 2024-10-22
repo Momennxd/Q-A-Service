@@ -23,6 +23,8 @@ namespace Core.Profiles
 
         public QuestionsProfile()
         {
+            CreateMap<Question, PatchQuestionDTO>();
+            CreateMap<PatchQuestionDTO, Question>();
 
             CreateMap<Question, SendQuestionDTO>();
             CreateMap<SP_Question, SendQuestionDTO>();

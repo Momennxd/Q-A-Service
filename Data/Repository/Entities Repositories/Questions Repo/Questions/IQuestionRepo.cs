@@ -17,7 +17,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
 
         public Task<List<SP_Question>> GetAllQuestionsAsync(int CollectionID);
 
-
+        public Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal);
 
     }
 }

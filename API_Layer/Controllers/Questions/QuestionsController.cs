@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 using System.Security.Claims;
 using static Core.DTOs.Questions.QuestionsDTOs;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace API_Layer.Controllers.Questions
 {
@@ -38,7 +39,7 @@ namespace API_Layer.Controllers.Questions
                    return Unauthorized();
                     
 
-            return Ok(await _QuestionsService.CreateQuestions(createDtos, CollectionID, (int)userId));
+            return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, (int)userId));
         }
 
 
@@ -52,11 +53,40 @@ namespace API_Layer.Controllers.Questions
             if (!await _collectionsAuthService.IsUserCollectionAccess(CollectionID, (int)userId))
                 return Unauthorized();
 
-            return Ok(await _QuestionsService.GetAllQuestions(CollectionID));
+            return Ok(await _QuestionsService.GetAllQuestionsAsync(CollectionID));
         }
 
 
 
+        [HttpPatch("{QuestionID}")]
+        public async Task<IActionResult> PatchQuestion
+           ([FromBody] JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
+        {
 
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
+                return Unauthorized();
+
+
+            return Ok(await _QuestionsService.PatchQuestionAsync(patchDoc, QuestionID));
+        }
+
+
+
+        [HttpPatch("points/{QuestionID}")]
+        public async Task<IActionResult> PatchQuestionPoints(int QuestionID, int NewPointsVal)
+        {
+
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
+                return Unauthorized();
+
+
+            return Ok(await _QuestionsService.PatchQuestionPointsAsync(QuestionID, NewPointsVal));
+        }
     }
 }

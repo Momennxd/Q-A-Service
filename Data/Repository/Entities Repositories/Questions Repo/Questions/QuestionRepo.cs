@@ -1,8 +1,10 @@
 ﻿using Data.DatabaseContext;
 using Data.models._SP_;
+using Data.models.Collections;
 using Data.models.People;
 using Data.models.Questions;
 using Data.Repositories;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -57,5 +59,22 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             return hasAccess;
         }
 
+        public async Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal)
+        {
+
+            if (QuestionID <= 0 || NewPointsVal < 0) return -1;
+
+            var repo = new CollectionsQuestionRepo(_appDbContext);
+
+            var CollecQues = await repo.GetCollectionQuestionsAsync(QuestionID);
+
+            if (CollecQues == null)
+                throw new ArgumentNullException("Question Does not belong to any Collection");
+
+            CollecQues.QuestionPoints = NewPointsVal;
+
+            return NewPointsVal;
+
+        }
     }
 }

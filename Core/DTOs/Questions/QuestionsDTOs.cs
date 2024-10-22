@@ -31,6 +31,16 @@ namespace Core.DTOs.Questions
         }
 
 
+        public class PatchQuestionDTO
+        {
+
+            public string QuestionText { get; set; }
+
+            public byte Rank { get; set; }
+
+        }
+
+
         public class SendQuestionDTO
         {
 
