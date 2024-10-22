@@ -11,7 +11,8 @@ namespace Core.Services.Interfaces.Questions
     {
 
         Task<bool> AddNewAsync(AnswerExplanationDTOs.AnswerExplanationMainDTO answerExplanationDTO);
-        Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationAsync(int QuestionID);
+        Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationByQuestionIDAsync(int QuestionID);
+        Task<AnswerExplanationDTOs.GetAnswerExplanationDTO> GetAnswerExplanationAsync(int ExplainaID);
 
     }
 }

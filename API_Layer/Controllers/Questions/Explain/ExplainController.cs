@@ -40,8 +40,8 @@ namespace API_Layer.Controllers.Questions.Explain
         }
 
 
-        [HttpGet("{QuestionID}")]
-        public async Task<IActionResult> GetAnswerExplaination(int QuestionID)
+        [HttpGet("GetAllExplainationsByQuestionID{QuestionID}")]
+        public async Task<IActionResult> GetAnswerExplainationByQuestionID(int QuestionID)
         {
             int? UserId = 1;// clsToken.GetUserID(HttpContext);
             if (UserId == null) return NotFound();
@@ -52,7 +52,24 @@ namespace API_Layer.Controllers.Questions.Explain
 
 
 
-            return Ok(await _answerExplanationService.GetAnswerExplanationAsync(QuestionID));
+            return Ok(await _answerExplanationService.GetAnswerExplanationByQuestionIDAsync(QuestionID));
+        }
+        [HttpGet("{ExplainID}")]
+        public async Task<IActionResult> GetAnswerExplaination(int ExplainID)
+        {
+            int? UserId = 1;// clsToken.GetUserID(HttpContext);
+
+            if (UserId == null) return NotFound();
+
+            var result = await _answerExplanationService.GetAnswerExplanationAsync(ExplainID);
+            
+            if (!await _authService.IsUserQuestionAccessAsync(result.QuestionID, (int)UserId))
+                return Unauthorized();
+
+
+
+
+            return Ok(result);
         }
     }
 }

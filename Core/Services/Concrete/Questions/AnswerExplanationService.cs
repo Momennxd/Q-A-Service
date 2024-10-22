@@ -33,7 +33,12 @@ namespace Core.Services.Concrete.Questions
             return true; 
         }
 
-        public async Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationAsync(int QuestionID)
+        public async Task<GetAnswerExplanationDTO> GetAnswerExplanationAsync(int ExplainaID)
+        {
+            return _mapper.Map<GetAnswerExplanationDTO>(await _unitOfWork.EntityRepo.FindAsync(ExplainaID));
+        }
+
+        public async Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationByQuestionIDAsync(int QuestionID)
         {
             var entities = await _unitOfWork.EntityRepo.GetExplainationByQuestionID(QuestionID);
             return _mapper.Map<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>>(entities);
