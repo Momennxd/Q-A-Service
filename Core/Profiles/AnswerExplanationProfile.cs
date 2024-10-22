@@ -14,6 +14,7 @@ namespace Core.Profiles
         public AnswerExplanationProfile()
         {
             CreateMap<AnswerExplanation, AnswerExplanationDTOs.AddAnswerExplanationDTO>();
+            CreateMap<AnswerExplanationDTOs.AddAnswerExplanationDTO, AnswerExplanation>();
         }
     }
 }

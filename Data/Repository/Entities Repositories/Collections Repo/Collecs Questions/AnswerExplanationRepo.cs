@@ -13,9 +13,12 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questio
             _appDbContext = context;
         }
 
-        public Task<bool> AddExplaination(AnswerExplanation answerExplanation)
+        public async Task<bool> AddExplaination(AnswerExplanation answerExplanation)
         {
-            
+            await _appDbContext.Questions_Answer_Explanation.AddAsync(answerExplanation);
+            return true;
         }
+
+
     }
 }

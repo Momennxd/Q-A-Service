@@ -31,7 +31,7 @@ namespace Data.DatabaseContext
 
 
         public virtual DbSet<QCollection> QCollections { get; set; }
-        public virtual DbSet<AnswerExplanation> Answer_Explanation { get; set; }
+        public virtual DbSet<AnswerExplanation> Questions_Answer_Explanation { get; set; }
 
         public virtual DbSet<Choices_Pics> Choices_Pics { get; set; }
         public virtual DbSet<Pics> Pics { get; set; }

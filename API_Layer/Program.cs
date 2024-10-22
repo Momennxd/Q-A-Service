@@ -32,6 +32,7 @@ using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
+using Core.Services.Interfaces.Questions;
 
 
 
@@ -112,6 +113,14 @@ builder.Services.AddScoped<IQuestionsChoicesService, QuestionsChoicesService>();
 builder.Services.AddScoped<IQuestionsChoicesRepo, QuestionsChoicesRepo>();
 builder.Services.AddScoped<IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices>,
     UnitOfWork<IQuestionsChoicesRepo, QuestionsChoices>>();
+
+
+
+
+builder.Services.AddScoped<IAnswerExplanationService , AnswerExplanationService>();
+builder.Services.AddScoped<IAnswerExplanationRepo, AnswerExplanationRepo>();
+builder.Services.AddScoped<IUnitOfWork<IAnswerExplanationRepo, AnswerExplanation>,
+    UnitOfWork<IAnswerExplanationRepo, AnswerExplanation>>();
 
 
 
