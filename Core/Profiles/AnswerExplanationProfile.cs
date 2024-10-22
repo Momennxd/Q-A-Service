@@ -13,8 +13,14 @@ namespace Core.Profiles
     {
         public AnswerExplanationProfile()
         {
-            CreateMap<AnswerExplanation, AnswerExplanationDTOs.AddAnswerExplanationDTO>();
-            CreateMap<AnswerExplanationDTOs.AddAnswerExplanationDTO, AnswerExplanation>();
+            CreateMap<AnswerExplanation, AnswerExplanationDTOs.AnswerExplanationMainDTO>();
+            CreateMap<AnswerExplanationDTOs.AnswerExplanationMainDTO, AnswerExplanation>();
+
+
+            CreateMap<AnswerExplanationDTOs.GetAnswerExplanationDTO, AnswerExplanation>();
+
+            CreateMap<AnswerExplanation, AnswerExplanationDTOs.GetAnswerExplanationDTO>();
+            CreateMap<AnswerExplanation, AnswerExplanationDTOs.AnswerExplanationMainDTO>();
         }
     }
 }

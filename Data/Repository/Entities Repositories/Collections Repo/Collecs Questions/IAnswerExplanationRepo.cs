@@ -11,7 +11,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questio
 {
     public interface IAnswerExplanationRepo: IRepository<AnswerExplanation>
     {
-
-        Task<bool> AddExplaination(AnswerExplanation answerExplanation);
+        Task<bool> AddExplainationAsync(AnswerExplanation answerExplanation);
+        Task<List<AnswerExplanation>> GetExplainationByQuestionID(int QuestionID);
     }
 }

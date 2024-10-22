@@ -10,7 +10,8 @@ namespace Core.Services.Interfaces.Questions
     public interface IAnswerExplanationService
     {
 
-        Task<bool> AddNewAsync(AnswerExplanationDTOs.AddAnswerExplanationDTO answerExplanationDTO);
+        Task<bool> AddNewAsync(AnswerExplanationDTOs.AnswerExplanationMainDTO answerExplanationDTO);
+        Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationAsync(int QuestionID);
 
     }
 }

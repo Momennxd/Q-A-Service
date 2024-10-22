@@ -9,12 +9,20 @@ namespace Core.DTOs.Questions
     public class AnswerExplanationDTOs
     {
 
-        public class AddAnswerExplanationDTO
+        public class AnswerExplanationMainDTO
         {
             public string ExplanationText { get; set; }
             public int QuestionID { get; set; }
 
         }
+
+
+        public class GetAnswerExplanationDTO : AnswerExplanationMainDTO
+        {
+            public DateTime AddedDate { get; set; }
+        }
+
+
 
     }
 }

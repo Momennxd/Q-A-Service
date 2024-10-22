@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Questions.AnswerExplanationDTOs;
 
 namespace Core.Services.Concrete.Questions
 {
@@ -25,11 +26,18 @@ namespace Core.Services.Concrete.Questions
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddNewAsync(AnswerExplanationDTOs.AddAnswerExplanationDTO answerExplanationDTO)
+        public async Task<bool> AddNewAsync(AnswerExplanationDTOs.AnswerExplanationMainDTO answerExplanationDTO)
         {
-            await _unitOfWork.EntityRepo.AddExplaination(_mapper.Map<AnswerExplanation>(answerExplanationDTO));
+            await _unitOfWork.EntityRepo.AddExplainationAsync(_mapper.Map<AnswerExplanation>(answerExplanationDTO));
             await _unitOfWork.CompleteAsync();
             return true; 
         }
+
+        public async Task<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>> GetAnswerExplanationAsync(int QuestionID)
+        {
+            var entities = await _unitOfWork.EntityRepo.GetExplainationByQuestionID(QuestionID);
+            return _mapper.Map<List<AnswerExplanationDTOs.GetAnswerExplanationDTO>>(entities);
+        }
+
     }
 }

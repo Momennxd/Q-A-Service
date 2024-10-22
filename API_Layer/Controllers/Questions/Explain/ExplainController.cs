@@ -2,8 +2,11 @@
 using Core.Authorization_Services.Interfaces;
 using Core.DTOs.Questions;
 using Core.Services.Interfaces.Questions;
+using Data.models.Questions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Core.DTOs.Questions.AnswerExplanationDTOs;
 
 namespace API_Layer.Controllers.Questions.Explain
 {
@@ -21,9 +24,10 @@ namespace API_Layer.Controllers.Questions.Explain
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExplain(AnswerExplanationDTOs.AddAnswerExplanationDTO addAnswerExplanationDTO)
+        [Authorize]
+        public async Task<IActionResult> AddExplain(AnswerExplanationDTOs.AnswerExplanationMainDTO addAnswerExplanationDTO)
         {
-            int? UserId = 1;// clsToken.GetUserID(HttpContext);
+            int? UserId = clsToken.GetUserID(HttpContext);
             if (UserId == null) return NotFound();
             
             if(! await _authService.IsUserQuestionOwnerAsync(addAnswerExplanationDTO.QuestionID, (int)UserId))
@@ -33,6 +37,22 @@ namespace API_Layer.Controllers.Questions.Explain
 
 
             return Ok(await _answerExplanationService.AddNewAsync(addAnswerExplanationDTO));
+        }
+
+
+        [HttpGet("{QuestionID}")]
+        public async Task<IActionResult> GetAnswerExplaination(int QuestionID)
+        {
+            int? UserId = 1;// clsToken.GetUserID(HttpContext);
+            if (UserId == null) return NotFound();
+
+            if (!await _authService.IsUserQuestionAccessAsync(QuestionID, (int)UserId))
+                return Unauthorized();
+
+
+
+
+            return Ok(await _answerExplanationService.GetAnswerExplanationAsync(QuestionID));
         }
     }
 }

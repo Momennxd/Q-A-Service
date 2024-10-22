@@ -23,7 +23,7 @@ namespace Data.models.Questions
 
         public byte Rank { get; set; }
 
-        public bool IsDeleted { get; set; }
+        //public bool IsDeleted { get; set; }
 
 
 
