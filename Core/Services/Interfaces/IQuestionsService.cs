@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,18 +12,20 @@ namespace Core.Services.Interfaces
     {
 
 
-        public Task<List<SendQuestionDTO>> CreateQuestions(
+        public Task<List<SendQuestionDTO>> CreateQuestionsAsync(
             List<CreateQuestionDTO> createQuestionsDTO, int CollectionID, int UserID);
 
 
 
-        public Task<List<SendQuestionDTO>> GetAllQuestions(int CollectionID);
+        public Task<List<SendQuestionDTO>> GetAllQuestionsAsync(int CollectionID);
+
+
+        public Task<SendQuestionDTO> PatchQuestionAsync(
+           JsonPatchDocument<PatchQuestionDTO> patchDoc, int collecID);
 
 
 
-
-
-
+        public Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal);
 
 
 

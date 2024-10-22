@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.DTOs.Collections;
 using Core.DTOs.Questions;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
@@ -8,6 +9,7 @@ using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +43,7 @@ namespace Core.Services.Concrete.Questions
         }
 
 
-        public async Task<List<SendQuestionDTO>> CreateQuestions(
+        public async Task<List<SendQuestionDTO>> CreateQuestionsAsync(
             List<CreateQuestionDTO> createQuestionsDTO, int CollectionID, int UserID)
         {
             List<SendQuestionDTO> output = new(createQuestionsDTO.Count);
@@ -95,7 +97,7 @@ namespace Core.Services.Concrete.Questions
         }
 
 
-        public async Task<List<SendQuestionDTO>> GetAllQuestions(int CollectionID)
+        public async Task<List<SendQuestionDTO>> GetAllQuestionsAsync(int CollectionID)
         {
             List<SP_Question> CollectQuestions =
                 await _uowQuestions.EntityRepo.GetAllQuestionsAsync(CollectionID);
@@ -126,6 +128,47 @@ namespace Core.Services.Concrete.Questions
 
             return [.. sendQuesDtoMap.Values];
 
+        }
+
+        public async Task<SendQuestionDTO> PatchQuestionAsync(JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
+        {
+
+            // Await the result of FindAsync to retrieve the actual entity
+            var entity = await _uowQuestions.EntityRepo.FindAsync(QuestionID);
+
+            if (entity == null)
+            {
+                // Handle the case where the collection is not found
+                throw new KeyNotFoundException($"Question with ID {QuestionID} not found.");
+            }
+
+            // Map the entity to a DTO to apply the patch
+            var QuestionToPatch = _mapper.Map<PatchQuestionDTO>(entity);
+
+            // Apply the patch to the DTO
+            patchDoc.ApplyTo(QuestionToPatch);
+
+            // Map the patched DTO back to the original entity
+            _mapper.Map(QuestionToPatch, entity);
+
+            // Save changes
+            await _uowQuestions.CompleteAsync();
+
+            // Return the updated collection as a DTO
+            return _mapper.Map<SendQuestionDTO>(entity);
+
+
+        }
+
+        public async Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal)
+        {
+            
+            if (await _uowQuestions.EntityRepo.PatchQuestionPointsAsync(QuestionID, NewPointsVal) == -1)
+                return -1;
+
+            if (await _uowQuestions.CompleteAsync() < 1) return -1;
+
+            return NewPointsVal;
         }
     }
 }
