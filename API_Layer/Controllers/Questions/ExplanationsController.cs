@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Core.DTOs.Questions.AnswerExplanationDTOs;
 
-namespace API_Layer.Controllers.Questions.Explain
+namespace API_Layer.Controllers.Questions
 {
-    [Route("api/Explain")]
+    [Route("api/explanations")]
     [ApiController]
-    public class ExplainController : ControllerBase
+    public class ExplanationsController : ControllerBase
     {
         IAnswerExplanationService _answerExplanationService;
         ICollectionsAuthService _authService;
 
-        public ExplainController(IAnswerExplanationService answerExplanationService, ICollectionsAuthService authService)
+        public ExplanationsController(IAnswerExplanationService answerExplanationService, ICollectionsAuthService authService)
         {
             _answerExplanationService = answerExplanationService;
             _authService = authService;
@@ -25,12 +25,12 @@ namespace API_Layer.Controllers.Questions.Explain
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddExplain(AnswerExplanationDTOs.AnswerExplanationMainDTO addAnswerExplanationDTO)
+        public async Task<IActionResult> AddExplain(AnswerExplanationMainDTO addAnswerExplanationDTO)
         {
             int? UserId = clsToken.GetUserID(HttpContext);
-            if (UserId == null) return NotFound();
-            
-            if(! await _authService.IsUserQuestionOwnerAsync(addAnswerExplanationDTO.QuestionID, (int)UserId))
+            if (UserId == null) return Unauthorized();
+
+            if (!await _authService.IsUserQuestionOwnerAsync(addAnswerExplanationDTO.QuestionID, (int)UserId))
                 return Unauthorized();
 
 
@@ -40,11 +40,11 @@ namespace API_Layer.Controllers.Questions.Explain
         }
 
 
-        [HttpGet("GetAllExplainationsByQuestionID{QuestionID}")]
+        [HttpGet("Questions/{QuestionID}")]
         public async Task<IActionResult> GetAnswerExplainationByQuestionID(int QuestionID)
         {
-            int? UserId = 1;// clsToken.GetUserID(HttpContext);
-            if (UserId == null) return NotFound();
+            int? UserId = clsToken.GetUserID(HttpContext);
+            if (UserId == null) return Unauthorized();
 
             if (!await _authService.IsUserQuestionAccessAsync(QuestionID, (int)UserId))
                 return Unauthorized();
@@ -54,15 +54,17 @@ namespace API_Layer.Controllers.Questions.Explain
 
             return Ok(await _answerExplanationService.GetAnswerExplanationByQuestionIDAsync(QuestionID));
         }
+
+
+
         [HttpGet("{ExplainID}")]
         public async Task<IActionResult> GetAnswerExplaination(int ExplainID)
         {
-            int? UserId = 1;// clsToken.GetUserID(HttpContext);
-
-            if (UserId == null) return NotFound();
+            int? UserId = clsToken.GetUserID(HttpContext);
+            if (UserId == null) return Unauthorized();
 
             var result = await _answerExplanationService.GetAnswerExplanationAsync(ExplainID);
-            
+
             if (!await _authService.IsUserQuestionAccessAsync(result.QuestionID, (int)UserId))
                 return Unauthorized();
 
