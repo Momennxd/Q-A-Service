@@ -8,23 +8,13 @@ using System.Threading.Tasks;
 
 namespace Data.models.Questions
 {
-    public class Question : IBaseEntity<Question>
+    public class AnswerExplanation : IBaseEntity<AnswerExplanation>
     {
         [Key]
+        public int ExplanationID { get; set; }
+        public string ExplanationText { get; set; }
+        public DateTime AddedDate { get; set; } = DateTime.Now;
         public int QuestionID { get; set; }
-
-        public string QuestionText { get; set; }
-
-        public int UserID { get; set; }
-
-        public bool IsMCQ { get; set; }
-
-        public DateTime AddedDate { get; set; }
-
-        public byte Rank { get; set; }
-
-
-
-
     }
+
 }
