@@ -88,5 +88,23 @@ namespace API_Layer.Controllers.Questions
 
             return Ok(await _QuestionsService.PatchQuestionPointsAsync(QuestionID, NewPointsVal));
         }
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteQuestion(int QuestionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            if (userId == null) return Unauthorized();
+
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, (int)userId))
+                return Unauthorized();
+
+
+
+            return Ok(await _QuestionsService.DeleteQuestionAsync(QuestionID));
+
+        }
     }
 }

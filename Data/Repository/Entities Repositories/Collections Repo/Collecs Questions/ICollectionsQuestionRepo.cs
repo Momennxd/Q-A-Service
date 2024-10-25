@@ -15,6 +15,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questi
         public Task<Collections_Questions?> GetCollectionQuestionsAsync(int QuestionID);
 
 
+        public Task<int> DeleteCollectionsQuestionsAsync(int QuestionID);
 
 
 

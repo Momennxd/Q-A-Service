@@ -24,5 +24,12 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 
 
 
+
+
+
+
+        public Task<int> DeleteQuestionChoicesAsync(int QuestionID);
+
+
     }
 }

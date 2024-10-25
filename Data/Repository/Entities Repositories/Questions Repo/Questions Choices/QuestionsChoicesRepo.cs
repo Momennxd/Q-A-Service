@@ -23,6 +23,24 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
             _appDbContext = context;
         }
 
+
+        public async Task<int> DeleteQuestionChoicesAsync(int QuestionID)
+        {
+            List<QuestionsChoices> questionsChoices = await GetAllByQuestionIDAsync(QuestionID);
+
+            foreach (QuestionsChoices question in questionsChoices)
+            {
+                await base.DeleteItemAsync(question.ChoiceID);
+            }
+
+
+
+            return questionsChoices.Count;
+
+        }
+
+
+
         public async Task<List<QuestionsChoices>> GetAllByQuestionIDAsync(int Questionid)
         {
            return await _appDbContext.Questions_Choices.Select(c => c).
@@ -72,9 +90,6 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
             var choice = await FindAsync(choiceid);
             return choice?.IsRightAnswer ?? false;
         }
-
-
-
 
 
 

@@ -106,11 +106,11 @@ namespace API_Layer.Controllers.Questions
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
 
-            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(ChoiceID, userId))
+            if (!await _collectionsAuthService.IsUserChoiceOwnerAsync(ChoiceID, userId))
                 return Unauthorized();
 
 
-            return Ok(await _QuestionsChoicesService.PatchChoice(patchDoc, ChoiceID));
+            return Ok(await _QuestionsChoicesService.PatchChoiceAsync(patchDoc, ChoiceID));
         }
 
 
@@ -120,10 +120,11 @@ namespace API_Layer.Controllers.Questions
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(ChoiceID, userId))
+
+            if (!await _collectionsAuthService.IsUserChoiceOwnerAsync(ChoiceID, userId))
                 return Unauthorized();
 
-            return await _QuestionsChoicesService.DeleteChoice(ChoiceID) == true ? Ok(1) : BadRequest();
+            return Ok(await _QuestionsChoicesService.DeleteChoiceAsync(ChoiceID));
 
         }
 

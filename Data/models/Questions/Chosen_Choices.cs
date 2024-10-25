@@ -8,20 +8,27 @@ using System.Threading.Tasks;
 
 namespace Data.models.Questions
 {
-    public class Question : IBaseEntity<Question>
+    public class Chosen_Choices : IBaseEntity<Chosen_Choices>
     {
         [Key]
-        public int QuestionID { get; set; }
+        public int Chosen_ChoiceID { get; set; }
 
-        public string QuestionText { get; set; }
+        public int ChoiceID { get; set; }
 
         public int UserID { get; set; }
 
-        public bool IsMCQ { get; set; }
+        public DateTime ChosenDate { get; set; }
 
-        public DateTime AddedDate { get; set; }
 
-        public byte Rank { get; set; }
+        public int SubmitionID { get; set; }
+
+
+
+
+
+
+
+
 
     }
 }

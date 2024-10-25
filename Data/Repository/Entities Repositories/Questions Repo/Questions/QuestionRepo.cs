@@ -28,6 +28,24 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             _appDbContext = context;
         }
 
+        public async Task<int> DeleteQuestionAsync(int QuestionID)
+        {
+
+            var RowsCount = new SqlParameter
+            {
+                ParameterName = "@RowsCount",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+
+            // Execute the stored procedure
+            await _appDbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"EXEC SP_DeleteQuestion  @QuestionID = {QuestionID}, @RowsCount = {RowsCount} OUTPUT");
+
+            // Get the output value
+            return (int)RowsCount.Value;
+        }
+
         public async Task<List<SP_Question>> GetAllQuestionsAsync(int CollectionID)
         {
 
@@ -37,6 +55,14 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
                              new SqlParameter("@CollectionID", CollectionID))
                 .ToListAsync();
 
+
+        }
+
+        public async Task<List<Question>> GetAllQuestionsAsync(HashSet<int> QuestionIDs)
+        {
+
+            return await _appDbContext.Set<Question>().Select(q => q).
+                Where(q => QuestionIDs.Contains(q.QuestionID)).ToListAsync();
 
         }
 

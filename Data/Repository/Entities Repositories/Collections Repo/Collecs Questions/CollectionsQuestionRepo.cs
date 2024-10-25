@@ -20,6 +20,18 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questio
             _appDbContext = context;
         }
 
+        public async Task<int> DeleteCollectionsQuestionsAsync(int QuestionID)
+        {
+            Collections_Questions? collections_Questions =
+                 await GetCollectionQuestionsAsync(QuestionID);
+
+            if (collections_Questions == null) return 0;
+
+            await base.DeleteItemAsync(collections_Questions.Collection_QuestionID);
+
+            return 1;
+        }
+
         public async Task<Collections_Questions?> GetCollectionQuestionsAsync(int QuestionID)
         {
             return await _appDbContext.Collections_Questions

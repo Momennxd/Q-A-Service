@@ -19,6 +19,7 @@ using Core.DTOs.Pictures;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using Core.DTOs.Collections;
+using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
 
 namespace Core.Services.Concrete.Questions
 {
@@ -26,13 +27,16 @@ namespace Core.Services.Concrete.Questions
     {
 
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _unitOfWork;
+        private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _uowChoices;
+        private readonly IUnitOfWork<IChosenChoicesRepo, Chosen_Choices> _uowChosenChoices;
 
 
         public QuestionsChoicesService
-            (IMapper mapper, IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices)
+            (IMapper mapper, IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices,
+            IUnitOfWork<IChosenChoicesRepo, Chosen_Choices> uowChosenChoices)
         {
-            _unitOfWork = uowChoices;
+            _uowChosenChoices = uowChosenChoices;
+            _uowChoices = uowChoices;
             _mapper = mapper;
         }
 
@@ -50,9 +54,9 @@ namespace Core.Services.Concrete.Questions
 
             }
 
-            await _unitOfWork.EntityRepo.AddItemsAsync(CreateChoicesEnities);
+            await _uowChoices.EntityRepo.AddItemsAsync(CreateChoicesEnities);
 
-            await _unitOfWork.CompleteAsync();
+            await _uowChoices.CompleteAsync();
 
 
             List<SendChoiceDTO> QSendchoicesDTOs = new List<SendChoiceDTO>();
@@ -67,17 +71,50 @@ namespace Core.Services.Concrete.Questions
 
         }
 
-        public async Task<bool> DeleteChoice(int choiceid)
+        public async Task<int> DeleteChoiceAsync(int choiceid)
         {
-            await _unitOfWork.EntityRepo.DeleteItemAsync(choiceid);
+            int rowsEffected = 0;
 
-            return await _unitOfWork.CompleteAsync() > 0;
+            await _uowChosenChoices.EntityRepo.DeleteChosenChoicesAsync(choiceid);
+            rowsEffected += await _uowChosenChoices.CompleteAsync();
+
+            await _uowChoices.EntityRepo.DeleteItemAsync(choiceid);
+            rowsEffected += await _uowChoices.CompleteAsync();
+
+            return rowsEffected;
         }
+        
+
+
+        public async Task<int> DeleteQuestionChoicesAsync(int QuestionID)
+        {
+
+            var choices = await _uowChoices.EntityRepo.GetAllByQuestionIDAsync(QuestionID);
+            HashSet<int> choicesIDs = new(choices.Count);
+
+            foreach (var choice in choices) choicesIDs.Add(choice.ChoiceID);
+
+
+            int rowsEffected = 0;
+
+            //delete chosen_choices
+            await _uowChosenChoices.EntityRepo.DeleteChosenChoicesAsync(choicesIDs);
+            rowsEffected += await _uowChosenChoices.CompleteAsync();
+
+            //delete choices
+            await _uowChoices.EntityRepo.DeleteQuestionChoicesAsync(QuestionID);
+            rowsEffected += await _uowChoices.CompleteAsync();
+
+            return rowsEffected;
+
+        }
+
+
 
         public async Task<List<SendChoiceDTO>> GetAllRightAnswersAsync(int Questionid)
         {
 
-            var entities = await _unitOfWork.EntityRepo.GetAllRightAnswersAsync(Questionid);
+            var entities = await _uowChoices.EntityRepo.GetAllRightAnswersAsync(Questionid);
 
             List<SendChoiceDTO> sendChoiceDTOs = new List<SendChoiceDTO>();
 
@@ -91,7 +128,7 @@ namespace Core.Services.Concrete.Questions
         public async Task<List<SendChoiceDTO>> GetChoicesAsync(int QuestionID)
         {
             
-            var entities = await _unitOfWork.EntityRepo.GetAllByQuestionIDAsync(QuestionID);
+            var entities = await _uowChoices.EntityRepo.GetAllByQuestionIDAsync(QuestionID);
 
             List<SendChoiceDTO> sendChoiceDTOs = new List<SendChoiceDTO>();
 
@@ -107,7 +144,7 @@ namespace Core.Services.Concrete.Questions
         {
             Dictionary<int, List<SendChoiceDTO>> sendChoiceDTOs = new(QuestionsIDs.Count);
 
-            var QuestionsChoicesMap = await _unitOfWork.EntityRepo.GetAllByQuestionIDsAsync(QuestionsIDs);
+            var QuestionsChoicesMap = await _uowChoices.EntityRepo.GetAllByQuestionIDsAsync(QuestionsIDs);
 
             foreach (var QuestionID in QuestionsChoicesMap.Keys) {
 
@@ -124,16 +161,13 @@ namespace Core.Services.Concrete.Questions
 
         public async Task<bool> IsRightAnswerAsync(int choiceid)
         {
-           return await _unitOfWork.EntityRepo.IsRightAnswerAsync(choiceid);
+           return await _uowChoices.EntityRepo.IsRightAnswerAsync(choiceid);
         }
 
 
-
-
-
-        public async Task<SendChoiceDTO> PatchChoice(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID)
+        public async Task<SendChoiceDTO> PatchChoiceAsync(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID)
         {
-            var entity = await _unitOfWork.EntityRepo.FindAsync(ChoiceID);
+            var entity = await _uowChoices.EntityRepo.FindAsync(ChoiceID);
 
             if (entity == null)
             {
@@ -153,7 +187,7 @@ namespace Core.Services.Concrete.Questions
             _mapper.Map(ChoiceToPatch, entity);
 
             // Save changes
-            await _unitOfWork.CompleteAsync();
+            await _uowChoices.CompleteAsync();
 
             // Return the updated collection as a DTO
             return _mapper.Map<SendChoiceDTO>(entity);

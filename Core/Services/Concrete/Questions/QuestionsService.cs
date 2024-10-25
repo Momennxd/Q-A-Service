@@ -96,6 +96,11 @@ namespace Core.Services.Concrete.Questions
             return output;
         }
 
+        public async Task<int> DeleteQuestionAsync(int QuestionID)
+        {
+            return  await _uowQuestions.EntityRepo.DeleteQuestionAsync(QuestionID);
+        }
+
 
         public async Task<List<SendQuestionDTO>> GetAllQuestionsAsync(int CollectionID)
         {
@@ -129,6 +134,8 @@ namespace Core.Services.Concrete.Questions
             return [.. sendQuesDtoMap.Values];
 
         }
+
+    
 
         public async Task<SendQuestionDTO> PatchQuestionAsync(JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
         {

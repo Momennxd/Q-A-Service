@@ -7,6 +7,7 @@ using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
+using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,18 @@ namespace Core.Authorization_Services.Concrete
         private readonly IUnitOfWork<ICollectionRepo, QCollection> _uowCollec;
         private readonly IUnitOfWork<IQuestionRepo, Question> _uowQuestion;
         private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
+        private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _uowChoices;
 
         public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections,
             IUnitOfWork<IQuestionRepo, Question> uowQuestion,
-            IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion)
+            IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion,
+            IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices)
         {
             _uowCollecQuestion = uowcollectionsQuestion;
             _uowCollec = uowCollections;
             _uowQuestion = uowQuestion;
+            _uowChoices = uowChoices;
+
         }
 
 
@@ -102,6 +107,28 @@ namespace Core.Authorization_Services.Concrete
 
 
             return collection.CreatedByUserId == UserID || collection.IsPublic;
+        }
+
+        public async Task<bool> IsUserQuestionOwnerAsync(HashSet<int> setQuestionIDs, int UserID)
+        {
+            List<Question> QEntities = await
+                _uowQuestion.EntityRepo.GetAllQuestionsAsync(setQuestionIDs);
+
+            foreach (var q in QEntities)
+            {
+                if (q.UserID != UserID) return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> IsUserChoiceOwnerAsync(int choiceID, int UserID)
+        {
+            var choice = await _uowChoices.EntityRepo.FindAsync(choiceID);
+
+            if (choice == null) throw new ArgumentNullException();
+
+            return await IsUserQuestionOwnerAsync(choice.QuestionID, UserID);
         }
     }
 }

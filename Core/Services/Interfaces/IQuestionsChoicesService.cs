@@ -31,10 +31,14 @@ namespace Core.Services.Interfaces
 
         public Task<bool> IsRightAnswerAsync(int choiceid);
 
-        public Task<bool> DeleteChoice(int choiceid);
+        public Task<int> DeleteChoiceAsync(int choiceid);
 
 
-        public Task<SendChoiceDTO> PatchChoice(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID);
+        public Task<int> DeleteQuestionChoicesAsync(int QuestionID);
+
+
+
+        public Task<SendChoiceDTO> PatchChoiceAsync(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID);
 
 
 

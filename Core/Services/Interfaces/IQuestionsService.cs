@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Data.models.Questions;
+using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,7 @@ namespace Core.Services.Interfaces
         public Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal);
 
 
-
-
+        public Task<int> DeleteQuestionAsync(int QuestionID);
 
 
 

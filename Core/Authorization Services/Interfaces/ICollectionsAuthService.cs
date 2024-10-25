@@ -29,7 +29,7 @@ namespace Core.Authorization_Services.Interfaces
 
 
         /// <summary>
-        /// Determines if the user could retrieve this choice
+        /// Determines if the user could retrieve this question
         /// </summary>
         /// <param name="QuestionID"></param>
         /// <param name="UserID"></param>
@@ -69,6 +69,22 @@ namespace Core.Authorization_Services.Interfaces
 
 
 
+        /// <summary>
+        /// Determines if the user is the owner of a set of questions.
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserQuestionOwnerAsync(HashSet<int> setQuestionIDs, int UserID);
+
+
+        /// <summary>
+        /// Determines if the user is the owner of a choice
+        /// </summary>
+        /// <param name="QuestionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserChoiceOwnerAsync(int choiceID, int UserID);
 
 
 
