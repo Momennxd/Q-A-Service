@@ -92,23 +92,30 @@ namespace Core.Services.Concrete.Users
             // Return the updated collection as a DTO
             return _mapper.Map<SendUserDTO>(entity);
         }
-
-
-
         public async Task<UsersDTOs.AddUserDTO?> GetUserByIdAsync(int UserID)
         {
             var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
 
             return _mapper.Map<AddUserDTO>(user);
         }
-
-
         public async Task<AddUserDTO?> GetUserByUsernameAsync(string Username)
         {
             var user = await _unitOfWork.EntityRepo.GetUserUsernameAsync(Username);
 
             return _mapper.Map<AddUserDTO>(user);  
         }
+        public async Task<List<UsersDTOs.SendUserDTO>> GetTopUsersAsync(int topN = 10)
+        {
+            // Await the asynchronous call to retrieve users
+            var users = await _unitOfWork.EntityRepo.GetTopUsersAsync(topN);
+
+            // Map the retrieved users to the DTOs
+            var userDtos = _mapper.Map<List<UsersDTOs.SendUserDTO>>(users);
+
+            // Return the mapped DTOs
+            return userDtos;
+        }
+
     }
 
 }

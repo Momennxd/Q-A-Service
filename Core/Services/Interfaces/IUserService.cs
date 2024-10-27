@@ -1,4 +1,5 @@
-﻿using Data.models.People;
+﻿using Core.DTOs.People;
+using Data.models.People;
 using Microsoft.AspNetCore.JsonPatch;
 using static Core.DTOs.People.UsersDTOs;
 
@@ -17,6 +18,8 @@ namespace Core.Services.Interfaces
         Task<AddUserDTO?> GetUserByIdAsync(int UserID);
         Task<AddUserDTO?> GetUserByUsernameAsync(string UserID);
         Task<bool> DeleteUserAsync(int id);
+        Task<List<UsersDTOs.SendUserDTO>> GetTopUsersAsync(int topN = 10);
+
     }
 
 }

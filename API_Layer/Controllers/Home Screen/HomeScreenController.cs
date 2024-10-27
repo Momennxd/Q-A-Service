@@ -11,10 +11,12 @@ namespace API_Layer.Controllers
 
 
         private readonly ICollectionService _collectionService;
+        private readonly IUserService _userService;
 
-        public HomeScreenController(ICollectionService collectionService)
+        public HomeScreenController(ICollectionService collectionService, IUserService userService)
         {
             _collectionService = collectionService;
+            _userService = userService;
         }
 
         [HttpGet("Top20Collections")]
@@ -22,5 +24,14 @@ namespace API_Layer.Controllers
         {
             return Ok(await _collectionService.GetTop20Collections());
         }
+
+        
+        [HttpGet("Top10FollowedUsers")]
+        public async Task<IActionResult> GetTop10FollowedUsers()
+        {
+            return Ok(await _userService.GetTopUsersAsync());
+        }
+
+
     }
 }
