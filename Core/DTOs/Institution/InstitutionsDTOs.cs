@@ -9,25 +9,40 @@ namespace Core.DTOs.Institution
 {
     public class InstitutionsDTOs
     {
-        public class MainDTO
+      
+
+        public class InstitutionDTO
         {
-            public int InstitutionID { get; set; }
-            public int UserID { get; set; }
-            public string Latitude { get; set; }
-            public string Longitude { get; set; }
+            public string Latitute { get; set; }
+            public string Longitute { get; set; }
             public string InstitutionName { get; set; }
             public string WebsiteURL { get; set; }
             public DateTime EstablishedYear { get; set; }
+
+
+
+            public string Username { get; set; }
+            public string Password { get; set; }
+
+
+
+            public string? Notes { get; set; }
+            public short PreferredLanguageID { get; set; }
+            public byte CountryID { get; set; }
         }
 
-        public class SigninDTO
+
+        public class CreateInstitutionDTO : InstitutionDTO
         {
-            public UsersDTOs.AddUserDTO userInfo { get; set; }
-            public string Latitude { get; set; }
-            public string Longitude { get; set; }
-            public string InstitutionName { get; set; }
-            public string WebsiteURL { get; set; }
-            public DateTime EstablishedYear { get; set; }
+            
+        }
+
+
+        public class SendInstitutionDTO : InstitutionDTO
+        {
+            public int InstitutionID { get; set; }
+
+
         }
     }
 }

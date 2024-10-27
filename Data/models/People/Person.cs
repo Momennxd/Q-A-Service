@@ -1,4 +1,5 @@
 ﻿using Data;
+using Data.Custom_Attributes;
 using Data.models.Base;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ public partial class Person : IBaseEntity<Person>
     [Key]
     public int PersonID { get; set; }
 
-    public string FirstName { get; set; } = null!;
+    public string? FirstName { get; set; }
 
     public string? SecondName { get; set; }
 
@@ -23,8 +24,9 @@ public partial class Person : IBaseEntity<Person>
 
     public byte CountryId { get; set; }
 
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
+    [EmailValidation]
     public string? Email { get; set; }
 
     public DateTime JoinedDate { get; set; }

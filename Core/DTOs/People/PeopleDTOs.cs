@@ -14,7 +14,7 @@ namespace Core.DTOs.People
             public string? Address { get; set; }
             public bool? Gender { get; set; }
             public byte CountryID { get; set; }
-            public DateTime DateOfBirth { get; set; }
+            public DateTime? DateOfBirth { get; set; }
             public string? Email { get; set; }
             public string? Notes { get; set; }
             public short PreferredLanguageID { get; set; }
@@ -38,7 +38,7 @@ namespace Core.DTOs.People
             public string? Notes { get; set; }
             public short PreferredLanguageID { get; set; }
             public byte CountryID { get; set; }
-            public DateTime DateOfBirth { get; set; }
+            public DateTime? DateOfBirth { get; set; }
         }
 
         public class SendPersonDTO : BasePersonDTO

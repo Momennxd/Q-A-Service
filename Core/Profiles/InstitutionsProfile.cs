@@ -17,10 +17,22 @@ namespace Core.Profiles
         {
 
 
-            CreateMap<InstitutionsDTOs.SigninDTO, Institution>()
-    .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.userInfo));
-            CreateMap<InstitutionsDTOs.SigninDTO, User>();
 
+
+
+            CreateMap<InstitutionsDTOs.CreateInstitutionDTO, Person>()
+           .ForMember(dest => dest.JoinedDate, opt => opt.MapFrom(src => DateTime.Now));
+
+            CreateMap<InstitutionsDTOs.CreateInstitutionDTO, User>();
+            CreateMap<InstitutionsDTOs.CreateInstitutionDTO, Institution>();
+
+
+
+
+
+            CreateMap<Person, InstitutionsDTOs.SendInstitutionDTO>();
+            CreateMap<User, InstitutionsDTOs.SendInstitutionDTO>();
+            CreateMap<Institution, InstitutionsDTOs.SendInstitutionDTO>();
 
         }
     }

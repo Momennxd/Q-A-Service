@@ -17,10 +17,11 @@ namespace API_Layer.Controllers.Institutions
         }
 
         [HttpPost("Siginin")]
-        public async Task<IActionResult> Siginin(InstitutionsDTOs.SigninDTO signinDTO)
+        public async Task<IActionResult> Siginin(InstitutionsDTOs.CreateInstitutionDTO signinDTO)
         {
-            await _InstitutionServce.Siginin(signinDTO);
-            return Ok();
+            return Ok(await _InstitutionServce.CreateInstitution(signinDTO));
+
+           
         }
     }
 }

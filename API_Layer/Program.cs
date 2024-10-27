@@ -38,6 +38,7 @@ using Core.Services.Concrete.Institutions;
 using Data.Repository.Entities_Repositories;
 using Data.models.Institutions;
 using Data.Repository.Entities_Repositories.Institutions_Repo;
+using Data.Repository.Entities_Repositories.People_Repo;
 
 
 
@@ -98,6 +99,8 @@ builder.Services.AddScoped<IUnitOfWork<IPicsRepo, Pics>, UnitOfWork<IPicsRepo, P
 
 
 
+
+
 builder.Services.AddScoped<IChoicesPicsService, ChoicesPicsService>();
 builder.Services.AddScoped<IChoicesPicsRepo, ChoicesPicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IChoicesPicsRepo, Choices_Pics>, UnitOfWork<IChoicesPicsRepo, Choices_Pics>>();
@@ -136,6 +139,9 @@ builder.Services.AddScoped<IInstitutionsRepo, InstitutionsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IInstitutionsRepo, Institution>,
     UnitOfWork<IInstitutionsRepo, Institution>>();
 
+
+builder.Services.AddScoped<IPersonRepo, PersonRepo>();
+builder.Services.AddScoped<IUnitOfWork<IPersonRepo, Person>, UnitOfWork<IPersonRepo, Person>>();
 
 
 #endregion
@@ -211,7 +217,7 @@ app.UseExceptionHandler(config =>
             var ex = error.Error;
 
             // Default to 500 Internal Server Error
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             // Check for specific exceptions
             switch (ex)
