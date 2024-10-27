@@ -13,8 +13,8 @@ namespace Core.DTOs.Institution
 
         public class InstitutionDTO
         {
-            public string Latitute { get; set; }
-            public string Longitute { get; set; }
+            public string latitude { get; set; }
+            public string longitude { get; set; }
             public string InstitutionName { get; set; }
             public string WebsiteURL { get; set; }
             public DateTime EstablishedYear { get; set; }

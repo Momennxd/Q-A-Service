@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_Layer.Controllers.Institutions
 {
-    [Route("api/Institution")]
+    [Route("api/institutions")]
     [ApiController]
     public class InstitutionController : ControllerBase
     {
@@ -16,12 +16,10 @@ namespace API_Layer.Controllers.Institutions
             _InstitutionServce = institutionServce;
         }
 
-        [HttpPost("Siginin")]
+        [HttpPost("signin")]
         public async Task<IActionResult> Siginin(InstitutionsDTOs.CreateInstitutionDTO signinDTO)
         {
-            return Ok(await _InstitutionServce.CreateInstitution(signinDTO));
-
-           
+            return Ok(await _InstitutionServce.CreateInstitution(signinDTO));   
         }
     }
 }
