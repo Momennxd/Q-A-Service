@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using static Core.DTOs.People.UsersDTOs;
 using Core.DTOs.Collections;
 using Data.Repository.Entities_Repositories.People_Repo;
+using static Core.DTOs.People.PeopleDTOs;
 
 namespace Core.Services.Concrete.Users
 {
@@ -42,7 +43,7 @@ namespace Core.Services.Concrete.Users
             var sendDto = _mapper.Map<SendUserDTO>(user);
 
             //getting the person send dto 
-            sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(addUserDTO.Person);
+            sendDto.Person = _mapper.Map<SendPersonDTO>(user.Person);
 
             return sendDto; 
         }

@@ -24,7 +24,7 @@ namespace Data.Repositories
 
         public Task<User?> FindUserByUsernameAsync(string Username)
         {
-            return null;
+           throw new NotImplementedException();
         }
 
         public async Task<List<User>> GetTopUsersAsync(int topN)

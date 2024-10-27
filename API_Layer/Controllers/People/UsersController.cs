@@ -30,7 +30,7 @@ namespace API_Layer.Controllers.People
         public async Task<ActionResult> Signin(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
-            return Ok(user);
+            return StatusCode(201, user);
         }
 
         [HttpPost("login")]
@@ -40,7 +40,7 @@ namespace API_Layer.Controllers.People
             if (user == null)
                 return BadRequest("Wrong username or password");
 
-            return Ok(clsToken.CreateToken(user.UserID));
+            return Ok(clsToken.CreateToken(user.UserId));
         }
 
         [HttpPatch]
@@ -48,7 +48,6 @@ namespace API_Layer.Controllers.People
         public async Task<ActionResult> UpdateUserInfo(JsonPatchDocument<AddUserDTO> UpdatedItem)
         {
             var user = await _userService.PatchUser(UpdatedItem, clsToken.GetUserID(HttpContext));
-
 
             return Ok(user);
         }

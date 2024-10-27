@@ -21,8 +21,6 @@ namespace Core.Profiles
         
             CreateMap<Person, SendPersonDTO>();
 
-            CreateMap<Person, AddPersonDTO>();
-
         }
 
 

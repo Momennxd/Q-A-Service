@@ -110,7 +110,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             }
 
             // Save changes and return true if successful
-            return await _appDbContext.SaveChangesAsync() > 0;
+            return await _appDbContext.SaveChangesAsync(new CancellationToken()) > 0;
         }
 
     }

@@ -3,10 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+	  
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+
+	<ItemGroup>
+	  
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="EntityFramework.Extensions" Version="0.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="8.0.6" />

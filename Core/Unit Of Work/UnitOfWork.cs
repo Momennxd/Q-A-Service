@@ -39,7 +39,12 @@ namespace Core.Unit_Of_Work
 
         public async Task<int> CompleteAsync()
         {
-            return await _appDbContext.SaveChangesAsync();
+            return await _appDbContext.SaveChangesAsync(new CancellationToken());
+        }
+
+        public async Task<int> CompleteAsync(CancellationToken cancellationToken)
+        {
+            return await _appDbContext.SaveChangesAsync(cancellationToken);
         }
 
 

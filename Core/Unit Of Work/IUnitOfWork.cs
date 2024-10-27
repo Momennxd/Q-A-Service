@@ -18,5 +18,8 @@ namespace Core.Unit_Of_Work
 
         Task<int> CompleteAsync();
 
+        Task<int> CompleteAsync(CancellationToken cancellationToken);
+
+
     }
 }

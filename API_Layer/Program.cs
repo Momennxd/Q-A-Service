@@ -223,7 +223,7 @@ app.UseExceptionHandler(config =>
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;             
                 case NotImplementedException:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    context.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
                     break;
 
 
