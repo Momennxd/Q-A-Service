@@ -10,12 +10,12 @@ namespace Core.Services.Interfaces
 
 
         //Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<User?> CreateUserAsync(AddUserDTO addUserDTO);
-        Task<User?> Login(LoginDTO loginDTO);
-        Task<User?> GetUser(int UserID);
+        Task<SendUserDTO?> CreateUserAsync(AddUserDTO addUserDTO);
+        Task<SendUserDTO?> Login(LoginDTO loginDTO);
+        Task<SendUserDTO?> GetUser(int UserID);
         Task<SendUserDTO> PatchUser(JsonPatchDocument<AddUserDTO> patchDoc, int UserID);
-        Task<AddUserDTO?> GetUserByIdAsync(int UserID);
-        Task<AddUserDTO?> GetUserByUsernameAsync(string UserID);
+        Task<SendUserDTO?> GetUserByIdAsync(int UserID);
+        Task<SendUserDTO?> GetUserByUsernameAsync(string UserID);
         Task<bool> DeleteUserAsync(int id);
     }
 

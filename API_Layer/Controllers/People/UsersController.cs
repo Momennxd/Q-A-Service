@@ -10,7 +10,7 @@ using static Core.DTOs.People.UsersDTOs;
 
 namespace API_Layer.Controllers.People
 {
-    [Route("api/Users")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -26,21 +26,21 @@ namespace API_Layer.Controllers.People
 
 
 
-        [HttpPost("Sigin in")]
+        [HttpPost("signin")]
         public async Task<ActionResult> Signin(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
-            return Ok();
+            return Ok(user);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult> Login(LoginDTO loginDTO)
         {
             var user = await _userService.Login(loginDTO);
             if (user == null)
                 return BadRequest("Wrong username or password");
 
-            return Ok(clsToken.CreateToken(user.UserId));
+            return Ok(clsToken.CreateToken(user.UserID));
         }
 
         [HttpPatch]
@@ -50,7 +50,7 @@ namespace API_Layer.Controllers.People
             var user = await _userService.PatchUser(UpdatedItem, clsToken.GetUserID(HttpContext));
 
 
-            return Ok();
+            return Ok(user);
         }
         
         [HttpGet]
