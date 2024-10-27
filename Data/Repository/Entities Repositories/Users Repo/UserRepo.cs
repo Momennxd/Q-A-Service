@@ -27,6 +27,15 @@ namespace Data.Repositories
             return null;
         }
 
+        public async Task<List<User>> GetTopUsersAsync(int topN)
+        {
+            return await _context.Users
+                      .FromSqlRaw("EXEC dbo.GetTopNUsers @TopN = {0}", topN)
+                      .ToListAsync();
+
+
+        }
+
         public async Task<User?> GetUserByID(int UserID)
         {
             var user =await _context

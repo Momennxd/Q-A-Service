@@ -4,8 +4,8 @@ using Data.models.Collections;
 using Data.models.People;
 using Data.models.Pictures;
 using Data.models.Questions;
+using Data.models.Institutions;
 using Microsoft.EntityFrameworkCore;
-
 namespace Data.DatabaseContext
 {
     public partial class AppDbContext
@@ -27,6 +27,7 @@ namespace Data.DatabaseContext
 
 
         public virtual DbSet<User> Users {  get; set; }
+        public virtual DbSet<Institution> Institutions {  get; set; }
 
  
         public virtual DbSet<Person> People { get; set; }

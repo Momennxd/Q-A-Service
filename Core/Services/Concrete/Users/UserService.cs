@@ -125,7 +125,7 @@ namespace Core.Services.Concrete.Users
 
 
 
-        public async Task<SendUserDTO?> GetUserByIdAsync(int UserID)
+        public async Task<UsersDTOs.AddUserDTO?> GetUserByIdAsync(int UserID)
         {
             var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
 
@@ -139,7 +139,7 @@ namespace Core.Services.Concrete.Users
         }
 
 
-        public async Task<SendUserDTO?> GetUserByUsernameAsync(string Username)
+        public async Task<AddUserDTO?> GetUserByUsernameAsync(string Username)
         {
             var user = await _unitOfWork.EntityRepo.GetUserUsernameAsync(Username);
 
@@ -153,6 +153,18 @@ namespace Core.Services.Concrete.Users
 
             return sendDto;
         }
+        public async Task<List<UsersDTOs.SendUserDTO>> GetTopUsersAsync(int topN = 10)
+        {
+            // Await the asynchronous call to retrieve users
+            var users = await _unitOfWork.EntityRepo.GetTopUsersAsync(topN);
+
+            // Map the retrieved users to the DTOs
+            var userDtos = _mapper.Map<List<UsersDTOs.SendUserDTO>>(users);
+
+            // Return the mapped DTOs
+            return userDtos;
+        }
+
     }
 
 }

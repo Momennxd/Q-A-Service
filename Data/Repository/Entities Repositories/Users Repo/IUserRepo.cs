@@ -22,6 +22,6 @@ namespace Data.Repositories
         Task<User?> GetUserByID(int UserID);
         Task<User?> GetUserUsernameAsync(string Username);
 
-        
+        Task<List<User>> GetTopUsersAsync(int topN);
     }
 }
