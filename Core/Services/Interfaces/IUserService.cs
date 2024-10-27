@@ -18,7 +18,7 @@ namespace Core.Services.Interfaces
         Task<SendUserDTO?> GetUserByIdAsync(int UserID);
         Task<SendUserDTO?> GetUserByUsernameAsync(string UserID);
         Task<bool> DeleteUserAsync(int id);
-        Task<List<UsersDTOs.SendUserDTO>> GetTopUsersAsync(int topN = 10);
+        Task<List<SendUserDTO>> GetTopUsersAsync(int topN = 10);
 
     }
 
