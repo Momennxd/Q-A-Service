@@ -6,6 +6,7 @@ using Data.models.Institutions;
 using Data.models.People;
 using Data.Repositories;
 using Data.Repository.Entities_Repositories;
+using Data.Repository.Entities_Repositories.Institutions_Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace Core.Services.Concrete.Institutions
     public class InstitutionService : IInstitutionServce
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<IInstitutionRepo, Institution> _unitOfWork;
+        private readonly IUnitOfWork<IInstitutionsRepo, Institution> _unitOfWork;
 
-        public InstitutionService(IMapper mapper, IUnitOfWork<IInstitutionRepo, Institution> unitOfWork)
+        public InstitutionService(IMapper mapper, IUnitOfWork<IInstitutionsRepo, Institution> unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

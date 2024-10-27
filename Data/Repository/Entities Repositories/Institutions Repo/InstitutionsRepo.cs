@@ -1,6 +1,8 @@
 ﻿using Data.DatabaseContext;
+using Data.models.Institutions;
 using Data.models.People;
 using Data.Repositories;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,6 @@ namespace Data.Repository.Entities_Repositories.Institutions_Repo
             _appDbContext = context;
         }
 
-
-
-
-
-
-
-
-
-
-
-
+   
     }
 }
