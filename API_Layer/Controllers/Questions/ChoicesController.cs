@@ -16,7 +16,7 @@ using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 namespace API_Layer.Controllers.Questions
 {
 
-    [Route("API/Choices")]
+    [Route("api/choices")]
     [ApiController]
     [Authorize]
     public class ChoicesController : Controller
@@ -50,7 +50,7 @@ namespace API_Layer.Controllers.Questions
         }
 
 
-        [HttpGet("Questions/{questionID}")]
+        [HttpGet("questions/{questionID}")]
         public async Task<IActionResult> GetChoices(int questionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -79,7 +79,7 @@ namespace API_Layer.Controllers.Questions
         }
 
 
-        [HttpGet("Answers")]
+        [HttpGet("answers")]
         public async Task<IActionResult> GetRightAnswers(int questionID)
         {
 

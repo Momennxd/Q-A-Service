@@ -39,6 +39,9 @@ using Data.Repository.Entities_Repositories;
 using Data.models.Institutions;
 using Data.Repository.Entities_Repositories.Institutions_Repo;
 using Data.Repository.Entities_Repositories.People_Repo;
+using Data.Repository.Entities_Repositories.Categories_Repo;
+using Data.models.nsCategories;
+using Core.Services.Concrete.Categories;
 
 
 
@@ -96,6 +99,10 @@ builder.Services.AddScoped<IPicsService, PicsService>();
 builder.Services.AddScoped<IPicsRepo, PicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPicsRepo, Pics>, UnitOfWork<IPicsRepo, Pics>>();
 
+
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<ICategoriesRepo, CategoriesRepo>();
+builder.Services.AddScoped<IUnitOfWork<ICategoriesRepo, Categories>, UnitOfWork<ICategoriesRepo, Categories>>();
 
 
 

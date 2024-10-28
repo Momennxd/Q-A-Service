@@ -47,17 +47,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
                 Where(coll => coll.CreatedByUserId == UserID && !coll.IsDeleted).ToListAsync();
         }
 
-        public async Task<ICollection<string>> GetAllCategoriesAsync(int collectionId)
-        {
-            // Execute the stored procedure and map results to the DTO
-            var categories = await _appDbContext.Set<SPCollectionCetagory>()
-                .FromSqlRaw("EXEC SP_GetCategoriesNamesByCollectionId @CollectionId",
-                             new SqlParameter("@CollectionId", collectionId))
-                .ToListAsync();
-
-            // Convert the list of DTOs to a list of strings
-            return categories.Select(c => c.CategoryName).ToList();
-        }
+       
 
         public async Task<IEnumerable<QCollection>> GetTop20Collections()
         {
@@ -65,21 +55,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
                .FromSqlRaw("EXEC GetTop20Collection")
                .ToListAsync();
 
-            // Load related data for each collection
-            foreach (var collection in collections)
-            {
-                await _appDbContext.Entry(collection)
-                    .Collection(c => c.CollectionCategories)
-                    .LoadAsync();
-
-                foreach (var collectionCategory in collection.CollectionCategories)
-                {
-                    await _appDbContext.Entry(collectionCategory)
-                        .Reference(cc => cc.Category)
-                        .LoadAsync();
-                }
-            }
-
+           
             return collections;
         }
         public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)

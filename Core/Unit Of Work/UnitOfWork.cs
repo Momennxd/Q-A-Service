@@ -3,7 +3,6 @@ using Core.Services.Interfaces;
 using Data.DatabaseContext;
 using Data.models.Base;
 using Data.Repositories;
-using Data.Repository.Entities_Repositories.Categories_Repo;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.People_Repo;
 using Microsoft.Extensions.Logging;

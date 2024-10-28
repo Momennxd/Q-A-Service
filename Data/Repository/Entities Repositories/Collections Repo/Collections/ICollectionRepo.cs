@@ -29,10 +29,6 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         public Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID);
 
 
-
-        public Task<ICollection<string>> GetAllCategoriesAsync(int collectionId);
-
-
         public Task<IEnumerable<QCollection>> GetTop20Collections();
 
         public Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);

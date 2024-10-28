@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.JsonPatch;
 namespace API_Layer.Controllers.Questions
 {
 
-    [Route("API/Questions")]
+    [Route("api/questions")]
     [ApiController]
     [Authorize]
     public class QuestionsController : Controller
@@ -30,7 +30,8 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuestions([FromBody]List<CreateQuestionDTO> createDtos, int CollectionID)
+        public async Task<IActionResult> CreateQuestions(
+            [FromBody]List<CreateQuestionDTO> createDtos, int CollectionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null)  return Unauthorized(); 

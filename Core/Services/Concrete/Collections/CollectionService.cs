@@ -83,17 +83,7 @@ namespace Core.Services.Concrete.Collections
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
-            foreach (var dto in sentDto)
-            {
-                var categories =
-                    await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
-
-                foreach (var categ in categories)
-                {
-                    dto.Categories.Add(categ);
-                }
-
-            }
+          
 
 
             return sentDto;
@@ -104,19 +94,6 @@ namespace Core.Services.Concrete.Collections
             var collections = await _unitOfWork.EntityRepo.GetAllByUserIDAsync(UserID);
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
-
-
-            foreach (var dto in sentDto)
-            {
-                var categories =
-                    await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
-
-                foreach (var categ in categories)
-                {
-                    dto.Categories.Add(categ);
-                }
-
-            }
 
 
             return sentDto;
@@ -132,8 +109,6 @@ namespace Core.Services.Concrete.Collections
             if (eCollection == null) return null;
 
             var dto = _mapper.Map<CollectionsDTOs.SendCollectionDTO>(eCollection);
-
-            dto.Categories = await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
 
             return dto;
 
@@ -162,21 +137,6 @@ namespace Core.Services.Concrete.Collections
 
             var collections = await _unitOfWork.EntityRepo.GetTop20Collections();
             var sentDto = _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
-
-
-
-            foreach (var dto in sentDto)
-            {
-                var categories =
-                    await _unitOfWork.EntityRepo.GetAllCategoriesAsync(dto.CollectionID);
-
-                foreach (var categ in categories)
-                {
-                    dto.Categories.Add(categ);
-                }
-
-            }
-
 
             return sentDto;
 

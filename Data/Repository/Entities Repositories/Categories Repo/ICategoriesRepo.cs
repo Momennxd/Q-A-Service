@@ -1,4 +1,4 @@
-﻿using Data.models.Collections;
+﻿using Data.models.nsCategories;
 using Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -8,19 +8,11 @@ using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Categories_Repo
 {
-    public interface ICollectionCategoriesRepo : IRepository<CollectionsCategories>
+    public interface ICategoriesRepo : IRepository<Categories>
     {
 
 
-        public Task<IEnumerable<CollectionsCategories>> GetAllByCollectionIDAsync(int CollectionID);
-
-
-
-
-
-
-
-
+        public Task<List<Categories>> GetCategories(string categorySubName, int RowCount);
 
 
 
