@@ -41,7 +41,8 @@ using Data.Repository.Entities_Repositories.Institutions_Repo;
 using Data.Repository.Entities_Repositories.People_Repo;
 using Data.Repository.Entities_Repositories.Categories_Repo;
 using Data.models.nsCategories;
-using Core.Services.Concrete.Categories;
+using Core.Services.Concrete.nsCategories;
+using Microsoft.Data.SqlClient;
 
 
 
@@ -226,30 +227,52 @@ app.UseExceptionHandler(config =>
             // Default to 500 Internal Server Error
              context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-            // Check for specific exceptions
-            switch (ex)
+            if (ex.GetBaseException().GetType() == typeof(SqlException))
             {
-                case UnauthorizedAccessException:
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    break;
-                case KeyNotFoundException:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    break;             
-                case NotImplementedException:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
-                    break;
+                int ErrorCode = ((SqlException)ex.InnerException).Number;
 
+                switch (ErrorCode)
+                {
+                    case 2627:  // Unique constraint error
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;                      
+                        break;
 
-                    //anything else if 'BadRequest'
-                    // Add more cases as needed
+                    case 547:   // Constraint check violation
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        break;
+
+                    case 2601:  // Duplicated key row error
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        break;
+                    default:
+                        break;
+                }
             }
+            else
+            {
+                // Check for specific exceptions
+                switch (ex)
+                {
+                    case UnauthorizedAccessException:
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        break;
+                    case KeyNotFoundException:
+                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
+                    case NotImplementedException:
+                        context.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
+                        break;
+                }
+            }
+
+            
 
             context.Response.ContentType = "application/json";
 
             var errorResponse = new ErrorModel
             {
                 StatusCode = context.Response.StatusCode,
-                ErrorMessage = ex.Message
+                ErrorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message
             };
 
             await context.Response.WriteAsync(errorResponse.ToString());

@@ -12,21 +12,33 @@ using System.Text;
 using System.Threading.Tasks;
 using static Core.DTOs.Categories.CategoriesDTOs;
 
-namespace Core.Services.Concrete.Categories
+namespace Core.Services.Concrete.nsCategories
 {
     public class CategoriesService : ICategoriesService
     {
 
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<ICategoriesRepo, Data.models.nsCategories.Categories > _uowCategories;
+        private readonly IUnitOfWork<ICategoriesRepo, Categories > _uowCategories;
 
         public CategoriesService(IMapper mapper, 
-            IUnitOfWork<ICategoriesRepo, Data.models.nsCategories.Categories> uowCategories)
+            IUnitOfWork<ICategoriesRepo, Categories> uowCategories)
         {
             _uowCategories = uowCategories;
             _mapper = mapper;
         }
 
+        public async Task<SendCategoryDTO> AddCategory(CreateCategoryDTO createCategoryDTO)
+        {
+            
+            var entity = _mapper.Map<Categories>(createCategoryDTO);
+
+            await _uowCategories.EntityRepo.AddItemAsync(entity);
+
+            if (await _uowCategories.CompleteAsync() == 0) throw new ArgumentNullException();
+
+            return _mapper.Map<SendCategoryDTO>(entity);
+
+        }
 
         public async Task<List<SendCategoryDTO>> GetCategories(string categorySubName, int RowCount)
         {

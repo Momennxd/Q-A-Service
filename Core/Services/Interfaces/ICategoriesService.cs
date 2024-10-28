@@ -15,6 +15,7 @@ namespace Core.Services.Interfaces
         public Task<List<SendCategoryDTO>> GetCategories(string categorySubName, int RowCount);
 
 
+        public Task<SendCategoryDTO> AddCategory(CreateCategoryDTO createCategoryDTO);
 
 
 

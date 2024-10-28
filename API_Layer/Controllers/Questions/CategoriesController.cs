@@ -1,5 +1,6 @@
 ﻿using API_Layer.Security;
 using Core.Authorization_Services.Interfaces;
+using Core.DTOs.Categories;
 using Core.DTOs.Collections;
 using Core.DTOs.Questions;
 using Core.Services.Concrete.Collections;
@@ -40,7 +41,12 @@ namespace API_Layer.Controllers.Questions
             return Ok(await _CategoriesService.GetCategories(CategorySumName, RowsCount));
         }
 
-       
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(CategoriesDTOs.CreateCategoryDTO createCategoryDTO)
+        {
+            return Ok(await _CategoriesService.AddCategory(createCategoryDTO));
+        }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Data.models.Base;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,8 @@ namespace Data.models.nsCategories
     {
         [Key]
         public int CategoryID { get; set; }
+
+
         public string CategoryName { get; set; }
 
 
