@@ -14,7 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 
-namespace API_Layer.Controllers.Questions
+namespace API_Layer.Controllers.Categories
 {
 
     [Route("api/categories")]
@@ -37,7 +37,7 @@ namespace API_Layer.Controllers.Questions
         [HttpGet("{RowsCount}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategories(string CategorySumName, int RowsCount)
-        {    
+        {
             return Ok(await _CategoriesService.GetCategories(CategorySumName, RowsCount));
         }
 

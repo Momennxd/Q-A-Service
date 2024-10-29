@@ -43,6 +43,10 @@ using Data.Repository.Entities_Repositories.Categories_Repo;
 using Data.models.nsCategories;
 using Core.Services.Concrete.nsCategories;
 using Microsoft.Data.SqlClient;
+using Data.Repository.Entities_Repositories.Questions_Repo.nsQuestions_Categories;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json.Serialization;
 
 
 
@@ -61,6 +65,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddControllers()
+               .AddNewtonsoftJson(options =>
+               {
+                   // Use the default property (Pascal) casing
+                   options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                   options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+               });
 
 
 
@@ -134,6 +145,14 @@ builder.Services.AddScoped<IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices>,
 builder.Services.AddScoped<IChosenChoicesRepo, ChosenChoicesRepo>();
 builder.Services.AddScoped<IUnitOfWork<IChosenChoicesRepo, Chosen_Choices>,
     UnitOfWork<IChosenChoicesRepo, Chosen_Choices>>();
+
+
+
+builder.Services.AddScoped<IQuestionsCategoriesService, QuestionsCategoriesService>();
+builder.Services.AddScoped<IQuestionsCategoriesRepo, QuestionsCategoriesRepo>();
+builder.Services.AddScoped<IUnitOfWork<IQuestionsCategoriesRepo, Questions_Categories>,
+    UnitOfWork<IQuestionsCategoriesRepo, Questions_Categories>>();
+
 
 
 builder.Services.AddScoped<IAnswerExplanationService , AnswerExplanationService>();

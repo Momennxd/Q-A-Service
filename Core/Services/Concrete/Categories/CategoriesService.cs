@@ -18,7 +18,7 @@ namespace Core.Services.Concrete.nsCategories
     {
 
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<ICategoriesRepo, Categories > _uowCategories;
+        private readonly IUnitOfWork<ICategoriesRepo, Categories> _uowCategories;
 
         public CategoriesService(IMapper mapper, 
             IUnitOfWork<ICategoriesRepo, Categories> uowCategories)

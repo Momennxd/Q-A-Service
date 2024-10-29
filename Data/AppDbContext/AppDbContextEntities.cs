@@ -11,7 +11,12 @@ namespace Data.DatabaseContext
 {
     public partial class AppDbContext
     {
-       public virtual DbSet<Chosen_Choices> Chosen_Choices { get; set; }
+
+        public virtual DbSet<SP_QuestionCategories> SP_QuestionCategories { get; set; }
+
+        public virtual DbSet<Questions_Categories> Questions_Categories { get; set; }
+
+        public virtual DbSet<Chosen_Choices> Chosen_Choices { get; set; }
         public virtual DbSet<Institution> Institutions { get; set; }
 
         public virtual DbSet<Collections_Questions> Collections_Questions { get; set; }
