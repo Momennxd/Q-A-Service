@@ -20,7 +20,7 @@ public partial class User : IBaseEntity<User>
     [MinStringLength(8, ErrorMessage = "password must be at least 8 characters long.")]
     public required string Password { get; set; }
 
-    public required int PersonId { get; set; }
+    public int PersonId { get; set; }
 
     public bool IsActive { get; set; }
 

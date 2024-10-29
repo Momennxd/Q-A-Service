@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 using static Core.DTOs.Institution.InstitutionsDTOs;
 using static Core.DTOs.People.UsersDTOs;
 
@@ -40,28 +41,17 @@ namespace Core.Services.Concrete.Institutions
         {
 
             //add person
-
             var person = _mapper.Map<Person>(createInstitutionDTO);
-            await _uowPerson.EntityRepo.AddItemAsync(person);
-            if (await _uowPerson.CompleteAsync() < 1) return null;
-
-
-
-
-
+            
+            
             //add user
-
             var User = _mapper.Map<User>(createInstitutionDTO);
-            User.PersonId = person.PersonID;
-            await _uowUser.EntityRepo.AddItemAsync(User);
-            if (await _uowUser.CompleteAsync() < 1) return null;
-
-
+            User.Person = person;
+            
+            
             //add institution
-
-
             var Instit = _mapper.Map<Institution>(createInstitutionDTO);
-            Instit.UserID = User.UserId;
+            Instit.User = User;
             await _uowInstit.EntityRepo.AddItemAsync(Instit);
             if (await _uowInstit.CompleteAsync() < 1) return null;
 

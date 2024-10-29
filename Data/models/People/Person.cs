@@ -29,7 +29,7 @@ public partial class Person : IBaseEntity<Person>
     [EmailValidation]
     public string? Email { get; set; }
 
-    public DateTime JoinedDate { get; set; }
+    public DateTime JoinedDate { get; set; } = DateTime.Now;
 
     public string? Notes { get; set; }
 

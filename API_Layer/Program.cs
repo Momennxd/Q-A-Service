@@ -47,6 +47,7 @@ using Data.Repository.Entities_Repositories.Questions_Repo.nsQuestions_Categorie
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Serialization;
+using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
 
 
 
@@ -165,6 +166,16 @@ builder.Services.AddScoped<IInstitutionServce , InstitutionService>();
 builder.Services.AddScoped<IInstitutionsRepo, InstitutionsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IInstitutionsRepo, Institution>,
     UnitOfWork<IInstitutionsRepo, Institution>>();
+
+
+
+builder.Services.AddScoped<ICollectionsReviewsService , CollectionsReviewsService>();
+builder.Services.AddScoped<ICollectionsReviewsRepo, CollectionsReviewsRepo>();
+builder.Services.AddScoped<IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>,
+    UnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>>();
+
+
+
 
 
 builder.Services.AddScoped<IPersonRepo, PersonRepo>();

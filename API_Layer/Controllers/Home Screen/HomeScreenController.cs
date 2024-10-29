@@ -1,4 +1,5 @@
-﻿using Core.Services.Interfaces;
+﻿using Core.DTOs.Collections;
+using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace API_Layer.Controllers
         }
 
         [HttpGet("Top20Collections")]
-        public async Task<IActionResult> GetTop20Collections()
+        public async Task<ActionResult<IEnumerable<CollectionsDTOs.SendCollectionDTO>>> GetTop20Collections()
         {
             return Ok(await _collectionService.GetTop20Collections());
         }
@@ -31,7 +32,6 @@ namespace API_Layer.Controllers
         {
             return Ok(await _userService.GetTopUsersAsync());
         }
-
 
     }
 }
