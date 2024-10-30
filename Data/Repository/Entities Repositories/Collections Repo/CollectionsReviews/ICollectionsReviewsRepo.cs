@@ -11,6 +11,6 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsRevi
     public interface ICollectionsReviewsRepo : IRepository<Collections_Reviews>
     {
         Task<Collections_Reviews?> FindByUserIdAndCollectionID(int UserID, int CollectionID);
-        Task<List<Collections_Reviews>> GetAllCollectionReviewsAsync(int CollectionID);
+        Task<List<Collections_Reviews>> GetAllCollectionReviewsAsync(int CollectionID, int Page, int PagesSize = 5);
     }
 }

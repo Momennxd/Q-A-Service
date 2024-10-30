@@ -58,9 +58,9 @@ namespace Core.Services.Concrete.Collections
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID)
+        public async Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page)
         {
-            var reviews = await _unitOfWork.EntityRepo.GetAllCollectionReviewsAsync(CollectionID);
+            var reviews = await _unitOfWork.EntityRepo.GetAllCollectionReviewsAsync(CollectionID, Page);
             return _mapper.Map<List<MainCollectionsReviewDTO>>(reviews);
         }
     }

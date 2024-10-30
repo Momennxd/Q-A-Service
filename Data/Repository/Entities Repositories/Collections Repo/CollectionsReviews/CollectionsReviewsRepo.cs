@@ -29,10 +29,12 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsRevi
                                              entity.UserID == UserID); 
         }
 
-        public async Task<List<Collections_Reviews>> GetAllCollectionReviewsAsync(int CollectionID)
+        public async Task<List<Collections_Reviews>> GetAllCollectionReviewsAsync(int CollectionID, int Page, int PagesSize)
         {
             return await _appDbContext.Collections_Reviews
                         .Where(review => review.CollectionID == CollectionID)
+                        .Skip((Page - 1) * PagesSize)
+                        .Take(PagesSize)
                         .ToListAsync();
         }
     }

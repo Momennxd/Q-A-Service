@@ -18,6 +18,6 @@ namespace Core.Services.Interfaces
 
         public Task DeleteReview(int UserID, int CollectionID);
 
-        Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID);
+        Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page);
     }
 }

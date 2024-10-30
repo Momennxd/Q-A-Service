@@ -47,9 +47,11 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpGet("getAllCollectionReviews")]
-        public async Task<IActionResult> getAllCollectionReviews(int CollectionID)
+        public async Task<IActionResult> getAllCollectionReviews(int CollectionID, int Page)
         {
-            return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID));
+            if(Page < 1)
+                return BadRequest();
+            return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID, Page));
         }
     }
 }
