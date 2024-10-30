@@ -9,6 +9,7 @@ using Core.DTOs.Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Data.models.Questions;
 using Core.Services.Concrete.Questions;
+using static Core.DTOs.Collections.CollectionsDTOs;
 namespace Core.Services.Concrete.Collections
 {
     public class CollectionService : ICollectionService
@@ -27,7 +28,7 @@ namespace Core.Services.Concrete.Collections
         }
 
         public async Task<int> CreateCollectionAsync
-            (CollectionsDTOs.CreateQCollectionDTO createQCollectionDTO, int UserID)
+            (CreateQCollectionDTO createQCollectionDTO, int UserID)
         {
             var collEntity = _mapper.Map<QCollection>(createQCollectionDTO);
             collEntity.CreatedByUserId = UserID;
@@ -36,13 +37,47 @@ namespace Core.Services.Concrete.Collections
             if (await _uowCollections.CompleteAsync() == 0) return 0;
 
             //just to speed things up by skipping the proccess of validating an empty array of questions in ef core
-            if (createQCollectionDTO.Questions.Count == 0) return 1;
+            if (createQCollectionDTO.CollecQuestions.Count == 0) return 1;
 
             int rowscount = (await _QuestionsService.CreateQuestionsAsync(
-                createQCollectionDTO.Questions, collEntity.CollectionId, UserID)).Count;
+                createQCollectionDTO.CollecQuestions, collEntity.CollectionId, UserID)).Count;
 
 
             return rowscount + 1;
+        }
+
+
+        public async Task<SendCollectionDTO_Full?> GetFullCollectionAsync(int CollecID)
+        {
+            var eCollection = await _uowCollections.EntityRepo.FindAsync(CollecID);
+            if (eCollection == null) return null;
+
+            var sendCollectionFull = _mapper.Map<SendCollectionDTO_Full>(eCollection);
+
+            // Await tasks sequentially to avoid DbContext threading issues :(
+            sendCollectionFull.CollecQuestions = await _QuestionsService.GetAllQuestionsAsync(CollecID);
+            var Likes_disLikes = await _uowCollections.EntityRepo.GetLikesDislikes(CollecID);
+
+            sendCollectionFull.Likes = Likes_disLikes.Item1;
+            sendCollectionFull.DisLikes = Likes_disLikes.Item2;
+
+            return sendCollectionFull;
+        }
+
+
+        public async Task<ICollection<SendCollectionDTO_Thumb>> GetThumbCollectionsAsync
+            (int UserID, bool? IsPublic)
+        {
+            var collections = await _uowCollections.EntityRepo.GetAllByUserIDAsync(UserID, IsPublic);
+            var output = new List<SendCollectionDTO_Thumb>();
+            foreach(var e in collections)
+            {
+                var sentDto = _mapper.Map<SendCollectionDTO_Thumb>(e);
+                sentDto.Categories =
+                    await _uowCollections.EntityRepo.GetCollectionCategories(e.CollectionId);
+                output.Add(sentDto);
+            }
+            return output;
         }
 
 
@@ -67,8 +102,7 @@ namespace Core.Services.Concrete.Collections
 
 
 
-
-        public async Task<CollectionsDTOs.SendCollectionDTO> PatchCollection(
+        public async Task<CollectionsDTOs.SendCollectionDTO_Full> PatchCollection(
             JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int collecID)
         {
             // Await the result of FindAsync to retrieve the actual entity
@@ -93,10 +127,8 @@ namespace Core.Services.Concrete.Collections
             await _uowCollections.CompleteAsync();
 
             // Return the updated collection as a DTO
-            return _mapper.Map<CollectionsDTOs.SendCollectionDTO>(entity);
+            return _mapper.Map<CollectionsDTOs.SendCollectionDTO_Full>(entity);
         }
-
-
 
         public async Task DeleteCollectionAsync(int id)
         {
@@ -107,14 +139,12 @@ namespace Core.Services.Concrete.Collections
             await _uowCollections.CompleteAsync();
         }
 
-
-
-        public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
+        public async Task<ICollection<CollectionsDTOs.SendCollectionDTO_Full>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
         {
             var collections = await _uowCollections.EntityRepo.GetAllByUserIDAsync(UserID, IsPublic);
 
-            var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
+            var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO_Full>>(collections);
 
           
 
@@ -122,45 +152,17 @@ namespace Core.Services.Concrete.Collections
             return sentDto;
         }
 
-        public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
-        {
-            var collections = await _uowCollections.EntityRepo.GetAllByUserIDAsync(UserID);
-
-            var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
-
-
-            return sentDto;
-        }
-
-
-
-
-        public async Task<CollectionsDTOs.SendCollectionDTO?> GetCollectionByIdAsync(int id)
-        {
-            var eCollection = await _uowCollections.EntityRepo.FindAsync(id);
-
-            if (eCollection == null) return null;
-
-            var dto = _mapper.Map<CollectionsDTOs.SendCollectionDTO>(eCollection);
-
-            return dto;
-
-        }
-
-
-
-
         public Task UpdateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO updateQCollectionDTO)
         {
             throw new NotImplementedException();
         }
 
 
-        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetTop20Collections()
+        public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO_Full>> GetTop20Collections()
         {
 
             var collections = await _uowCollections.EntityRepo.GetTop20Collections();
-            var sentDto = _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
+            var sentDto = _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO_Full>>(collections);
 
             return sentDto;
 

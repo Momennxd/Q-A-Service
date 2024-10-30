@@ -20,7 +20,8 @@ namespace Core.Profiles
         {
 
 
-            CreateMap<QCollection, SendCollectionDTO>();
+            CreateMap<QCollection, SendCollectionDTO_Full>();
+            CreateMap<QCollection, SendCollectionDTO_Thumb>();
 
 
             CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
