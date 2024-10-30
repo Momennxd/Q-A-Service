@@ -51,7 +51,10 @@ namespace Core.DTOs.Collections
 
         }
 
+        public class PatchQCollectionDTO : CollectionBaseDTO
+        {
 
+        }
 
 
     }

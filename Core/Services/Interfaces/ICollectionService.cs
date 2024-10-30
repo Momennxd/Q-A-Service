@@ -17,10 +17,12 @@ namespace Core.Services.Interfaces
         public Task<ICollection<SendCollectionDTO_Thumb>> GetThumbCollectionsAsync
             (int UserID, bool? IsPublic);
 
+        public Task<CollectionsDTOs.SendCollectionDTO_Full> PatchCollection
+           (JsonPatchDocument<CollectionsDTOs.PatchQCollectionDTO> patchDoc, int CollecID);
 
 
 
-
+        public Task<int> DeleteCollectionAsync(int id);
 
 
 
@@ -37,12 +39,9 @@ namespace Core.Services.Interfaces
 
 
         Task<ICollection<CollectionsDTOs.SendCollectionDTO_Full>> GetAllCollectionsAsync(int UserID, bool IsPublic);
-        Task UpdateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO updateQCollectionDTO);
     
-        Task DeleteCollectionAsync(int id);
 
-        public Task<CollectionsDTOs.SendCollectionDTO_Full> PatchCollection
-            (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID);
+       
         public Task<IEnumerable<SendCollectionDTO_Full>> GetTop20Collections();
 
         Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);

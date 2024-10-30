@@ -83,27 +83,8 @@ namespace Core.Services.Concrete.Collections
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public async Task<CollectionsDTOs.SendCollectionDTO_Full> PatchCollection(
-            JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int collecID)
+        public async Task<SendCollectionDTO_Full> PatchCollection(
+            JsonPatchDocument<PatchQCollectionDTO> patchDoc, int collecID)
         {
             // Await the result of FindAsync to retrieve the actual entity
             var entity = await _uowCollections.EntityRepo.FindAsync(collecID);
@@ -115,7 +96,7 @@ namespace Core.Services.Concrete.Collections
             }
 
             // Map the entity to a DTO to apply the patch
-            var collectionToPatch = _mapper.Map<CollectionsDTOs.CreateQCollectionDTO>(entity);
+            var collectionToPatch = _mapper.Map<PatchQCollectionDTO>(entity);
 
             // Apply the patch to the DTO
             patchDoc.ApplyTo(collectionToPatch);
@@ -130,14 +111,13 @@ namespace Core.Services.Concrete.Collections
             return _mapper.Map<CollectionsDTOs.SendCollectionDTO_Full>(entity);
         }
 
-        public async Task DeleteCollectionAsync(int id)
+
+        public async Task<int> DeleteCollectionAsync(int id)
         {
-            await _uowCollections.EntityRepo.DeleteItemAsync(id);
-
-
-            // Save changes
-            await _uowCollections.CompleteAsync();
+            return await _uowCollections.EntityRepo.DeleteCollectionAsync(id);
         }
+
+
 
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO_Full>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
@@ -146,16 +126,10 @@ namespace Core.Services.Concrete.Collections
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO_Full>>(collections);
 
-          
-
-
+         
             return sentDto;
         }
 
-        public Task UpdateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO updateQCollectionDTO)
-        {
-            throw new NotImplementedException();
-        }
 
 
         public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO_Full>> GetTop20Collections()

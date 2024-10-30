@@ -30,6 +30,11 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         public Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID);
 
 
+
+        Task<int> DeleteCollectionAsync(int CollectionID);
+
+
+
         public Task<IEnumerable<QCollection>> GetTop20Collections();
 
         public Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);

@@ -4,6 +4,7 @@ using Data.models.Collections;
 using Data.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Data.Entity;
 
 namespace Data.Repository.Entities_Repositories.Collections_Repo
@@ -19,6 +20,31 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             _appDbContext = context;
             //_logger = Logger;
         }
+
+
+
+        public async Task<int> DeleteCollectionAsync(int collectionID)
+        {
+            var totalRowsCountParam = new SqlParameter
+            {
+                ParameterName = "@TotalRowsCount",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+
+            await _appDbContext.Database.ExecuteSqlRawAsync(
+                "EXEC SP_DeleteCollection @CollectionID, @TotalRowsCount OUTPUT",
+                new SqlParameter("@CollectionID", collectionID),
+                totalRowsCountParam);
+
+            // Retrieve the output parameter value
+            return (int)totalRowsCountParam.Value;
+        }
+
+
+
+
+
 
         public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
         {

@@ -83,22 +83,9 @@ namespace API_Layer.Controllers.Collections
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         [HttpPatch]
         public async Task<IActionResult> PatchCollection
-            ([FromBody] JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID)
+            ([FromBody] JsonPatchDocument<CollectionsDTOs.PatchQCollectionDTO> patchDoc, int CollecID)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -110,6 +97,8 @@ namespace API_Layer.Controllers.Collections
         }
 
 
+
+
         [HttpDelete]
         public async Task<IActionResult> DeleteCollection(int CollecID)
         {
@@ -119,19 +108,9 @@ namespace API_Layer.Controllers.Collections
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();
 
-
-            await _collectionService.DeleteCollectionAsync(CollecID);
-
-            return Ok();
-
-
-
+            return Ok(await _collectionService.DeleteCollectionAsync(CollecID));
         }
 
-
-     
-
-        
 
 
 
