@@ -24,8 +24,7 @@ namespace Core.Profiles
 
 
             CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
-           .ForMember(dest => dest.AddedTime, opt => opt.MapFrom(src => DateTime.Now))
-           .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => false));
+           .ForMember(dest => dest.AddedTime, opt => opt.MapFrom(src => DateTime.Now));
 
 
 

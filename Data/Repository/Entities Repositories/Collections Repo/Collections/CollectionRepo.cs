@@ -33,9 +33,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         {
 
             return await _appDbContext.QCollections
-        .Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic && !coll.IsDeleted)
-
-        .ToListAsync();
+        .Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic).ToListAsync();
 
 
         }
@@ -44,7 +42,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID)
         {
             return await _appDbContext.QCollections.
-                Where(coll => coll.CreatedByUserId == UserID && !coll.IsDeleted).ToListAsync();
+                Where(coll => coll.CreatedByUserId == UserID).ToListAsync();
         }
 
        

@@ -20,6 +20,7 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto)
         {
             await _collectionsReviewsService.CreateReview(collectionsReviewDto);
@@ -46,7 +47,7 @@ namespace API_Layer.Controllers.Collections
         }
 
 
-        [HttpGet("getAllCollectionReviews")]
+        [HttpGet("{CollectionID}")]
         public async Task<IActionResult> getAllCollectionReviews(int CollectionID)
         {
             return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID));

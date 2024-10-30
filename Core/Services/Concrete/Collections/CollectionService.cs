@@ -5,18 +5,24 @@ using Data.models.Collections;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Microsoft.AspNetCore.JsonPatch;
 using Core.Unit_Of_Work;
-
+using Core.DTOs.Questions;
+using Data.Repository.Entities_Repositories.Questions_Repo;
+using Data.models.Questions;
+using Core.Services.Concrete.Questions;
 namespace Core.Services.Concrete.Collections
 {
     public class CollectionService : ICollectionService
     {
 
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork<ICollectionRepo, QCollection> _unitOfWork;
+        private readonly IUnitOfWork<ICollectionRepo, QCollection> _uowCollections;
+        private readonly IQuestionsService _QuestionsService;
 
-        public CollectionService(IMapper mapper, IUnitOfWork<ICollectionRepo, QCollection> uowCollections)
+        public CollectionService(IMapper mapper,
+            IUnitOfWork<ICollectionRepo, QCollection> uowCollections, IQuestionsService QuestionsService)
         {
-            _unitOfWork = uowCollections;
+            _QuestionsService = QuestionsService;
+            _uowCollections = uowCollections;
             _mapper = mapper;
         }
 
@@ -26,12 +32,39 @@ namespace Core.Services.Concrete.Collections
             var collEntity = _mapper.Map<QCollection>(createQCollectionDTO);
             collEntity.CreatedByUserId = UserID;
 
-            await _unitOfWork.EntityRepo.AddItemAsync(collEntity);
+            await _uowCollections.EntityRepo.AddItemAsync(collEntity);
+            if (await _uowCollections.CompleteAsync() == 0) return 0;
+
+            //just to speed things up by skipping the proccess of validating an empty array of questions in ef core
+            if (createQCollectionDTO.Questions.Count == 0) return 1;
+
+            int rowscount = (await _QuestionsService.CreateQuestionsAsync(
+                createQCollectionDTO.Questions, collEntity.CollectionId, UserID)).Count;
 
 
-            return await _unitOfWork.CompleteAsync();
-
+            return rowscount + 1;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -39,7 +72,7 @@ namespace Core.Services.Concrete.Collections
             JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int collecID)
         {
             // Await the result of FindAsync to retrieve the actual entity
-            var entity = await _unitOfWork.EntityRepo.FindAsync(collecID);
+            var entity = await _uowCollections.EntityRepo.FindAsync(collecID);
 
             if (entity == null)
             {
@@ -57,7 +90,7 @@ namespace Core.Services.Concrete.Collections
             _mapper.Map(collectionToPatch, entity);
 
             // Save changes
-            await _unitOfWork.CompleteAsync();
+            await _uowCollections.CompleteAsync();
 
             // Return the updated collection as a DTO
             return _mapper.Map<CollectionsDTOs.SendCollectionDTO>(entity);
@@ -67,11 +100,11 @@ namespace Core.Services.Concrete.Collections
 
         public async Task DeleteCollectionAsync(int id)
         {
-            await _unitOfWork.EntityRepo.DeleteItemAsync(id);
+            await _uowCollections.EntityRepo.DeleteItemAsync(id);
 
 
             // Save changes
-            await _unitOfWork.CompleteAsync();
+            await _uowCollections.CompleteAsync();
         }
 
 
@@ -79,7 +112,7 @@ namespace Core.Services.Concrete.Collections
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
         {
-            var collections = await _unitOfWork.EntityRepo.GetAllByUserIDAsync(UserID, IsPublic);
+            var collections = await _uowCollections.EntityRepo.GetAllByUserIDAsync(UserID, IsPublic);
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
@@ -91,7 +124,7 @@ namespace Core.Services.Concrete.Collections
 
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID)
         {
-            var collections = await _unitOfWork.EntityRepo.GetAllByUserIDAsync(UserID);
+            var collections = await _uowCollections.EntityRepo.GetAllByUserIDAsync(UserID);
 
             var sentDto = _mapper.Map<ICollection<CollectionsDTOs.SendCollectionDTO>>(collections);
 
@@ -104,7 +137,7 @@ namespace Core.Services.Concrete.Collections
 
         public async Task<CollectionsDTOs.SendCollectionDTO?> GetCollectionByIdAsync(int id)
         {
-            var eCollection = await _unitOfWork.EntityRepo.FindAsync(id);
+            var eCollection = await _uowCollections.EntityRepo.FindAsync(id);
 
             if (eCollection == null) return null;
 
@@ -113,15 +146,6 @@ namespace Core.Services.Concrete.Collections
             return dto;
 
         }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -135,7 +159,7 @@ namespace Core.Services.Concrete.Collections
         public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO>> GetTop20Collections()
         {
 
-            var collections = await _unitOfWork.EntityRepo.GetTop20Collections();
+            var collections = await _uowCollections.EntityRepo.GetTop20Collections();
             var sentDto = _mapper.Map<IEnumerable<CollectionsDTOs.SendCollectionDTO>>(collections);
 
             return sentDto;
@@ -144,14 +168,14 @@ namespace Core.Services.Concrete.Collections
 
         public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
         {
-            await _unitOfWork.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
-            return await _unitOfWork.CompleteAsync() > 0;
+            await _uowCollections.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
+            return await _uowCollections.CompleteAsync() > 0;
         }
 
         public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
         {
-            await _unitOfWork.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
-            return await _unitOfWork.CompleteAsync() > 0;
+            await _uowCollections.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
+            return await _uowCollections.CompleteAsync() > 0;
         }
     }
 }

@@ -21,14 +21,13 @@ namespace Core.DTOs.Collections
         { 
            public int CollectionID { get; set; }
            public DateTime AddedTime { get; set; }
-           public ICollection<string> Categories { get; set; } = new List<string>();
 
         }
 
 
         public class CreateQCollectionDTO : CollectionBaseDTO
         {
-
+            public List<QuestionsDTOs.CreateQuestionDTO> Questions { get; set; }
 
         }
 

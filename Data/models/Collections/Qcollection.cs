@@ -20,7 +20,6 @@ public partial class QCollection : IBaseEntity<QCollection>
 
     public DateTime AddedTime { get; set; }
 
-    public bool IsDeleted { get; set; }
 
     public bool IsPublic { get; set; }
 

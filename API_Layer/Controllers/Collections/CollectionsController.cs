@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace API_Layer.Controllers.Collections
 {
 
-    [Route("API/Collections")]
+    [Route("api/collections")]
     [ApiController]
     [Authorize]
     public class CollectionsController : Controller
@@ -34,10 +34,7 @@ namespace API_Layer.Controllers.Collections
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            var result = await _collectionService.CreateCollectionAsync(createDTO, userId);
-
-            return result == 1 ? Ok() : BadRequest();
-
+            return Ok(await _collectionService.CreateCollectionAsync(createDTO, userId));
         }
 
 

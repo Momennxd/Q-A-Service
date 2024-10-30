@@ -16,32 +16,29 @@ namespace Core.Services.Interfaces
 
 
 
+        Task<int> CreateCollectionAsync(CreateQCollectionDTO createQCollectionDTO, int UserID);
+
+
+
+
+
+
+
+
+
+
+
 
         Task<CollectionsDTOs.SendCollectionDTO?> GetCollectionByIdAsync(int id);
-
-
         Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID, bool IsPublic);
-
-
-        public Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID);
-        
-
-
-        Task<int> CreateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO createQCollectionDTO, int UserID);
-
-
+        public Task<ICollection<CollectionsDTOs.SendCollectionDTO>> GetAllCollectionsAsync(int UserID);   
         Task UpdateCollectionAsync(CollectionsDTOs.CreateQCollectionDTO updateQCollectionDTO);
-
-        
+    
         Task DeleteCollectionAsync(int id);
 
         public Task<CollectionsDTOs.SendCollectionDTO> PatchCollection
             (JsonPatchDocument<CollectionsDTOs.CreateQCollectionDTO> patchDoc, int CollecID);
-
-
         public Task<IEnumerable<SendCollectionDTO>> GetTop20Collections();
-
-
 
         Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike);
         Task<bool> DeleteLikeAsync(int CollectionID, int UserID);
