@@ -4,6 +4,7 @@ using Data.models.Collections;
 using Data.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace Data.Repository.Entities_Repositories.Collections_Repo
 {
@@ -29,13 +30,16 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             return true;
         }
 
-        public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID, bool IsPublic)
+        public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID, bool? IsPublic)
         {
 
-            return await _appDbContext.QCollections
-        .Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic && !coll.IsDeleted)
+            if (IsPublic == null)            
+                return await _appDbContext.QCollections
+                    .Where(coll => coll.CreatedByUserId == UserID).ToListAsync();
+            
 
-        .ToListAsync();
+            return await _appDbContext.QCollections
+        .Where(coll => coll.CreatedByUserId == UserID && coll.IsPublic == IsPublic).ToListAsync();
 
 
         }
@@ -44,10 +48,38 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID)
         {
             return await _appDbContext.QCollections.
-                Where(coll => coll.CreatedByUserId == UserID && !coll.IsDeleted).ToListAsync();
+                Where(coll => coll.CreatedByUserId == UserID).ToListAsync();
         }
 
-       
+
+
+
+        public async Task<List<SPCollectionCetagory>> GetCollectionCategories(int CollectionID)
+        {
+            
+            var categories = await _appDbContext.sp_CollectionCategories
+                .FromSqlRaw("EXEC SP_GetCategoriesByCollectionID @CollectionID = {0}", CollectionID)
+                .ToListAsync();
+
+            return categories;
+            
+        }
+
+
+
+        public async Task<Tuple<long, long>> GetLikesDislikes(int CollecID)
+        {
+            var result = await _appDbContext.Collections_Likes
+                .Where(l => l.CollectionID == CollecID)
+                .GroupBy(l => l.Like_Dislike)
+                .Select(g => new { Like_Dislike = g.Key, Count = g.LongCount() })
+                .ToListAsync();
+
+            long likes = result.FirstOrDefault(r => r.Like_Dislike == true)?.Count ?? 0;
+            long dislikes = result.FirstOrDefault(r => r.Like_Dislike == false)?.Count ?? 0;
+
+            return new Tuple<long, long>(likes, dislikes);
+        }
 
         public async Task<IEnumerable<QCollection>> GetTop20Collections()
         {

@@ -47,7 +47,7 @@ namespace Data.DatabaseContext
         public virtual DbSet<Choices_Pics> Choices_Pics { get; set; }
         public virtual DbSet<Pics> Pics { get; set; }
 
-        public virtual DbSet<SPCollectionCetagory> sp_CollectionCetagories { get; set; }
+        public virtual DbSet<SPCollectionCetagory> sp_CollectionCategories { get; set; }
         public virtual DbSet<SP_IsRightAnswersAccess> sp_HasRightAnswersAccess { get; set; }
 
     }

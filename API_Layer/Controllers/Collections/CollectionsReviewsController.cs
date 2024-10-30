@@ -20,6 +20,7 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto)
         {
             await _collectionsReviewsService.CreateReview(collectionsReviewDto);
@@ -47,7 +48,7 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpGet("getAllCollectionReviews")]
-        public async Task<IActionResult> getAllCollectionReviews(int CollectionID, int Page)
+        public async Task<IActionResult> getAllCollectionReviews(int CollectionID)
         {
             if(Page < 1)
                 return BadRequest();

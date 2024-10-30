@@ -9,7 +9,17 @@ using System.Security.Claims;
 namespace API_Layer.Controllers.Collections
 {
 
-    [Route("API/Collections")]
+    //READ THIS----->
+    /// <summary>
+    /// There are two types of collections that are sent to the user
+    /// 1-'FULL' this type has the full most valuable collection data like all the questions, choices, basic info,
+    ///  likes and dislikes.....
+    /// 2-'BASIC or THUMB' this type is just to show basic info of the the collection without exposing the 
+    /// internal data like question or choices.
+    /// </summary>
+
+
+    [Route("api/collections")]
     [ApiController]
     [Authorize]
     public class CollectionsController : Controller
@@ -26,19 +36,64 @@ namespace API_Layer.Controllers.Collections
         }
 
 
-
-
-
         [HttpPost]
         public async Task<IActionResult> AddCollection([FromBody] CollectionsDTOs.CreateQCollectionDTO createDTO)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            var result = await _collectionService.CreateCollectionAsync(createDTO, userId);
+            return Ok(await _collectionService.CreateCollectionAsync(createDTO, userId));
+        }
 
-            return result == 1 ? Ok() : BadRequest();
+
+       
+        [HttpGet("{CollecID}")]
+        public async Task<IActionResult> GetFullCollection(int CollecID)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            if (!await _collectionsAuthService.IsUserCollectionAccess(CollecID, userId))
+                return Unauthorized();
+
+            return Ok(await _collectionService.GetFullCollectionAsync(CollecID));
 
         }
+
+
+
+        [HttpGet("users/{UserID}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetThumbCollection(int UserID)
+        {        
+            return Ok(await _collectionService.GetThumbCollectionsAsync(UserID, true));
+
+        }
+
+
+        /// <summary>
+        /// Gets all the public and Private collections by the current logged in user..
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetThumbCollection()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            return Ok(await _collectionService.GetThumbCollectionsAsync(userId, null));
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [HttpPatch]
@@ -74,74 +129,9 @@ namespace API_Layer.Controllers.Collections
         }
 
 
-        /// <summary>
-        /// Gets all the public collections by userID.
-        /// </summary>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
-        [HttpGet("Public")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllPublicCollections(int UserID)
-        {
-            var collec = await _collectionService.GetAllCollectionsAsync(UserID, true);
+     
 
-            return Ok(collec);
-        }
-
-
-        /// <summary>
-        /// Gets all the public/Private collections by the current logged in user..
-        /// </summary>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
-        [HttpGet(@"library/Visibilty")]
-        public async Task<IActionResult> GetAllLoggedInUserCollections(bool Public)
-        {
-
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            var collec = await _collectionService.GetAllCollectionsAsync(userId, Public);
-
-            return Ok(collec);
-        }
-
-
-        /// <summary>
-        /// Gets all the public and Private collections by the current logged in user..
-        /// </summary>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
-        [HttpGet("library/All")]
-        public async Task<IActionResult> GetAllLoggedInUserCollections()
-        {
-
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            var collec = await _collectionService.GetAllCollectionsAsync(userId);
-
-            return Ok(collec);
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetCollection(int CollectionID)
-        {
-
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            var collec = await _collectionService.GetCollectionByIdAsync(CollectionID);
-
-            if (collec == null)
-                return NotFound();
-
-            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, userId) && !collec.IsPublic)
-                return Unauthorized();
-
-
-
-            return Ok(collec);
-        }
-
+        
 
 
 

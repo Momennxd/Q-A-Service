@@ -21,7 +21,7 @@ namespace API_Layer.Controllers
         }
 
         [HttpGet("Top20Collections")]
-        public async Task<ActionResult<IEnumerable<CollectionsDTOs.SendCollectionDTO>>> GetTop20Collections()
+        public async Task<ActionResult<IEnumerable<CollectionsDTOs.SendCollectionDTO_Thumb>>> GetTop20Collections()
         {
             return Ok(await _collectionService.GetTop20Collections());
         }
