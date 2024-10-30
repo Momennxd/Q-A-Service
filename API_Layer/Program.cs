@@ -259,6 +259,7 @@ app.UseExceptionHandler(config =>
 
             if (ex.GetBaseException().GetType() == typeof(SqlException))
             {
+
                 int ErrorCode = ((SqlException)ex.InnerException).Number;
 
                 switch (ErrorCode)
