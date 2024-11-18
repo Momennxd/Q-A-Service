@@ -14,7 +14,6 @@ namespace Data.DatabaseContext
 
         }
 
-        // This method has the `async` modifier, so `await` can be used:
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             ValidateEntities(); // Run validation before saving changes
