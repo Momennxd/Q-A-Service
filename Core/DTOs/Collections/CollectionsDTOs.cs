@@ -16,7 +16,19 @@ namespace Core.DTOs.Collections
             public bool IsPublic { get; set; }
         }
 
-        
+
+        /// <summary>
+        /// This DTO is used to send the  most valuable public info in brief about a collection THROUGH SEARCH BAR.
+        /// It's made to be fast without requesting too many time to the DB and with only basic info
+        /// </summary>
+        public class SendCollectionDTO_Search : CollectionBaseDTO
+        {
+            public int CollectionID { get; set; }
+            public DateTime AddedTime { get; set; }
+
+        }
+
+
         /// <summary>
         /// This DTO is used to send the full most valuable info about a collection like questions, choices......
         /// </summary>
