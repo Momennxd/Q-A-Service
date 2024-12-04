@@ -48,6 +48,7 @@ using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Serialization;
 using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
+using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitions;
 
 
 
@@ -173,6 +174,12 @@ builder.Services.AddScoped<ICollectionsReviewsService , CollectionsReviewsServic
 builder.Services.AddScoped<ICollectionsReviewsRepo, CollectionsReviewsRepo>();
 builder.Services.AddScoped<IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>,
     UnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>>();
+
+
+builder.Services.AddScoped<ICollectionsSubmitionsService , CollectionsSubmitionsService>();
+builder.Services.AddScoped<ICollectionsSubmitionsRepo, CollectionsSubmitionsRepo>();
+builder.Services.AddScoped<IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions>,
+    UnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions>>();
 
 
 

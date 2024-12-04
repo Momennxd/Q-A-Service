@@ -58,6 +58,11 @@ namespace Data.DatabaseContext
             modelBuilder.Entity<SP_IsRightAnswersAccess>().HasNoKey(); // Indicate that this is a keyless entity
             modelBuilder.Entity<SP_Question>().HasNoKey(); // Indicate that this is a keyless entity
             modelBuilder.Entity<SP_QuestionCategories>().HasNoKey(); // Indicate that this is a keyless entity
+            
+            modelBuilder
+                .Entity<CollectionSubmissionView>()
+                .HasNoKey()
+                .ToView("View_CollectionSubmissions");
 
 
         }
