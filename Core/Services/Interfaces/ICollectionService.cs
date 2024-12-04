@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Collections;
+using Data.models.Collections;
 using Microsoft.AspNetCore.JsonPatch;
 using static Core.DTOs.Collections.CollectionsDTOs;
 
@@ -28,6 +29,7 @@ namespace Core.Services.Interfaces
 
 
 
+        public Task<List<SendCollectionDTO_Search>> CollectionsSearch(string SearchText, int PageNumber, int PageSize);
 
 
 

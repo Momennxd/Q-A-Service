@@ -9,13 +9,17 @@ using System.Security.Claims;
 namespace API_Layer.Controllers.Collections
 {
 
-    //READ THIS----->
+  
+
+    //READ THIS to understand collections DTOs types----->
     /// <summary>
     /// There are two types of collections that are sent to the user
     /// 1-'FULL' this type has the full most valuable collection data like all the questions, choices, basic info,
     ///  likes and dislikes.....
     /// 2-'BASIC or THUMB' this type is just to show basic info of the the collection without exposing the 
     /// internal data like question or choices.
+    /// 3-'Search' this type of used to return the most basic form of a collection to make the search faster
+    /// and light in the return value, it only return the allowed model properties.
     /// </summary>
 
 
@@ -24,6 +28,8 @@ namespace API_Layer.Controllers.Collections
     [Authorize]
     public class CollectionsController : Controller
     {
+
+  
 
         private readonly ICollectionService _collectionService;
         private readonly ICollectionsAuthService _collectionsAuthService;
@@ -34,6 +40,22 @@ namespace API_Layer.Controllers.Collections
             _collectionService = collectionService;
             _collectionsAuthService = collectionsAuthService;
         }
+
+
+
+        /// <summary>
+        /// Used to search for public collections based on text that is related to the collection info like
+        /// {collection name or description} it's built on the 'full text search index' in sql server
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CollectionsSearch(string SearchText, int PageNumber, int PageSize)
+        {
+            return Ok(await _collectionService.CollectionsSearch
+                (SearchText, PageNumber, PageSize > DEF.MAX_SEARCH_ROWS_OUTPUT ? DEF.MAX_SEARCH_ROWS_OUTPUT : PageSize));
+        }
+
 
 
         [HttpPost]

@@ -23,6 +23,18 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
 
 
+        public async Task<List<QCollection>> CollectionsSearch(string searchText, int pageNumber, int pageSize)
+        {
+            var collections = await _appDbContext.QCollections
+                .FromSqlRaw(@"EXEC [SP_SearchCollections] @SearchText = {0}, @PageNumber = {1}, @PageSize = {2}",
+                             searchText, pageNumber, pageSize)
+                .ToListAsync();
+
+            return collections;
+        }
+
+
+
         public async Task<int> DeleteCollectionAsync(int collectionID)
         {
             var totalRowsCountParam = new SqlParameter
@@ -40,11 +52,6 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             // Retrieve the output parameter value
             return (int)totalRowsCountParam.Value;
         }
-
-
-
-
-
 
         public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)
         {
@@ -70,15 +77,11 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
         }
 
-
         public async Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID)
         {
             return await _appDbContext.QCollections.
                 Where(coll => coll.CreatedByUserId == UserID).ToListAsync();
         }
-
-
-
 
         public async Task<List<SPCollectionCetagory>> GetCollectionCategories(int CollectionID)
         {
@@ -90,8 +93,6 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             return categories;
             
         }
-
-
 
         public async Task<Tuple<long, long>> GetLikesDislikes(int CollecID)
         {

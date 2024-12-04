@@ -80,9 +80,6 @@ namespace Core.Services.Concrete.Collections
             return output;
         }
 
-
-
-
         public async Task<SendCollectionDTO_Full> PatchCollection(
             JsonPatchDocument<PatchQCollectionDTO> patchDoc, int collecID)
         {
@@ -111,13 +108,10 @@ namespace Core.Services.Concrete.Collections
             return _mapper.Map<CollectionsDTOs.SendCollectionDTO_Full>(entity);
         }
 
-
         public async Task<int> DeleteCollectionAsync(int id)
         {
             return await _uowCollections.EntityRepo.DeleteCollectionAsync(id);
         }
-
-
 
         public async Task<ICollection<CollectionsDTOs.SendCollectionDTO_Full>> GetAllCollectionsAsync
             (int UserID, bool IsPublic)
@@ -129,8 +123,6 @@ namespace Core.Services.Concrete.Collections
          
             return sentDto;
         }
-
-
 
         public async Task<IEnumerable<CollectionsDTOs.SendCollectionDTO_Full>> GetTop20Collections()
         {
@@ -152,6 +144,20 @@ namespace Core.Services.Concrete.Collections
         {
             await _uowCollections.EntityRepo.DeleteLikeAsync(CollectionID, UserID);
             return await _uowCollections.CompleteAsync() > 0;
+        }
+
+        public async Task<List<SendCollectionDTO_Search>> CollectionsSearch(string SearchText, int PageNumber, int PageSize)
+        {
+            var lst = await _uowCollections.EntityRepo.CollectionsSearch(SearchText, PageNumber, PageSize);
+
+            var output = new List<SendCollectionDTO_Search>(PageSize);
+
+            foreach (var item in lst)
+            {
+                output.Add(_mapper.Map<SendCollectionDTO_Search>(item)); 
+            }
+
+            return output;
         }
     }
 }

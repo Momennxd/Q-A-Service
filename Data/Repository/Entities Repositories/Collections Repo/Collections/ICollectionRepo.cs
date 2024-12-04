@@ -30,10 +30,9 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
         public Task<ICollection<QCollection>> GetAllByUserIDAsync(int UserID);
 
 
-
         Task<int> DeleteCollectionAsync(int CollectionID);
 
-
+        public Task<List<QCollection>> CollectionsSearch(string SearchText, int PageNumber, int PageSize);
 
         public Task<IEnumerable<QCollection>> GetTop20Collections();
 
