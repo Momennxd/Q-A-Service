@@ -12,7 +12,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
     public interface IQuestionRepo : IRepository<Question>
     {
 
-
+        public Task<Question?> GetQuestionAsync(int QuestionID);
         public Task<bool> IsUserRightAnswerAccessAsync(int QuestionID, int UserID);
 
         public Task<List<SP_Question>> GetAllQuestionsAsync(int CollectionID);

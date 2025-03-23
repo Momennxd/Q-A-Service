@@ -107,5 +107,16 @@ namespace API_Layer.Controllers.Questions
             return Ok(await _QuestionsService.DeleteQuestionAsync(QuestionID));
 
         }
+
+
+        [HttpGet("{QuestionID}")]
+        public async Task<IActionResult> GetQuestion(int QuestionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
+            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
+                return Unauthorized();
+            return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
+        }
     }
 }

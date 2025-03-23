@@ -20,6 +20,7 @@ namespace Core.Services.Interfaces
 
         public Task<List<SendQuestionDTO>> GetAllQuestionsAsync(int CollectionID);
 
+        public Task<SendQuestionDTO> GetQuestionAsync(int QuestionID);
 
         public Task<SendQuestionDTO> PatchQuestionAsync(
            JsonPatchDocument<PatchQuestionDTO> patchDoc, int collecID);

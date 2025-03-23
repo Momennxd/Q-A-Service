@@ -66,6 +66,12 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
 
         }
 
+        public async Task<Question?> GetQuestionAsync(int QuestionID)
+        {
+            var res = await _appDbContext.Questions.FirstOrDefaultAsync(q => q.QuestionID == QuestionID);
+            return res;
+        }
+
         public async Task<bool> IsUserRightAnswerAccessAsync(int QuestionID, int UserID)
         {
             var hasAccessParam = new SqlParameter

@@ -135,7 +135,13 @@ namespace Core.Services.Concrete.Questions
 
         }
 
-    
+        public async Task<SendQuestionDTO> GetQuestionAsync(int QuestionID)
+        {
+            var Question = await _uowQuestions.EntityRepo.GetQuestionAsync(QuestionID);
+            var result = _mapper.Map<SendQuestionDTO>(Question);
+            return result;
+
+        }
 
         public async Task<SendQuestionDTO> PatchQuestionAsync(JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
         {
