@@ -68,7 +68,10 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
 
         public async Task<Question?> GetQuestionAsync(int QuestionID)
         {
-            var res = await _appDbContext.Questions.FirstOrDefaultAsync(q => q.QuestionID == QuestionID);
+            var res = await _appDbContext.Questions
+                .Include(q => q.Choices)
+                .FirstOrDefaultAsync(q => q.QuestionID == QuestionID);
+
             return res;
         }
 
