@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 using static Core.DTOs.Questions.QuestionsDTOs;
 
 namespace Core.Profiles
@@ -33,6 +34,10 @@ namespace Core.Profiles
            .ForMember(dest => dest.AddedDate, opt => opt.MapFrom(src => DateTime.Now));
 
 
+            CreateMap<QuestionsChoices, CreateChoiceDTO>();
+
+            CreateMap<Question, QuestionWithChoicesDto>()
+                .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices));
 
         }
 

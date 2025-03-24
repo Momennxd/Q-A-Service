@@ -1,4 +1,5 @@
-﻿using Data.models.Questions;
+﻿using Core.DTOs.Questions;
+using Data.models.Questions;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,9 @@ namespace Core.Services.Interfaces
 
 
         public Task<int> DeleteQuestionAsync(int QuestionID);
+
+
+        public Task<List<QuestionsDTOs.QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(string collectionName);
 
 
 

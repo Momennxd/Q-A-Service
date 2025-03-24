@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 
 namespace Core.DTOs.Questions
 {
@@ -63,6 +64,12 @@ namespace Core.DTOs.Questions
 
         }
 
+        public class QuestionWithChoicesDto
+        {
+            public int QuestionID { get; set; }
+            public string QuestionText { get; set; }
+            public List<CreateChoiceDTO> Choices { get; set; } = new();
+        }
 
 
     }

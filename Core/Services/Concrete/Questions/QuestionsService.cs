@@ -143,6 +143,13 @@ namespace Core.Services.Concrete.Questions
 
         }
 
+        public async Task<List<QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(string collectionName)
+        {
+            var result = await _uowQuestions.EntityRepo.GetRandomQuestionsWithChoicesAsync(collectionName);
+            var output = _mapper.Map<List<QuestionWithChoicesDto>>(result);
+            return output;
+        }
+
         public async Task<SendQuestionDTO> PatchQuestionAsync(JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
         {
 

@@ -14,7 +14,7 @@ namespace API_Layer.Controllers.Questions
 
     [Route("api/questions")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class QuestionsController : Controller
     {
 
@@ -31,14 +31,14 @@ namespace API_Layer.Controllers.Questions
 
         [HttpPost]
         public async Task<IActionResult> CreateQuestions(
-            [FromBody]List<CreateQuestionDTO> createDtos, int CollectionID)
+            [FromBody] List<CreateQuestionDTO> createDtos, int CollectionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null)  return Unauthorized(); 
+            if (userId == null) return Unauthorized();
 
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
-                   return Unauthorized();
-                    
+                return Unauthorized();
+
 
             return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, (int)userId));
         }
@@ -117,6 +117,12 @@ namespace API_Layer.Controllers.Questions
             if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
                 return Unauthorized();
             return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
+        }
+
+        [HttpGet("random/{collectionName}")]
+        public async Task<IActionResult> GetRandomQuestionsWithChoices(string collectionName)
+        {
+            return Ok(await _QuestionsService.GetRandomQuestionsWithChoicesAsync(collectionName));
         }
     }
 }

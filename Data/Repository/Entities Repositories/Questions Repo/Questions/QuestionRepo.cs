@@ -75,6 +75,33 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             return res;
         }
 
+        public async Task<List<Question>> GetRandomQuestionsWithChoicesAsync(string collectionName)
+        {
+            var questions = await _appDbContext.Set<Question>()
+                .FromSqlRaw("EXEC SP_GetRandomQuestion @CollectionName",
+                            new SqlParameter("@CollectionName", collectionName))
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (!questions.Any()) return new List<Question>();
+
+            // الحصول على الاختيارات من الـ DB بعد الـ Questions
+            var choices = await _appDbContext.Set<QuestionsChoices>()
+                .Where(c => questions.Select(q => q.QuestionID).Contains(c.QuestionID))
+                .ToListAsync();
+
+            // ربط الاختيارات بالأسئلة
+            foreach (var question in questions)
+            {
+                question.Choices = choices.Where(c => c.QuestionID == question.QuestionID).ToList();
+            }
+
+            return questions;
+        }
+
+
+
+
         public async Task<bool> IsUserRightAnswerAccessAsync(int QuestionID, int UserID)
         {
             var hasAccessParam = new SqlParameter

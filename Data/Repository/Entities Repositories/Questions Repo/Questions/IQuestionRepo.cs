@@ -1,8 +1,11 @@
-﻿using Data.models._SP_;
+﻿using Data.DatabaseContext;
+using Data.models._SP_;
 using Data.models.Questions;
 using Data.Repositories;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +23,8 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
         public Task<int> PatchQuestionPointsAsync(int QuestionID, int NewPointsVal);
 
         public Task<List<Question>> GetAllQuestionsAsync(HashSet<int> QuestionIDs);
+
+        public Task<List<Question>> GetRandomQuestionsWithChoicesAsync(string collectionName);
 
 
         /// <summary>
