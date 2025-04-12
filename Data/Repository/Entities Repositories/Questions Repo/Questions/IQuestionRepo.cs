@@ -24,7 +24,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
 
         public Task<List<Question>> GetAllQuestionsAsync(HashSet<int> QuestionIDs);
 
-        public Task<List<Question>> GetRandomQuestionsWithChoicesAsync(string collectionName);
+        public Task<List<Question>> GetRandomQuestionsWithChoicesAsync(int CollectionID);
 
 
         /// <summary>

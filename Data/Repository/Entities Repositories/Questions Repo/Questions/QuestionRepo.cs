@@ -75,11 +75,11 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             return res;
         }
 
-        public async Task<List<Question>> GetRandomQuestionsWithChoicesAsync(string collectionName)
+        public async Task<List<Question>> GetRandomQuestionsWithChoicesAsync(int CollectionID)
         {
             var questions = await _appDbContext.Set<Question>()
-                .FromSqlRaw("EXEC SP_GetRandomQuestion @CollectionName",
-                            new SqlParameter("@CollectionName", collectionName))
+                .FromSqlRaw("EXEC SP_GetRandomQuestion @CollectionID",
+                            new SqlParameter("@CollectionID", CollectionID))
                 .AsNoTracking()
                 .ToListAsync();
 

@@ -34,7 +34,7 @@ namespace Core.Services.Interfaces
         public Task<int> DeleteQuestionAsync(int QuestionID);
 
 
-        public Task<List<QuestionsDTOs.QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(string collectionName);
+        public Task<List<QuestionsDTOs.QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(int CollectionID);
 
 
 

@@ -143,9 +143,9 @@ namespace Core.Services.Concrete.Questions
 
         }
 
-        public async Task<List<QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(string collectionName)
+        public async Task<List<QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(int CollectionID)
         {
-            var result = await _uowQuestions.EntityRepo.GetRandomQuestionsWithChoicesAsync(collectionName);
+            var result = await _uowQuestions.EntityRepo.GetRandomQuestionsWithChoicesAsync(CollectionID);
             var output = _mapper.Map<List<QuestionWithChoicesDto>>(result);
             return output;
         }
