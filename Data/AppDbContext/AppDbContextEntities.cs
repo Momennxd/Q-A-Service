@@ -19,6 +19,7 @@ namespace Data.DatabaseContext
         public DbSet<CollectionSubmissionView> CollectionSubmissionViews { get; set; }
 
 
+
         #region Choices
         public virtual DbSet<Chosen_Choices> Chosen_Choices { get; set; }
         public virtual DbSet<Choices_Pics> Choices_Pics { get; set; }
@@ -32,6 +33,8 @@ namespace Data.DatabaseContext
         public virtual DbSet<AnswerExplanation> Questions_Answer_Explanation { get; set; }
         public virtual DbSet<SP_QuestionCategories> SP_QuestionCategories { get; set; }
         public virtual DbSet<Questions_Categories> Questions_Categories { get; set; }
+        public DbSet<SP_GetRandomQuestion> FlatQuestionChoices { get; set; }
+
         #endregion
 
         #region Collections

@@ -75,28 +75,35 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             return res;
         }
 
-        public async Task<List<Question>> GetRandomQuestionsWithChoicesAsync(int CollectionID)
+        public async Task<List<Question>> GetRandomQuestionsWithChoicesAsync(int collectionID)
         {
-            var questions = await _appDbContext.Set<Question>()
+            var flatData = await _appDbContext.Set<SP_GetRandomQuestion>()
                 .FromSqlRaw("EXEC SP_GetRandomQuestion @CollectionID",
-                            new SqlParameter("@CollectionID", CollectionID))
+                            new SqlParameter("@CollectionID", collectionID))
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (!questions.Any()) return new List<Question>();
+            if (!flatData.Any()) return new List<Question>();
 
-            // الحصول على الاختيارات من الـ DB بعد الـ Questions
-            var choices = await _appDbContext.Set<QuestionsChoices>()
-                .Where(c => questions.Select(q => q.QuestionID).Contains(c.QuestionID))
-                .ToListAsync();
+            var result = flatData
+                .GroupBy(f => new { f.QuestionID, f.QuestionText, f.QuestionPoints })
+                .Select(g => new Question
+                {
+                    QuestionID = g.Key.QuestionID,
+                    QuestionText = g.Key.QuestionText,
+                    Rank = g.Key.QuestionPoints,
+                    Choices = g.Select(c => new QuestionsChoices
+                    {
+                        ChoiceID = c.ChoiceID,
+                        ChoiceText = c.ChoiceText,
+                        IsRightAnswer = c.IsRightAnswer,
+                        Rank = c.ChoicePoints,
+                        QuestionID = c.QuestionID
+                    }).ToList()
+                }).ToList();
 
-            // ربط الاختيارات بالأسئلة
-            foreach (var question in questions)
-            {
-                question.Choices = choices.Where(c => c.QuestionID == question.QuestionID).ToList();
-            }
 
-            return questions;
+            return result;
         }
 
 

@@ -112,15 +112,15 @@ namespace API_Layer.Controllers.Questions
         [HttpGet("{QuestionID}")]
         public async Task<IActionResult> GetQuestion(int QuestionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
-            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
-                return Unauthorized();
+            //int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            //if (userId == null) return Unauthorized();
+            //if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
+            //    return Unauthorized();
             return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
         }
 
         [HttpGet("randomQuestion")]
-        public async Task<IActionResult> GetRandomQuestionsWithChoices([FromBody] int? collectionId)
+        public async Task<IActionResult> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
         {
             //int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             //if (userId == null) return Unauthorized();
