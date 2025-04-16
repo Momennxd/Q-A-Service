@@ -20,6 +20,7 @@ namespace Core.Profiles
             CreateMap<User, AddUserDTO>();
             CreateMap<SendUserDTO, User>();
             CreateMap< User, SendUserDTO>();
+            CreateMap<SP_GetUser, GetUserDTO>();
 
         }
 

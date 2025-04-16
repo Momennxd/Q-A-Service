@@ -55,20 +55,20 @@ namespace Core.Services.Concrete.Users
             return true;
         }
 
-        public async Task<SendUserDTO?> GetUser(int UserID)
-        {
-            var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
+        //public async Task<SendUserDTO?> GetUser(int UserID)
+        //{
+        //    var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
                 
-            if (user == null) return null;
+        //    if (user == null) return null;
 
-            //getting the send user dto
-            var sendDto = _mapper.Map<SendUserDTO>(user);
+        //    //getting the send user dto
+        //    var sendDto = _mapper.Map<SendUserDTO>(user);
 
-            //getting the person send dto 
-            sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
+        //    //getting the person send dto 
+        //    sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
 
-            return sendDto;
-        }
+        //    return sendDto;
+        //}
 
 
 
@@ -126,15 +126,13 @@ namespace Core.Services.Concrete.Users
 
 
 
-        public async Task<SendUserDTO?> GetUserByIdAsync(int UserID)
+        public async Task<GetUserDTO?> GetUserByIdAsync(int UserID)
         {
             var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
 
             //getting the send user dto
-            var sendDto = _mapper.Map<SendUserDTO>(user);
+            var sendDto = _mapper.Map<GetUserDTO>(user);
 
-            //getting the person send dto 
-            sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
 
             return sendDto;
         }

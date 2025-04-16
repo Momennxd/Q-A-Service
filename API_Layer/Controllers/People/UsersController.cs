@@ -53,10 +53,10 @@ namespace API_Layer.Controllers.People
         }
         
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> GetUser()
         {
-            var user = await _userService.GetUserByIdAsync(clsToken.GetUserID(HttpContext));
+            var user = await _userService.GetUserByIdAsync(1);
 
 
             return Ok(user);

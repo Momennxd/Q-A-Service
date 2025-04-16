@@ -1,5 +1,6 @@
 ﻿using Data.models._SP_;
 using Data.models.Collections;
+using Data.models.People;
 using Data.models.Questions;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -60,6 +61,7 @@ namespace Data.DatabaseContext
             modelBuilder.Entity<SP_Question>().HasNoKey(); // Indicate that this is a keyless entity
             modelBuilder.Entity<SP_QuestionCategories>().HasNoKey(); // Indicate that this is a keyless entity
             modelBuilder.Entity<SP_GetRandomQuestion>().HasNoKey().ToView(null);
+            modelBuilder.Entity<SP_GetUser>().HasNoKey();
 
             modelBuilder
                 .Entity<CollectionSubmissionView>()

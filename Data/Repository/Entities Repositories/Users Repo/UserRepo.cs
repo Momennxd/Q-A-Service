@@ -36,15 +36,18 @@ namespace Data.Repositories
 
         }
 
-        public async Task<User?> GetUserByID(int UserID)
+        public async Task<SP_GetUser?> GetUserByID(int userID)
         {
-            var user =await _context
-                .Users
-                .Include(u => u.Person)
-                .FirstOrDefaultAsync(u => u.UserId == UserID);
+            var users = await _context.Set<SP_GetUser>()
+                .FromSqlInterpolated($"EXEC SP_GetUser @UserID = {userID}")
+                .AsNoTracking()
+                .ToListAsync();
 
-            return user;
+            return users.FirstOrDefault();
         }
+
+
+
 
         public async Task<User?> GetUserUsernameAsync(string Username)
         {

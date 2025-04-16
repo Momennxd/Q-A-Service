@@ -13,9 +13,9 @@ namespace Core.Services.Interfaces
         //Task<IEnumerable<User>> GetAllUsersAsync();
         Task<SendUserDTO?> CreateUserAsync(AddUserDTO addUserDTO);
         Task<SendUserDTO?> Login(LoginDTO loginDTO);
-        Task<SendUserDTO?> GetUser(int UserID);
+        //Task<GetUserDTO?> GetUser(int UserID);
         Task<SendUserDTO> PatchUser(JsonPatchDocument<AddUserDTO> patchDoc, int UserID);
-        Task<SendUserDTO?> GetUserByIdAsync(int UserID);
+        Task<GetUserDTO?> GetUserByIdAsync(int UserID);
         Task<SendUserDTO?> GetUserByUsernameAsync(string UserID);
         Task<bool> DeleteUserAsync(int id);
         Task<List<SendUserDTO>> GetTopUsersAsync(int topN = 10);
