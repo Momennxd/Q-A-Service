@@ -11,5 +11,10 @@ namespace Core.Services.Interfaces
     public interface IInstitutionServce
     {
         Task<SendInstitutionDTO?> CreateInstitution(InstitutionsDTOs.CreateInstitutionDTO createInstitutionDTO);
+
+        public Task<SendInstitutionDTO?> GetInstitutionAsync(dynamic id);
+
+
+
     }
 }

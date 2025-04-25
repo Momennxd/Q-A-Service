@@ -66,5 +66,20 @@ namespace Core.Services.Concrete.Institutions
 
             return sendDto;
         }
+
+        public async Task<SendInstitutionDTO?> GetInstitutionAsync(dynamic id)
+        {
+            SendInstitutionDTO res = new SendInstitutionDTO();
+
+            Institution inst = await _uowInstit.EntityRepo.FindAsync(id);
+
+            res = _mapper.Map<SendInstitutionDTO>(inst);
+            res.sendUser = _mapper.Map<SendUserDTO>(inst.User);
+
+            return res;
+        }
+
+
+
     }
 }

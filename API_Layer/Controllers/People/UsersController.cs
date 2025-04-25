@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using static Core.DTOs.People.UsersDTOs;
 
 namespace API_Layer.Controllers.People
@@ -53,11 +54,12 @@ namespace API_Layer.Controllers.People
         }
         
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult> GetUser()
         {
-            var user = await _userService.GetUserByIdAsync(1);
-
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId <= 0) return BadRequest();
+            var user = await _userService.GetUserByIdAsync(userId);
 
             return Ok(user);
         }
@@ -67,7 +69,6 @@ namespace API_Layer.Controllers.People
         public async Task<ActionResult> Delete()
         {
             return Ok(await _userService.DeleteUserAsync(clsToken.GetUserID(HttpContext)));
-
         }
 
 

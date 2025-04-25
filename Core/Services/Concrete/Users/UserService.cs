@@ -55,20 +55,20 @@ namespace Core.Services.Concrete.Users
             return true;
         }
 
-        //public async Task<SendUserDTO?> GetUser(int UserID)
-        //{
-        //    var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
-                
-        //    if (user == null) return null;
+        public async Task<SendUserDTO?> GetUser(int UserID)
+        {
+            var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
 
-        //    //getting the send user dto
-        //    var sendDto = _mapper.Map<SendUserDTO>(user);
+            if (user == null) return null;
 
-        //    //getting the person send dto 
-        //    sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
+            //getting the send user dto
+            var sendDto = _mapper.Map<SendUserDTO>(user);
 
-        //    return sendDto;
-        //}
+            //getting the person send dto 
+            sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
+
+            return sendDto;
+        }
 
 
 

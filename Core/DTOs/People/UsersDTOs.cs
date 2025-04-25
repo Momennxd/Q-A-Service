@@ -28,7 +28,7 @@
             public string FirstName { get; set; }
             public string SecondName { get; set; }
             public string LastName { get; set; }
-            public char Gender { get; set; }
+            public bool Gender { get; set; }
             public string Email { get; set; }
             public string Notes { get; set; }
             public int UserPoints { get; set; }

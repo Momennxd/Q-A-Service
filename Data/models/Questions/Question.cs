@@ -23,7 +23,7 @@ namespace Data.models.Questions
 
         public byte Rank { get; set; }
 
-        public List<QuestionsChoices> Choices { get; set; }
+        public virtual List<QuestionsChoices> Choices { get; set; }
 
 
 

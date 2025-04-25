@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 
+
 namespace Data.DatabaseContext
 {
     public partial class AppDbContext : DbContext
@@ -14,6 +15,11 @@ namespace Data.DatabaseContext
         public AppDbContext(DbContextOptions options) : base(options)
         {
 
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
