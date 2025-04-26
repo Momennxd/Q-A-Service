@@ -58,15 +58,16 @@ using Serilog.Sinks.File;
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("SerilogSettings.json");
 
 #region init serilog
+builder.Configuration.AddJsonFile("SerilogSettings.json");
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
 builder.Host.UseSerilog();
 #endregion
+
 
 builder.Services.AddControllers(options =>
 {
@@ -89,7 +90,7 @@ builder.Services.AddControllers()
                });
 
 
-
+#region Cloudinary settings
 //// Load Cloudinary settings from appsettings.json
 var cloudinarySettings = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
 
@@ -104,7 +105,7 @@ builder.Services.AddSingleton(cloudinary);
 
 ////adding the scope of clouinary
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
-
+#endregion
 
 #region Collections injection
 builder.Services.AddScoped<ICollectionService, CollectionService>();
@@ -121,11 +122,11 @@ builder.Services.AddScoped<IUnitOfWork<IUserRepo, User>, UnitOfWork<IUserRepo, U
 
 #endregion
 
-
+#region Pictures injection
 builder.Services.AddScoped<IPicsService, PicsService>();
 builder.Services.AddScoped<IPicsRepo, PicsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPicsRepo, Pics>, UnitOfWork<IPicsRepo, Pics>>();
-
+#endregion
 
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<ICategoriesRepo, CategoriesRepo>();
