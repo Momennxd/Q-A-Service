@@ -20,6 +20,6 @@ namespace Data.models.Institutions
         public string WebsiteURL { get; set; }
         public DateTime EstablishedYear { get; set; }
 
-        public virtual User User { get; set; }
+        public User User { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Data.models.Institutions;
 using Data.models.People;
+using Data.models.Questions;
 using Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Data.Repository.Entities_Repositories.Institutions_Repo
 
 
 
+        public Task<Institution?> GetInstitutionAsync(int InstID);
 
 
 

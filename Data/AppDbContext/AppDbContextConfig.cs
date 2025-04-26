@@ -17,10 +17,7 @@ namespace Data.DatabaseContext
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseLazyLoadingProxies();
-        }
+       
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {

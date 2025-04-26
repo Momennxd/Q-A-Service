@@ -28,6 +28,7 @@ namespace API_Layer.Controllers.Institutions
         [HttpGet("")]
         public async Task<ActionResult<InstitutionsDTOs.SendInstitutionDTO>?> GetInstitution()
         {
+
             int UserId = clsToken.GetUserID(HttpContext);
             var inst =  await _InstitutionServce.GetInstitutionAsync(UserId);
             if (inst == null) return NotFound();

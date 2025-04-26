@@ -2,6 +2,7 @@
 using Data.models.Institutions;
 using Data.models.People;
 using Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,14 @@ namespace Data.Repository.Entities_Repositories.Institutions_Repo
             _appDbContext = context;
         }
 
-   
+        public async Task<Institution?> GetInstitutionAsync(int InstID)
+        {
+            var inst = await _appDbContext.Institutions
+                        .Include(o => o.User)
+                        .ThenInclude(o => o.Person)
+                        .FirstOrDefaultAsync(o => o.InstitutionID == InstID);
+            return inst;
+        }
+
     }
 }
