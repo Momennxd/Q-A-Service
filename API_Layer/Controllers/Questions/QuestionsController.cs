@@ -15,7 +15,7 @@ namespace API_Layer.Controllers.Questions
 
     [Route("api/questions")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class QuestionsController : Controller
     {
 
@@ -34,14 +34,14 @@ namespace API_Layer.Controllers.Questions
         public async Task<IActionResult> CreateQuestions(
             [FromBody] List<CreateQuestionDTO> createDtos, int CollectionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            //int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            //if (userId == null) return Unauthorized();
 
-            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
-                return Unauthorized();
+            //if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
+            //    return Unauthorized();
 
 
-            return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, (int)userId));
+            return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, 1/* (int)userId*/));
         }
 
 
