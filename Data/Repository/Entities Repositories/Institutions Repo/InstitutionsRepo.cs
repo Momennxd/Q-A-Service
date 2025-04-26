@@ -31,5 +31,9 @@ namespace Data.Repository.Entities_Repositories.Institutions_Repo
             return inst;
         }
 
+        public async Task<Institution?> GetInstitutionByUserIDAsync(int UserID)
+        {
+            return await _appDbContext.Institutions.FirstOrDefaultAsync(inst => inst.UserID == UserID);
+        }
     }
 }

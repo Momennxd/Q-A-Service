@@ -50,5 +50,17 @@ namespace Core.DTOs.Institution
 
             public DTOs.People.UsersDTOs.SendUserDTO sendUser;
         }
+
+
+        public class PatchInstitutionDTO
+        {
+
+            public string latitude { get; set; }
+            public string longitude { get; set; }
+            public string InstitutionName { get; set; }
+            public string WebsiteURL { get; set; }
+            public DateTime EstablishedYear { get; set; }
+
+        }
     }
 }

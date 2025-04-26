@@ -18,6 +18,7 @@ namespace Data.Repository.Entities_Repositories.Institutions_Repo
         public Task<Institution?> GetInstitutionAsync(int InstID);
 
 
+        public Task<Institution?> GetInstitutionByUserIDAsync(int UserID);
 
 
 
