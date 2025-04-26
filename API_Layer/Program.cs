@@ -49,12 +49,25 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json.Serialization;
 using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
 using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitions;
+using Serilog;
+using Serilog.Sinks.SystemConsole;
+using Serilog.Sinks.File;
 
 
 
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("SerilogSettings.json");
+
+#region init serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+#endregion
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<PermissionBasedAuthorizationFilters>();
