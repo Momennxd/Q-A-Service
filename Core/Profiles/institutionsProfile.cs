@@ -28,6 +28,9 @@ namespace Core.Profiles
 
 
 
+            CreateMap<InstitutionsDTOs.PatchInstitutionDTO, InstitutionsDTOs.SendInstitutionDTO>();
+            CreateMap<InstitutionsDTOs.PatchInstitutionDTO, Institution>();
+            CreateMap<Institution, InstitutionsDTOs.PatchInstitutionDTO>();
 
 
             CreateMap<Person, InstitutionsDTOs.SendInstitutionDTO>();

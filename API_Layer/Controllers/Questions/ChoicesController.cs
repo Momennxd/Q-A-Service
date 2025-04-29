@@ -16,6 +16,18 @@ using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 namespace API_Layer.Controllers.Questions
 {
 
+
+    /// VERY IMPORTANT READ about  choices authurization
+    // the level of auth that is required to make it impossible for the user to get the choices of a question
+    //that is not thiers and private will make the API slower especially when the user sends a set of choices then u have to interate through
+    //the set and make sure each choices is well authurized, so that makes the API SLOWER and speaking of security it does not really matter
+    //AT THIS TIME if the user could break through this API and gets something they are not AUTHORIZED to do 
+    //bets choices here is making this API AS FAST AS WE CAN IN THIS RELEASE so no authrization is implemented here at all just the normal
+    //AUTHENTICATION using JWT
+    //this method is just used for now 29 Apirl, so in the future we might consider using full authrization here with a diff method to make it 
+    //faster and more secure.
+    //thanks for reading
+
     [Route("api/choices")]
     [ApiController]
     [Authorize]
@@ -50,16 +62,20 @@ namespace API_Layer.Controllers.Questions
         }
 
 
+
         [HttpGet("questions/{questionID}")]
         public async Task<IActionResult> GetChoices(int questionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
-            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
-                    questionID, userId == null ? -1 : (int)userId))
-            {
-                return Unauthorized();
-            }
+
+            //to understand why this is commented out READ THE ABOVE paragraph =>
+
+            //if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
+            //        questionID, userId == null ? -1 : (int)userId))
+            //{
+            //    return Unauthorized();
+            //}
 
             return Ok(await _QuestionsChoicesService.GetChoicesAsync(questionID));
         }
@@ -70,11 +86,13 @@ namespace API_Layer.Controllers.Questions
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
 
-            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
-                    setQuestionIDs, userId == null ? -1 : (int)userId))
-            {
-                return Unauthorized();
-            }
+            //to understand why this is commented out READ THE ABOVE paragraph =>
+
+            //if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
+            //        setQuestionIDs, userId == null ? -1 : (int)userId))
+            //{
+            //    return Unauthorized();
+            //}
 
             return Ok(await _QuestionsChoicesService.GetChoicesAsync(setQuestionIDs));
         }
@@ -86,8 +104,7 @@ namespace API_Layer.Controllers.Questions
 
             //authorization:
             //1- if the caller is the creater, then no authorization needed.
-            //2- if the caller is the consumer, then the consumer must answer the question first to call the API
-            //to prevent right answers leak.
+            //2- if the caller is the consumer, then the consumer must answer the question first to call the API to prevent right answers leak.
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
 
