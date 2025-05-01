@@ -1,4 +1,4 @@
-using API_Layer.Authorization;
+﻿using API_Layer.Authorization;
 using API_Layer.Exceptions;
 using API_Layer.Security;
 using CloudinaryDotNet;
@@ -57,6 +57,8 @@ using TelegramService.Concrete;
 using Telegram.Bot;
 using API_Layer.Telegram;
 using Microsoft.Extensions.Options;
+using API_Layer.Handlers;
+using API_Layer.LogsSettings;
 
 
 
@@ -65,9 +67,14 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 #region init serilog
+var criticalHandler = new CriticalLogHandler();
+builder.Services.AddSingleton(criticalHandler);
+
+
 builder.Configuration.AddJsonFile("SerilogSettings.json");
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.Sink(new CriticalLogSink(criticalHandler))
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -217,6 +224,8 @@ builder.Services.AddSingleton<ITelegramBotClient>(provider =>
 });
 builder.Services.AddSingleton<ITelegramBot, clsTBot>();
 
+
+
 #endregion
 
 #endregion
@@ -265,6 +274,15 @@ clsToken.jwtOptions = jwtOptions;
 
 
 var app = builder.Build();
+
+var bot = app.Services.GetRequiredService<ITelegramBot>();
+var settings = app.Services.GetRequiredService<IOptions<TelegramSettings>>();
+
+criticalHandler.OnCriticalLog += async (msg) =>
+{
+    await bot.SendMessageAsync(settings.Value.AdminGroupID, $"⚠️ CRITICAL ERROR ⚠️\n @AhmedM204, @MOMEN_xNasr\n\n Log message: \n{msg}");
+};
+
 
 
 // Configure the HTTP request pipeline.

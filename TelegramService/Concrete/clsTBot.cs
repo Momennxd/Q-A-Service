@@ -52,7 +52,12 @@ namespace TelegramService.Concrete
 
         public async Task SendMessageAsync(string chatId, string message)
         {
-            await _client.SendMessage(chatId, message);
+            try
+            {
+
+                await _client?.SendMessage(chatId, message);
+            }
+            catch { }
         }
 
     }
