@@ -52,6 +52,11 @@ using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitio
 using Serilog;
 using Serilog.Sinks.SystemConsole;
 using Serilog.Sinks.File;
+using TelegramService.Interfaces;
+using TelegramService.Concrete;
+using Telegram.Bot;
+using API_Layer.Telegram;
+using Microsoft.Extensions.Options;
 
 
 
@@ -201,7 +206,18 @@ builder.Services.AddScoped<IUnitOfWork<ICollectionsSubmitionsRepo, Collections_S
 
 builder.Services.AddScoped<IPersonRepo, PersonRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPersonRepo, Person>, UnitOfWork<IPersonRepo, Person>>();
+#region Telegram Injection
 
+builder.Services.Configure<TelegramSettings>(builder.Configuration.GetSection("Telegram"));
+
+builder.Services.AddSingleton<ITelegramBotClient>(provider =>
+{
+    var settings = provider.GetRequiredService<IOptions<TelegramSettings>>().Value;
+    return new TelegramBotClient(settings.Token);
+});
+builder.Services.AddSingleton<ITelegramBot, clsTBot>();
+
+#endregion
 
 #endregion
 
@@ -249,7 +265,6 @@ clsToken.jwtOptions = jwtOptions;
 
 
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline.
