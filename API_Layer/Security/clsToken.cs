@@ -19,7 +19,7 @@ namespace API_Layer.Security
             {
                 Issuer = jwtOptions?.Issuer,
                 Audience = jwtOptions?.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions?.SingingKey)),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions?.SigningKey)),
                 SecurityAlgorithms.HmacSha256),
 
 

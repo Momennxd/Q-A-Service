@@ -1,6 +1,7 @@
 ﻿
 using Data.DatabaseContext;
 using Data.models.People;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +17,11 @@ namespace Data.Repositories
     {
 
         AppDbContext _context;
-
-        public UserRepo(AppDbContext context) : base(context)
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public UserRepo(AppDbContext context, IPasswordHasher<User> passwordHasher) : base(context)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public Task<User?> FindUserByUsernameAsync(string Username)
@@ -59,13 +61,23 @@ namespace Data.Repositories
             return user;
         }
 
-        public async Task<User?> LoginAsync(string Username, string Password)
+        public async Task<User?> LoginAsync(string username, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u=> u.Username == Username && u.Password == Password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
-            return user;
+            if (user == null) return null;
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+
+            if (result == PasswordVerificationResult.Success)
+            {
+                return user;
+            }
+
+            return null;
         }
 
-        
+
+
     }
 }

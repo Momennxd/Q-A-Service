@@ -59,6 +59,7 @@ using API_Layer.Telegram;
 using Microsoft.Extensions.Options;
 using API_Layer.Handlers;
 using API_Layer.LogsSettings;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -230,7 +231,11 @@ builder.Services.AddSingleton<ITelegramBot, clsTBot>();
 
 #endregion
 
+#region Security 
 
+#region Hash passwords
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+#endregion
 
 #region Jwt Config
 
@@ -250,7 +255,7 @@ builder.Services.AddAuthentication()
             ValidAudience = jwtOptions!.Audience,
 
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SingingKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
 
             RequireExpirationTime = true,
             ValidateLifetime = true, // Ensure the token's lifetime is validated
@@ -264,6 +269,7 @@ clsToken.jwtOptions = jwtOptions;
 #endregion
 
 
+#endregion
 
 #region Init App
 

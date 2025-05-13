@@ -17,25 +17,29 @@ using static Core.DTOs.People.UsersDTOs;
 using Core.DTOs.Collections;
 using Data.Repository.Entities_Repositories.People_Repo;
 using static Core.DTOs.People.PeopleDTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Services.Concrete.Users
 {
     public class UserService : IUserService
     {
 
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<IUserRepo, User> _unitOfWork;
 
-        public UserService(IMapper mapper, IUnitOfWork<IUserRepo, User> unitOfWork)
+        public UserService(IPasswordHasher<User> passwordHasher, IMapper mapper, IUnitOfWork<IUserRepo, User> unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<SendUserDTO?> CreateUserAsync(UsersDTOs.AddUserDTO addUserDTO)
         {
             var user = _mapper.Map<User>(addUserDTO);
+            user.Password = _passwordHasher.HashPassword(user, addUserDTO.Password);
             await _unitOfWork.EntityRepo.AddItemAsync(user);
             if (await _unitOfWork.CompleteAsync() < 1) return null;
 
