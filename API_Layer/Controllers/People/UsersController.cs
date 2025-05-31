@@ -29,8 +29,8 @@ namespace API_Layer.Controllers.People
 
 
 
-        [HttpPost("signin")]
-        public async Task<ActionResult> Signin(AddUserDTO addUserDTO)
+        [HttpPost("signup")]
+        public async Task<ActionResult> Signup(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
             return StatusCode(201, user);
