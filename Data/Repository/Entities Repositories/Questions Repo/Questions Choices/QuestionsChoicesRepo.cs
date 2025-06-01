@@ -4,12 +4,6 @@ using Data.models.Questions;
 using Data.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 {
@@ -43,8 +37,8 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 
         public async Task<List<QuestionsChoices>> GetAllByQuestionIDAsync(int Questionid)
         {
-           return await _appDbContext.Questions_Choices.Select(c => c).
-                Where(c => c.QuestionID == Questionid).OrderBy(c => c.Rank).ToListAsync();
+            return await _appDbContext.Questions_Choices.Select(c => c).
+                 Where(c => c.QuestionID == Questionid).OrderBy(c => c.Rank).ToListAsync();
         }
 
         public async Task<Dictionary<int, List<QuestionsChoices>>> GetAllByQuestionIDsAsync(HashSet<int> QuestionsIDs)
@@ -74,6 +68,20 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
         {
             return await _appDbContext.Questions_Choices.Select(c => c).
                Where(c => c.QuestionID == Questionid && c.IsRightAnswer).ToListAsync();
+        }
+
+        public async Task<SP_ChoiceWithExplanation?> GetChoiceWithExplanationAsync(int choiceId, int questionId)
+        {
+            var questionIdParam = new SqlParameter("@QuestionID", questionId);
+            var choiceIdParam = new SqlParameter("@ChoiceID", choiceId);
+
+            var result = await _appDbContext.Set<SP_ChoiceWithExplanation>()
+                .FromSqlRaw("EXEC GetChoiceWithRandomExplanation @QuestionID, @ChoiceID", questionIdParam, choiceIdParam)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return result.FirstOrDefault();
+
         }
 
         public async Task<List<QuestionsChoices>> GetCollectionChoices(int CollectionID)

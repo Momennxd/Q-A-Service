@@ -65,11 +65,13 @@ namespace Data.DatabaseContext
             modelBuilder.Entity<SP_QuestionCategories>().HasNoKey(); // Indicate that this is a keyless entity
             modelBuilder.Entity<SP_GetRandomQuestion>().HasNoKey().ToView(null);
             modelBuilder.Entity<SP_GetUser>().HasNoKey();
+            modelBuilder.Entity<SP_ChoiceWithExplanation>().HasNoKey().ToView(null);
 
             modelBuilder
                 .Entity<CollectionSubmissionView>()
                 .HasNoKey()
                 .ToView("View_CollectionSubmissions");
+
 
 
         }

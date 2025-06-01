@@ -44,5 +44,20 @@ namespace Core.DTOs.Questions
 
 
         }
+
+        public class SendSimpleChoiceDTO
+        {
+            public int ChoiceID { get; set; }
+            public string ChoiceText { get; set; }
+        }
+
+        public class SendChoiceWithExplanationDTO
+        {
+            public int ChoiceID { get; set; }
+            public string ChoiceText { get; set; }
+            public bool IsRightAnswer { get; set; }
+            public string? ExplanationText { get; set; }
+            public int? ExplanationID { get; set; }
+        }
     }
 }

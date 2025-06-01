@@ -192,5 +192,11 @@ namespace Core.Services.Concrete.Questions
             // Return the updated collection as a DTO
             return _mapper.Map<SendChoiceDTO>(entity);
         }
+        public async Task<SendChoiceWithExplanationDTO?> GetChoiceWithExplanationAsync(int choiceId, int questionId)
+        {
+            var choiceWithExplanation = await _uowChoices.EntityRepo.GetChoiceWithExplanationAsync(choiceId, questionId);
+            if (choiceWithExplanation == null) return null;
+            return _mapper.Map<SendChoiceWithExplanationDTO>(choiceWithExplanation);
+        }
     }
 }
