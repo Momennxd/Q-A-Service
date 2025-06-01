@@ -20,7 +20,7 @@ namespace API_Layer.Controllers.Collections
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddSubmission(int CollectionID)
+        public async Task<ActionResult<int>> AddSubmission(int CollectionID)
         {
 
             int UserId = clsToken.GetUserID(HttpContext);
