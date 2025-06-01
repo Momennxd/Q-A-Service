@@ -20,12 +20,12 @@ namespace API_Layer.Controllers.Collections
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddSubmition(int CollectionID)
+        public async Task<IActionResult> AddSubmission(int CollectionID)
         {
 
             int UserId = clsToken.GetUserID(HttpContext);
-            await _collectionService.AddSubmition(CollectionID, UserId);
-            return Ok();
+            int submissionId = await _collectionService.AddSubmission(CollectionID, UserId);
+            return Ok(submissionId);
         }
 
         [HttpDelete]

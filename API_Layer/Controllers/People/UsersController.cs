@@ -30,14 +30,14 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("signup")]
-        public async Task<ActionResult> Signup(AddUserDTO addUserDTO)
+        public async Task<ActionResult<UsersDTOs.SendUserDTO>> Signup(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
             return StatusCode(201, user);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
         {
             var user = await _userService.Login(loginDTO);
             if (user == null)
@@ -48,7 +48,7 @@ namespace API_Layer.Controllers.People
 
         [HttpPatch]
         [Authorize]
-        public async Task<ActionResult> UpdateUserInfo(JsonPatchDocument<AddUserDTO> UpdatedItem)
+        public async Task<ActionResult<SendUserDTO>> UpdateUserInfo(JsonPatchDocument<AddUserDTO> UpdatedItem)
         {
             var user = await _userService.PatchUser(UpdatedItem, clsToken.GetUserID(HttpContext));
 
@@ -57,7 +57,7 @@ namespace API_Layer.Controllers.People
         
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetUser()
+        public async Task<ActionResult<GetUserDTO>> GetUser()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId <= 0) return BadRequest();

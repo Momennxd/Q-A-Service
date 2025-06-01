@@ -25,10 +25,11 @@ namespace Core.Services.Concrete.Collections
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddSubmition(int CollectionId, int UserID)
+        public async Task<int> AddSubmission(int CollectionId, int UserID)
         {
-            await _unitOfWork.EntityRepo.AddItemAsync(CollectionId, UserID);
+            var entity = await _unitOfWork.EntityRepo.AddItemAsync(CollectionId, UserID);
             await _unitOfWork.CompleteAsync();
+            return entity.SubmitionID;
         }
 
         public async Task<bool> DeleteSubmition(int SubmitionID, int UserID)

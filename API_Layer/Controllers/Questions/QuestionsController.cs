@@ -120,7 +120,7 @@ namespace API_Layer.Controllers.Questions
         }
 
         [HttpGet("randomQuestion")]
-        public async Task<IActionResult> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
+        public async Task<ActionResult<List<QuestionsDTOs.QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
