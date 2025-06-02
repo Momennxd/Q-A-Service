@@ -24,9 +24,11 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubm
             _appDbContext = appDbContext;
         }
 
-        public async Task AddItemAsync(int CollectionID, int UserID)
+        public async Task<Collections_Submitions> AddItemAsync(int CollectionID, int UserID)
         {
-            await base.AddItemAsync(new Collections_Submitions() { CollectionID = CollectionID, SubmittedUserID = UserID });
+            var entity = new Collections_Submitions() { CollectionID = CollectionID, SubmittedUserID = UserID };
+            await base.AddItemAsync(entity);
+            return entity;
         }
 
         public async Task<bool> DeleteSubmition(int submitionID, int userID)

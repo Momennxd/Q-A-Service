@@ -11,7 +11,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubm
 {
     public interface ICollectionsSubmitionsRepo : IRepository<Collections_Submitions>
     {
-        Task AddItemAsync(int CollectionID, int UserID);
+        Task<Collections_Submitions> AddItemAsync(int CollectionID, int UserID);
 
         Task<bool> DeleteSubmition(int SubmitionID, int UserID);
 

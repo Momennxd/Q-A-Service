@@ -1,4 +1,5 @@
-﻿using Data.models.Questions;
+﻿using Data.models._SP_;
+using Data.models.Questions;
 using Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
 
 
 
-
+        public Task<SP_ChoiceWithExplanation?> GetChoiceWithExplanationAsync(int choiceID, int questionId);
 
 
         public Task<int> DeleteQuestionChoicesAsync(int QuestionID);

@@ -18,6 +18,7 @@ namespace Data.DatabaseContext
         public virtual DbSet<Pics> Pics { get; set; }
         public DbSet<CollectionSubmissionView> CollectionSubmissionViews { get; set; }
         public DbSet<SP_GetUser> UserWithPoints { get; set; }
+        public DbSet<SP_ChoiceWithExplanation> ChoiceWithExplanation { get; set; }
 
 
 

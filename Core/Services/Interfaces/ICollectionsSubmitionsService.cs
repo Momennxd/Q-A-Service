@@ -10,7 +10,7 @@ namespace Core.Services.Interfaces
 {
     public interface ICollectionsSubmitionsService
     {
-        public Task AddSubmition(int CollectionId, int UserID);
+        public Task<int> AddSubmission(int CollectionId, int UserID);
         public Task<bool> DeleteSubmition(int SubmitionID, int UserID);
 
 

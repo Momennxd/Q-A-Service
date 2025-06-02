@@ -69,7 +69,7 @@ namespace Core.DTOs.Questions
             public int QuestionID { get; set; }
             public string QuestionText { get; set; }
             public byte Rank { get; set; }
-            public List<CreateChoiceDTO> Choices { get; set; } = new();
+            public List<SendSimpleChoiceDTO> Choices { get; set; } = new();
         }
 
 

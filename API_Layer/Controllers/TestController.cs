@@ -90,7 +90,7 @@ namespace API_Layer.Controllers.Collections
 
 
 
-        [HttpGet("GetTest" ,Name = "TestGet")]
+        [HttpGet("TestCriticalLog" ,Name = "TestCriticalLog")]
         public  IActionResult GetTest()
         {
             _logger.LogCritical("Test");

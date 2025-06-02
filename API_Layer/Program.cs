@@ -1,4 +1,4 @@
-using API_Layer.Authorization;
+﻿using API_Layer.Authorization;
 using API_Layer.Exceptions;
 using API_Layer.Security;
 using CloudinaryDotNet;
@@ -52,6 +52,14 @@ using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitio
 using Serilog;
 using Serilog.Sinks.SystemConsole;
 using Serilog.Sinks.File;
+using TelegramService.Interfaces;
+using TelegramService.Concrete;
+using Telegram.Bot;
+using API_Layer.Telegram;
+using Microsoft.Extensions.Options;
+using API_Layer.Handlers;
+using API_Layer.LogsSettings;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -60,9 +68,14 @@ using Serilog.Sinks.File;
 var builder = WebApplication.CreateBuilder(args);
 
 #region init serilog
+var criticalHandler = new CriticalLogHandler();
+builder.Services.AddSingleton(criticalHandler);
+
+
 builder.Configuration.AddJsonFile("SerilogSettings.json");
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.Sink(new CriticalLogSink(criticalHandler))
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -201,11 +214,28 @@ builder.Services.AddScoped<IUnitOfWork<ICollectionsSubmitionsRepo, Collections_S
 
 builder.Services.AddScoped<IPersonRepo, PersonRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPersonRepo, Person>, UnitOfWork<IPersonRepo, Person>>();
+#region Telegram Injection
+
+builder.Services.Configure<TelegramSettings>(builder.Configuration.GetSection("Telegram"));
+
+builder.Services.AddSingleton<ITelegramBotClient>(provider =>
+{
+    var settings = provider.GetRequiredService<IOptions<TelegramSettings>>().Value;
+    return new TelegramBotClient(settings.Token);
+});
+builder.Services.AddSingleton<ITelegramBot, clsTBot>();
+
 
 
 #endregion
 
+#endregion
 
+#region Security 
+
+#region Hash passwords
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+#endregion
 
 #region Jwt Config
 
@@ -225,7 +255,7 @@ builder.Services.AddAuthentication()
             ValidAudience = jwtOptions!.Audience,
 
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SingingKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
 
             RequireExpirationTime = true,
             ValidateLifetime = true, // Ensure the token's lifetime is validated
@@ -239,6 +269,7 @@ clsToken.jwtOptions = jwtOptions;
 #endregion
 
 
+#endregion
 
 #region Init App
 
@@ -249,6 +280,14 @@ clsToken.jwtOptions = jwtOptions;
 
 
 var app = builder.Build();
+
+var bot = app.Services.GetRequiredService<ITelegramBot>();
+var settings = app.Services.GetRequiredService<IOptions<TelegramSettings>>();
+
+criticalHandler.OnCriticalLog += async (msg) =>
+{
+    await bot.SendMessageAsync(settings.Value.AdminGroupID, $"⚠️ CRITICAL ERROR ⚠️\n @AhmedM204, @MOMEN_xNasr\n\n Log message: \n{msg}");
+};
 
 
 

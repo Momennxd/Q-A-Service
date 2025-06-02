@@ -146,5 +146,18 @@ namespace API_Layer.Controllers.Questions
 
         }
 
+        [HttpGet("explanation/{choiceId:int}/{questionId:int}")]
+        public async Task<ActionResult<SendChoiceWithExplanationDTO>> GetChoiceWithExplanation(
+            [FromRoute] int choiceId,
+            [FromRoute] int questionId
+            )
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var choiceWithExplanation = await _QuestionsChoicesService.GetChoiceWithExplanationAsync(choiceId, questionId);
+            if (choiceWithExplanation == null)
+                return NotFound();
+            return Ok(choiceWithExplanation);
+
+        }
     }
 }

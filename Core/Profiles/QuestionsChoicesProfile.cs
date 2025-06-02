@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Data.models.Questions;
 using Core.DTOs.Questions;
+using static Core.DTOs.Questions.QuestionsChoicesDTOs;
+using Data.models._SP_;
 
 namespace Core.Profiles
 {
@@ -27,6 +29,11 @@ namespace Core.Profiles
             CreateMap<QuestionsChoices, QuestionsChoicesDTOs.PatchChoiceDTO>();
             CreateMap<QuestionsChoicesDTOs.PatchChoiceDTO, QuestionsChoices>();
 
+            CreateMap<SendSimpleChoiceDTO, QuestionsChoices>();
+            CreateMap<QuestionsChoices, SendSimpleChoiceDTO>();
+
+            CreateMap<SP_ChoiceWithExplanation, SendChoiceWithExplanationDTO>();
+            CreateMap<SendChoiceWithExplanationDTO ,  SP_ChoiceWithExplanation>();
 
         }
 
