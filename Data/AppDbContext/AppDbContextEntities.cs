@@ -7,6 +7,7 @@ using Data.models.Questions;
 using Data.models.Institutions;
 using Microsoft.EntityFrameworkCore;
 using Data.models.nsCategories;
+using Data.models.RefreshTokens;
 namespace Data.DatabaseContext
 {
     public partial class AppDbContext
@@ -20,6 +21,7 @@ namespace Data.DatabaseContext
         public DbSet<SP_GetUser> UserWithPoints { get; set; }
         public DbSet<SP_ChoiceWithExplanation> ChoiceWithExplanation { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         #region Choices

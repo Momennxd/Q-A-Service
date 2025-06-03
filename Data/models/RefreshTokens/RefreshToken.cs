@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.models.Base;
+using Data.models.People;
+using System.ComponentModel.DataAnnotations;
 
-namespace Data.models.Security
+namespace Data.models.RefreshTokens
 {
-    public class RefreshToken
+    public class RefreshToken : IBaseEntity<RefreshToken>
     {
         [Key]
         public int TokenId { get; set; }
@@ -13,5 +15,7 @@ namespace Data.models.Security
         public DateTime? RevokedOn { get; set; }
         public bool IsActive => RevokedOn == null && !IsExpired;
 
+        public int UserId { get; set; }      
+        public User User { get; set; }       
     }
 }
