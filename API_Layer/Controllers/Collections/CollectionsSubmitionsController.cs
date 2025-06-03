@@ -28,26 +28,26 @@ namespace API_Layer.Controllers.Collections
             return Ok(submissionId);
         }
 
-        [HttpDelete]
-        [Authorize]
-        public async Task<IActionResult> DeleteSubmition(int SubmitionID)
-        {
-            int UserId = clsToken.GetUserID(HttpContext);
-            bool isDeleted = await _collectionService.DeleteSubmition(SubmitionID, UserId);
-            if (isDeleted)
-                return Ok();
-            else
-                return BadRequest();
-        }
+        //[HttpDelete]
+        //[Authorize]
+        //public async Task<IActionResult> DeleteSubmition(int SubmitionID)
+        //{
+        //    int UserId = clsToken.GetUserID(HttpContext);
+        //    bool isDeleted = await _collectionService.DeleteSubmition(SubmitionID, UserId);
+        //    if (isDeleted)
+        //        return Ok();
+        //    else
+        //        return BadRequest();
+        //}
 
-        [HttpGet]
-        public async Task<IActionResult> GetSubmission(int SubmissionID)
-        {
-            int UserID = 1; //clsToken.GetUserID(HttpContext);
-            var submission = await _collectionService.GetBySubmissionID(SubmissionID, UserID);
-            if (submission == null) return NotFound();
+        //[HttpGet]
+        //public async Task<IActionResult> GetSubmission(int SubmissionID)
+        //{
+        //    int UserID = 1; //clsToken.GetUserID(HttpContext);
+        //    var submission = await _collectionService.GetBySubmissionID(SubmissionID, UserID);
+        //    if (submission == null) return NotFound();
 
-            return Ok(submission);
-        }
+        //    return Ok(submission);
+        //}
     }
 }
