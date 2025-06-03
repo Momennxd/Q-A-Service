@@ -1,15 +1,7 @@
-﻿using API_Layer.Security;
-using Core.Authorization_Services.Interfaces;
-using Core.DTOs.Collections;
-using Core.DTOs.Questions;
-using Core.Services.Concrete.Collections;
+﻿using Core.Authorization_Services.Interfaces;
 using Core.Services.Interfaces;
-using Data.models.People;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System.Linq;
 using System.Security.Claims;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 

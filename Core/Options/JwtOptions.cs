@@ -1,4 +1,4 @@
-﻿namespace API_Layer.Security
+﻿namespace Core.Options
 {
     public class JwtOptions
     {

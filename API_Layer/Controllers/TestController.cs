@@ -1,26 +1,10 @@
-﻿using API_Layer.Security;
-using AutoMapper;
-using Core.DTOs.People;
-using Core.Services.Concrete.People;
-using Core.Services.Concrete.Users;
+﻿using Core.DTOs.Pictures;
 using Core.Services.Interfaces;
+using Core.Services.Interfaces.RefreshTokens;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Net.Mail;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Services.Concrete;
 using Services.Interfaces;
-using Core.DTOs.Pictures;
-using Core.Services.Concrete.Questions;
-using Core.DTOs.Questions;
-using Microsoft.AspNetCore.Routing.Constraints;
+using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -34,15 +18,17 @@ namespace API_Layer.Controllers.Collections
         private readonly IPicsService PicsService;
         private readonly IQuestionsChoicesService choicesService;
         private readonly ILogger<TestController> _logger;
-
+        private readonly ITokenService _tokenService;
         public TestController(ICloudinaryService cloudinary, IChoicesPicsService picsService,
-            IPicsService pics, IQuestionsChoicesService questionsChoicesService, ILogger<TestController> logger)
+            IPicsService pics, IQuestionsChoicesService questionsChoicesService, ILogger<TestController> logger
+            , ITokenService tokenService)
         {
             this.PicsService = pics;
             _cloudinary = cloudinary;
             _PicsService = picsService;
             choicesService = questionsChoicesService;
             _logger = logger;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
@@ -60,7 +46,7 @@ namespace API_Layer.Controllers.Collections
         [Route("CreateNewToken")]
         public ActionResult CreateNewToken(int userID)
         {
-            return Ok(clsToken.CreateToken(userID));
+            return Ok(_tokenService.CreateToken(userID));
         }
 
 
@@ -90,8 +76,8 @@ namespace API_Layer.Controllers.Collections
 
 
 
-        [HttpGet("TestCriticalLog" ,Name = "TestCriticalLog")]
-        public  IActionResult GetTest()
+        [HttpGet("TestCriticalLog", Name = "TestCriticalLog")]
+        public IActionResult GetTest()
         {
             _logger.LogCritical("Test");
             return Ok();

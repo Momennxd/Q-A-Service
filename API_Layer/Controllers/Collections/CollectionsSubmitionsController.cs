@@ -1,8 +1,6 @@
-﻿using API_Layer.Security;
-using Core.DTOs.Collections;
+﻿using API_Layer.Extensions;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Layer.Controllers.Collections
@@ -23,7 +21,7 @@ namespace API_Layer.Controllers.Collections
         public async Task<ActionResult<int>> AddSubmission(int CollectionID)
         {
 
-            int UserId = clsToken.GetUserID(HttpContext);
+            int UserId = User.GetUserId();
             int submissionId = await _collectionService.AddSubmission(CollectionID, UserId);
             return Ok(submissionId);
         }

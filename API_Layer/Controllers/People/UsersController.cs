@@ -1,9 +1,9 @@
-﻿using API_Layer.Security;
+﻿using API_Layer.Extensions;
 using Core.DTOs.People;
+using Core.DTOs.RefreshTokens;
 using Core.Services.Interfaces;
-using Data.models.People;
+using Core.Services.Interfaces.RefreshTokens;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -19,11 +19,12 @@ namespace API_Layer.Controllers.People
 
         IUserService _userService;
         private readonly ILogger<UsersController> _logger;
-
-        public UsersController(IUserService userService, ILogger<UsersController> logger)
+        IRefreshTokenService _refreshTokenService;
+        public UsersController(IUserService userService, ILogger<UsersController> logger, IRefreshTokenService refreshTokenService)
         {
             _userService = userService;
             _logger = logger;
+            _refreshTokenService = refreshTokenService;
         }
 
 
@@ -37,33 +38,53 @@ namespace API_Layer.Controllers.People
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<RefreshTokenDTOs.LoginResponseDto>> Login(LoginDTO loginDTO)
         {
             var user = await _userService.Login(loginDTO);
             if (user == null)
                 return BadRequest("Wrong username or password");
 
-            return Ok(clsToken.CreateToken(user.UserId));
+            var tokens = await _refreshTokenService.GenerateTokensForUserAsync(user.UserId);
+            return Ok(tokens);
         }
 
         [HttpPatch]
         [Authorize]
         public async Task<ActionResult<SendUserDTO>> UpdateUserInfo(JsonPatchDocument<AddUserDTO> UpdatedItem)
         {
-            var user = await _userService.PatchUser(UpdatedItem, clsToken.GetUserID(HttpContext));
+            var userId = User.GetUserId();
+
+            var user = await _userService.PatchUser(UpdatedItem, userId);
 
             return Ok(user);
         }
-        
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<GetUserDTO>> GetUser()
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
             if (userId <= 0) return BadRequest();
             var user = await _userService.GetUserByIdAsync(userId);
 
             return Ok(user);
+        }
+        [HttpPost("logout")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenDTOs.RefreshTokenDTO request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Token))
+                return BadRequest(new { message = "Refresh token is required" });
+
+            var success = await _refreshTokenService.LogoutAsync(request.Token);
+
+            if (!success)
+                return Unauthorized(new { message = "Invalid or already revoked token" });
+
+            return Ok(new { message = "Logged out successfully" });
         }
 
         //[HttpDelete]
