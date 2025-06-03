@@ -4,6 +4,7 @@ using Data.models.Collections;
 using Data.models.Base;
 using System.ComponentModel.DataAnnotations;
 using Data.Custom_Attributes;
+using Data.models.Security;
 
 
 
@@ -29,4 +30,5 @@ public partial class User : IBaseEntity<User>
     public Person Person { get; set; }
 
     public byte Permissions { get; set; } = 0;
+    public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }
