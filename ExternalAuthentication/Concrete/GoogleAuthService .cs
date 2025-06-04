@@ -1,7 +1,8 @@
-﻿using ExternalAuthentication.DateToSend;
+﻿using ExternalAuthentication.DataToSend;
 using ExternalAuthentication.Interfaces;
 using ExternalAuthentication.Options;
 using Google.Apis.Auth;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace ExternalAuthentication.Concrete
     public class GoogleAuthService : IExternalAuthProvider
     {
         private readonly GoogleAuthSettings _settings;
+        private readonly ILogger<GoogleAuthService> _logger;
 
-        public GoogleAuthService(IOptions<GoogleAuthSettings> options)
+        public GoogleAuthService(IOptions<GoogleAuthSettings> options, ILogger<GoogleAuthService> logger)
         {
             _settings = options.Value;
+            _logger = logger;
         }
 
         public string ProviderName => "Google";
@@ -40,6 +43,8 @@ namespace ExternalAuthentication.Concrete
             }
             catch (InvalidJwtException ex)
             {
+                _logger.LogWarning("Google token validation failed: {Message}", ex.Message);
+
                 return new ExternalAuthResults
                 {
                     IsSuccess = false,
@@ -48,6 +53,8 @@ namespace ExternalAuthentication.Concrete
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Unexpected error during Google authentication");
+
                 return new ExternalAuthResults
                 {
                     IsSuccess = false,

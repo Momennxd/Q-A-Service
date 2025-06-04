@@ -1,4 +1,4 @@
-﻿using ExternalAuthentication.DateToSend;
+﻿using ExternalAuthentication.DataToSend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
