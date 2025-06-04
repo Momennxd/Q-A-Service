@@ -230,17 +230,7 @@ builder.Services.AddScoped<IUnitOfWork<IRefreshTokenRepo, RefreshToken>,
 
 builder.Services.Configure<GoogleAuthSettings>(
     builder.Configuration.GetSection("Authentication:Google"));
-
 builder.Services.AddScoped<IExternalAuthProvider, GoogleAuthService>();
-
-builder.Services.AddScoped<Dictionary<string, IExternalAuthProvider>>(serviceProvider =>
-{
-    var providers = new Dictionary<string, IExternalAuthProvider>(StringComparer.OrdinalIgnoreCase);
-    var googleProvider = serviceProvider.GetRequiredService<GoogleAuthService>();
-    providers.Add(googleProvider.ProviderName, googleProvider);
-    return providers;
-});
-
 builder.Services.AddScoped<IExternalAuthProviderFactory, ExternalAuthProviderFactory>();
 
 
