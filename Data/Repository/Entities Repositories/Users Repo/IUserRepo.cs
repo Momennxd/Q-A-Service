@@ -20,6 +20,7 @@ namespace Data.Repositories
 
 
         Task<SP_GetUser?> GetUserByID(int UserID);
+        Task<SP_GetUser?> AddUserAsync(int UserID);
         Task<User?> GetUserUsernameAsync(string Username);
 
         Task<List<User>> GetTopUsersAsync(int topN);

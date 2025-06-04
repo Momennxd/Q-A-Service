@@ -77,7 +77,9 @@ namespace Data.Repositories
             return null;
         }
 
-
-
+        public Task<SP_GetUser?> AddUserAsync(int UserID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
