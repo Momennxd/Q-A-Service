@@ -9,18 +9,21 @@ namespace ExternalAuthentication.Concrete
 {
     public class ExternalAuthProviderFactory : IExternalAuthProviderFactory
     {
-        private readonly IEnumerable<IExternalAuthProvider> _providers;
+        private readonly Dictionary<string, IExternalAuthProvider> _providers;
 
         public ExternalAuthProviderFactory(IEnumerable<IExternalAuthProvider> providers)
         {
-            _providers = providers;
+            _providers = providers.ToDictionary(
+                p => p.ProviderName,
+                StringComparer.OrdinalIgnoreCase);
         }
 
         public IExternalAuthProvider GetProvider(string providerName)
         {
-            return _providers.FirstOrDefault(p =>
-                string.Equals(p.ProviderName, providerName, StringComparison.OrdinalIgnoreCase))
-                ?? throw new ArgumentException("Unsupported provider");
+            return _providers.TryGetValue(providerName, out var provider)
+                ? provider
+                : throw new ArgumentException("Unsupported provider");
         }
     }
+
 }
