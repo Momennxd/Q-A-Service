@@ -4,8 +4,6 @@ using ExternalAuthentication.Options;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading.Tasks;
 
 namespace ExternalAuthentication.Concrete
 {
