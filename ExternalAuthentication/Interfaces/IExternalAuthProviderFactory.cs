@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExternalAuthentication.Interfaces
 {
-    public interface IExternalAuthFactory
+    public interface IExternalAuthProviderFactory
     {
         IExternalAuthProvider GetProvider(string providerName);
     }

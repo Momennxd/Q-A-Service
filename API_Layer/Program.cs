@@ -42,6 +42,9 @@ using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
 using Data.Repository.Entities_Repositories.Questions_Repo.nsQuestions_Categories;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
 using Data.Repository.Entities_Repositories.RefreshTokens_Repo;
+using ExternalAuthentication.Concrete;
+using ExternalAuthentication.Interfaces;
+using ExternalAuthentication.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -222,6 +225,26 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
 builder.Services.AddScoped<IUnitOfWork<IRefreshTokenRepo, RefreshToken>,
     UnitOfWork<IRefreshTokenRepo, RefreshToken>>();
+
+
+
+builder.Services.Configure<GoogleAuthSettings>(
+    builder.Configuration.GetSection("Authentication:Google"));
+
+builder.Services.AddScoped<GoogleAuthService>();
+
+builder.Services.AddScoped<Dictionary<string, IExternalAuthProvider>>(serviceProvider =>
+{
+    var providers = new Dictionary<string, IExternalAuthProvider>(StringComparer.OrdinalIgnoreCase);
+
+    var googleProvider = serviceProvider.GetRequiredService<GoogleAuthService>();
+    providers.Add(googleProvider.ProviderName, googleProvider);
+
+    return providers;
+});
+
+builder.Services.AddScoped<IExternalAuthProviderFactory, ExternalAuthProviderFactory>();
+
 
 
 #region Telegram Injection

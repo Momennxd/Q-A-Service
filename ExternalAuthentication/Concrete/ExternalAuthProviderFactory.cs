@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ExternalAuthentication.Concrete
 {
-    internal class ExternalAuthFactory : IExternalAuthFactory
+    public class ExternalAuthProviderFactory : IExternalAuthProviderFactory
     {
         private readonly IEnumerable<IExternalAuthProvider> _providers;
 
-        public ExternalAuthFactory(IEnumerable<IExternalAuthProvider> providers)
+        public ExternalAuthProviderFactory(IEnumerable<IExternalAuthProvider> providers)
         {
             _providers = providers;
         }
