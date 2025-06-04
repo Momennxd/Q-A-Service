@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\ExternalAuthentication\ExternalAuthentication.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
