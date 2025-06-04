@@ -10,7 +10,7 @@ namespace ExternalAuthentication.Interfaces
     public interface IExternalAuthProvider
     {
         string ProviderName { get; }
-        Task<ExternalAuthResults> AuthenticateGoogleAsync(string idToken);
+        Task<ExternalAuthResults> AuthenticateAsync(string idToken);
 
     }
 }
