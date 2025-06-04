@@ -19,6 +19,7 @@ namespace Core.Services.Interfaces
         Task<SendUserDTO?> GetUserByUsernameAsync(string UserID);
         Task<bool> DeleteUserAsync(int id);
         Task<List<SendUserDTO>> GetTopUsersAsync(int topN = 10);
+        Task<GetUserDTO> GetUser_ExternalAuth(string email, string fullName);
 
     }
 

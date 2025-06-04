@@ -104,22 +104,26 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("external-login")]
-        public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
+        public async Task<ActionResult<GetUserDTO>> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
         {
             var provider = _authProviderFactory.GetProvider(request.Provider);
 
-            var result = await provider.AuthenticateAsync(request.IdToken);
+            var info = await provider.AuthenticateAsync(request.IdToken);
 
-            if (!result.IsSuccess)
-                return Unauthorized(new { error = result.ErrorMessage });
+            if (!info.IsSuccess)
+                return Unauthorized(new { error = info.ErrorMessage });
 
+            var userResult = await _userService.GetUser_ExternalAuth(info.Email, info.FullName);
+            if (userResult == null)
+                return NotFound(new { message = "User not found or could not be created" });
+
+            var tokens = await _refreshTokenService.GenerateTokensForUserAsync(userResult.UserId);
             return Ok(new
             {
-                provider = provider.ProviderName,
-                email = result.Email,
-                fullName = result.FullName,
-                providerUserId = result.ProviderUserId
+                User = userResult,
+                Tokens = tokens
             });
+
         }
     }
 }

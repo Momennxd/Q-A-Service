@@ -20,9 +20,9 @@ public partial class Person : IBaseEntity<Person>
 
     public string? Address { get; set; }
 
-    public bool? Gender { get; set; }
+    public bool? Gender { get; set; } 
 
-    public byte CountryId { get; set; }
+    public byte CountryId { get; set; } = 180;
 
     public DateTime? DateOfBirth { get; set; }
 
@@ -33,7 +33,7 @@ public partial class Person : IBaseEntity<Person>
 
     public string? Notes { get; set; }
 
-    public short PreferredLanguageId { get; set; }
+    public short? PreferredLanguageId { get; set; } = 1;
 
     public string? PassportNumber { get; set; }
 

@@ -168,6 +168,42 @@ namespace Core.Services.Concrete.Users
             return userDtos;
         }
 
+
+
+        public async Task<GetUserDTO> GetUser_ExternalAuth(string email, string fullName)
+        {
+            var user = await _unitOfWork.EntityRepo.GetUserByEmail(email);
+            if (user == null)
+            {
+                string firstname = fullName.Contains(' ') ? fullName.Substring(0, fullName.IndexOf(' ')) : fullName;
+                string lastname = fullName.Contains(' ') ? fullName.Substring(fullName.IndexOf(' ') + 1) : "";
+
+                string username = email.Split('@')[0].Replace(".", "");
+
+                var newUser = new User
+                {
+                    Username = username,
+                    Password = Guid.NewGuid().ToString(),
+                    Person = new Person
+                    {
+                        FirstName = firstname,
+                        LastName = lastname,
+                        Email = email
+                        
+                    }
+                };
+
+                await _unitOfWork.EntityRepo.AddItemAsync(newUser);
+                await _unitOfWork.CompleteAsync();
+
+                user = await _unitOfWork.EntityRepo.GetUserByID(newUser.UserId);
+            }
+
+            var userDto = _mapper.Map<GetUserDTO>(user);
+            return userDto;
+        }
+
+
     }
 
 }
