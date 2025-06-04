@@ -1,6 +1,8 @@
-﻿using Core.DTOs.Pictures;
+﻿using Core.DTOs.ExternalAuth;
+using Core.DTOs.Pictures;
 using Core.Services.Interfaces;
 using Core.Services.Interfaces.RefreshTokens;
+using ExternalAuthentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -19,9 +21,12 @@ namespace API_Layer.Controllers.Collections
         private readonly IQuestionsChoicesService choicesService;
         private readonly ILogger<TestController> _logger;
         private readonly ITokenService _tokenService;
+        private readonly IExternalAuthProviderFactory _authProviderFactory;
+
         public TestController(ICloudinaryService cloudinary, IChoicesPicsService picsService,
             IPicsService pics, IQuestionsChoicesService questionsChoicesService, ILogger<TestController> logger
-            , ITokenService tokenService)
+            , ITokenService tokenService
+            , IExternalAuthProviderFactory authProviderFactory)
         {
             this.PicsService = pics;
             _cloudinary = cloudinary;
@@ -29,6 +34,7 @@ namespace API_Layer.Controllers.Collections
             choicesService = questionsChoicesService;
             _logger = logger;
             _tokenService = tokenService;
+            _authProviderFactory = authProviderFactory;
         }
 
         [HttpGet]
@@ -83,7 +89,24 @@ namespace API_Layer.Controllers.Collections
             return Ok();
         }
 
+        [HttpPost("external-login")]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
+        {
+            var provider = _authProviderFactory.GetProvider(request.Provider);
 
+            var result = await provider.AuthenticateAsync(request.IdToken);
+
+            if (!result.IsSuccess)
+                return Unauthorized(new { error = result.ErrorMessage });
+
+            return Ok(new
+            {
+                provider = provider.ProviderName,
+                email = result.Email,
+                fullName = result.FullName,
+                providerUserId = result.ProviderUserId
+            });
+        }
 
 
     }

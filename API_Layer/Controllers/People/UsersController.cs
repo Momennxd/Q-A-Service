@@ -1,8 +1,10 @@
 ﻿using API_Layer.Extensions;
+using Core.DTOs.ExternalAuth;
 using Core.DTOs.People;
 using Core.DTOs.RefreshTokens;
 using Core.Services.Interfaces;
 using Core.Services.Interfaces.RefreshTokens;
+using ExternalAuthentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +22,17 @@ namespace API_Layer.Controllers.People
         IUserService _userService;
         private readonly ILogger<UsersController> _logger;
         IRefreshTokenService _refreshTokenService;
-        public UsersController(IUserService userService, ILogger<UsersController> logger, IRefreshTokenService refreshTokenService)
+        private readonly IExternalAuthProviderFactory _authProviderFactory;
+
+        public UsersController(IUserService userService, 
+            ILogger<UsersController> logger,
+            IRefreshTokenService refreshTokenService,
+            IExternalAuthProviderFactory authProviderFactory)
         {
             _userService = userService;
             _logger = logger;
             _refreshTokenService = refreshTokenService;
+            _authProviderFactory = authProviderFactory;
         }
 
 
@@ -95,5 +103,23 @@ namespace API_Layer.Controllers.People
         //}
 
 
+        [HttpPost("external-login")]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
+        {
+            var provider = _authProviderFactory.GetProvider(request.Provider);
+
+            var result = await provider.AuthenticateAsync(request.IdToken);
+
+            if (!result.IsSuccess)
+                return Unauthorized(new { error = result.ErrorMessage });
+
+            return Ok(new
+            {
+                provider = provider.ProviderName,
+                email = result.Email,
+                fullName = result.FullName,
+                providerUserId = result.ProviderUserId
+            });
+        }
     }
 }
