@@ -104,25 +104,26 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("external-login")]
-        public async Task<ActionResult<GetUserDTO>> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
+        public async Task<ActionResult< ExternalAuthResponseDTO >> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
         {
             var provider = _authProviderFactory.GetProvider(request.Provider);
 
             var info = await provider.AuthenticateAsync(request.IdToken);
 
-            if (!info.IsSuccess)
-                return Unauthorized(new { error = info.ErrorMessage });
-
-            var userResult = await _userService.GetUser_ExternalAuth(info.Email, info.FullName);
-            if (userResult == null)
-                return NotFound(new { message = "User not found or could not be created" });
-
-            var tokens = await _refreshTokenService.GenerateTokensForUserAsync(userResult.UserId);
-            return Ok(new
+            if (info == null || info?.Email == null)
             {
-                User = userResult,
-                Tokens = tokens
-            });
+                _logger.LogWarning("External authentication failed for provider: {Provider}", request.Provider);
+                return BadRequest($"Authentication failed. Please try again. {info?.ErrorMessage}");
+            }
+
+            var result = await _userService.GetExternalAuthResponse(info.Email, info.FullName);
+            if (result == null)
+            {
+                _logger.LogWarning("User not found or created during external authentication for email: {Email}", info.Email);
+                return BadRequest("User not found or created during external authentication.");
+            }
+
+            return Ok(result);
 
         }
     }

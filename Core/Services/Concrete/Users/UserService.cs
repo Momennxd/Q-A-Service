@@ -18,6 +18,9 @@ using Core.DTOs.Collections;
 using Data.Repository.Entities_Repositories.People_Repo;
 using static Core.DTOs.People.PeopleDTOs;
 using Microsoft.AspNetCore.Identity;
+using Data.Repository.Entities_Repositories.RefreshTokens_Repo;
+using Data.models.RefreshTokens;
+using Core.Services.Interfaces.RefreshTokens;
 
 namespace Core.Services.Concrete.Users
 {
@@ -28,12 +31,17 @@ namespace Core.Services.Concrete.Users
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<IUserRepo, User> _unitOfWork;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public UserService(IPasswordHasher<User> passwordHasher, IMapper mapper, IUnitOfWork<IUserRepo, User> unitOfWork)
+        public UserService(IPasswordHasher<User> passwordHasher, 
+            IMapper mapper, 
+            IUnitOfWork<IUserRepo, User> unitOfWork,
+            IRefreshTokenService refreshTokenService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _passwordHasher = passwordHasher;
+            _refreshTokenService = refreshTokenService;
         }
 
         public async Task<SendUserDTO?> CreateUserAsync(UsersDTOs.AddUserDTO addUserDTO)
@@ -203,6 +211,18 @@ namespace Core.Services.Concrete.Users
             return userDto;
         }
 
+
+        public async Task<ExternalAuthResponseDTO?> GetExternalAuthResponse(string email, string fullName)
+        {
+            var user = await GetUser_ExternalAuth(email, fullName);
+            if (user == null) return null;
+            var tokens = await _refreshTokenService.GenerateTokensForUserAsync(user.UserId);
+            return new ExternalAuthResponseDTO
+            {
+                user = user,
+                tokens = tokens
+            };
+        }
 
     }
 
