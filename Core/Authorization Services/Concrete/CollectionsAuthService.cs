@@ -5,6 +5,7 @@ using Data.models.Collections;
 using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
+using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitions;
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,16 +26,19 @@ namespace Core.Authorization_Services.Concrete
         private readonly IUnitOfWork<IQuestionRepo, Question> _uowQuestion;
         private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
         private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _uowChoices;
+        private readonly IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> _uowCollectionsSubmitions;
 
         public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections,
             IUnitOfWork<IQuestionRepo, Question> uowQuestion,
             IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion,
-            IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices)
+            IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices,
+            IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> uowCollectionsSubmitions)
         {
             _uowCollecQuestion = uowcollectionsQuestion;
             _uowCollec = uowCollections;
             _uowQuestion = uowQuestion;
             _uowChoices = uowChoices;
+            _uowCollectionsSubmitions = uowCollectionsSubmitions;
 
         }
 
@@ -129,6 +134,12 @@ namespace Core.Authorization_Services.Concrete
             if (choice == null) throw new ArgumentNullException();
 
             return await IsUserQuestionOwnerAsync(choice.QuestionID, UserID);
+        }
+
+        public async Task<bool> IsUserSubmitionOwnerAsync(int submitionID, int UserID)
+        {
+           var subEntity = await _uowCollectionsSubmitions.EntityRepo.FindAsync(submitionID);
+           return subEntity != null && subEntity.SubmittedUserID == UserID;
         }
     }
 }

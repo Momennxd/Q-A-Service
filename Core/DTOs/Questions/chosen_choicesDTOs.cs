@@ -22,9 +22,17 @@ namespace Core.DTOs.Questions
             public int SubmitionID { get; set; }
         }
 
-        public class send_chosen_choicesDTO : chosen_choicesDTO
-    {
+        public class send_chosen_choicesDTO : chosen_choicesDTO {
            
+        }
+
+
+        public class Add_chosen_choicesDTO
+        {
+
+            public int ChoiceID { get; set; }
+
+            public int SubmitionID { get; set; }
         }
     }
 }

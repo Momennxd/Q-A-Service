@@ -22,13 +22,5 @@ namespace Data.models.Questions
 
         public int SubmitionID { get; set; }
 
-
-
-
-
-
-
-
-
     }
 }

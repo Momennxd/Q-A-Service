@@ -2,6 +2,7 @@
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -26,26 +27,31 @@ namespace API_Layer.Controllers.Collections
             return Ok(submissionId);
         }
 
-        //[HttpDelete]
-        //[Authorize]
-        //public async Task<IActionResult> DeleteSubmition(int SubmitionID)
-        //{
-        //    int UserId = clsToken.GetUserID(HttpContext);
-        //    bool isDeleted = await _collectionService.DeleteSubmition(SubmitionID, UserId);
-        //    if (isDeleted)
-        //        return Ok();
-        //    else
-        //        return BadRequest();
-        //}
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteSubmition(int SubmitionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetSubmission(int SubmissionID)
-        //{
-        //    int UserID = 1; //clsToken.GetUserID(HttpContext);
-        //    var submission = await _collectionService.GetBySubmissionID(SubmissionID, UserID);
-        //    if (submission == null) return NotFound();
+            bool isDeleted = await _collectionService.DeleteSubmition(SubmitionID, (int)userId);
 
-        //    return Ok(submission);
-        //}
+            if (isDeleted)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubmission(int SubmissionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
+
+            var submission = await _collectionService.GetBySubmissionID(SubmissionID, (int)userId);
+            if (submission == null) return NotFound();
+
+            return Ok(submission);
+        }
     }
 }

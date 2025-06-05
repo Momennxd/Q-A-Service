@@ -13,5 +13,9 @@ namespace Core.Services.Interfaces
     {
         public Task<Dictionary<int, send_chosen_choicesDTO>> GetChosenChoices(HashSet<int> QuestionIDs, int submitionID, int userID);
 
+
+        public Task<send_chosen_choicesDTO> AddChosenChoices(Add_chosen_choicesDTO add_Chosen_ChoicesDTO, int UserID);
+
+
     }
 }

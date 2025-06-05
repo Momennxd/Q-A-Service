@@ -30,94 +30,94 @@ namespace API_Layer.Controllers.Questions
         }
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateQuestions(
-        //    [FromBody] List<CreateQuestionDTO> createDtos, int CollectionID)
-        //{
-        //    //int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        //    //if (userId == null) return Unauthorized();
+        [HttpPost]
+        public async Task<IActionResult> CreateQuestions(
+            [FromBody] List<CreateQuestionDTO> createDtos, int CollectionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
 
-        //    //if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
-        //    //    return Unauthorized();
-
-
-        //    return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, 1/* (int)userId*/));
-        //}
+            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
+                return Unauthorized();
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetCollectionQuestions(int CollectionID)
-        //{
-        //    int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        //    if (userId == null) return Unauthorized();
-
-        //    //validate if the collection is not the users and its private then reutrn unauth
-        //    if (!await _collectionsAuthService.IsUserCollectionAccess(CollectionID, (int)userId))
-        //        return Unauthorized();
-
-        //    return Ok(await _QuestionsService.GetAllQuestionsAsync(CollectionID));
-        //}
+            return Ok(await _QuestionsService.CreateQuestionsAsync(createDtos, CollectionID, (int)userId));
+        }
 
 
-        //[HttpPatch("{QuestionID}")]
-        //public async Task<IActionResult> PatchQuestion
-        //   ([FromBody] JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
-        //{
+        [HttpGet]
+        public async Task<IActionResult> GetCollectionQuestions(int CollectionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
 
-        //    int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            //validate if the collection is not the users and its private then reutrn unauth
+            if (!await _collectionsAuthService.IsUserCollectionAccess(CollectionID, (int)userId))
+                return Unauthorized();
 
-
-        //    if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
-        //        return Unauthorized();
-
-
-        //    return Ok(await _QuestionsService.PatchQuestionAsync(patchDoc, QuestionID));
-        //}
+            return Ok(await _QuestionsService.GetAllQuestionsAsync(CollectionID));
+        }
 
 
+        [HttpPatch("{QuestionID}")]
+        public async Task<IActionResult> PatchQuestion
+           ([FromBody] JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
+        {
 
-        //[HttpPatch("points/{QuestionID}")]
-        //public async Task<IActionResult> PatchQuestionPoints(int QuestionID, int NewPointsVal)
-        //{
-
-        //    int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-
-        //    if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
-        //        return Unauthorized();
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
 
-        //    return Ok(await _QuestionsService.PatchQuestionPointsAsync(QuestionID, NewPointsVal));
-        //}
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
+                return Unauthorized();
+
+
+            return Ok(await _QuestionsService.PatchQuestionAsync(patchDoc, QuestionID));
+        }
 
 
 
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteQuestion(int QuestionID)
-        //{
-        //    int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        [HttpPatch("points/{QuestionID}")]
+        public async Task<IActionResult> PatchQuestionPoints(int QuestionID, int NewPointsVal)
+        {
 
-        //    if (userId == null) return Unauthorized();
-
-        //    if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, (int)userId))
-        //        return Unauthorized();
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
 
-
-        //    return Ok(await _QuestionsService.DeleteQuestionAsync(QuestionID));
-
-        //}
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
+                return Unauthorized();
 
 
-        //[HttpGet("{QuestionID}")]
-        //public async Task<IActionResult> GetQuestion(int QuestionID)
-        //{
-        //    int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-        //    if (userId == null) return Unauthorized();
-        //    if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
-        //        return Unauthorized();
-        //    return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
-        //}
+            return Ok(await _QuestionsService.PatchQuestionPointsAsync(QuestionID, NewPointsVal));
+        }
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteQuestion(int QuestionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            if (userId == null) return Unauthorized();
+
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, (int)userId))
+                return Unauthorized();
+
+
+
+            return Ok(await _QuestionsService.DeleteQuestionAsync(QuestionID));
+
+        }
+
+
+        [HttpGet("{QuestionID}")]
+        public async Task<IActionResult> GetQuestion(int QuestionID)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == null) return Unauthorized();
+            if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
+                return Unauthorized();
+            return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
+        }
 
         [HttpGet("randomQuestion")]
         public async Task<ActionResult<List<QuestionsDTOs.QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)

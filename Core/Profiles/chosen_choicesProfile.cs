@@ -17,6 +17,8 @@ namespace Core.Profiles
         public chosen_choicesProfile() {
 
             CreateMap<Chosen_Choices, send_chosen_choicesDTO>();
+            CreateMap<Add_chosen_choicesDTO, Chosen_Choices>();
+
 
         }
     }

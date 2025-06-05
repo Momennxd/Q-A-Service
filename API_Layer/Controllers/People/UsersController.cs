@@ -104,7 +104,7 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("external-login")]
-        public async Task<ActionResult< ExternalAuthResponseDTO >> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
+        public async Task<ActionResult<ExternalAuthResponseDTO>> ExternalLogin([FromBody] ExternalAuthDTOs.ExternalLoginRequestDTO request)
         {
             var provider = _authProviderFactory.GetProvider(request.Provider);
 

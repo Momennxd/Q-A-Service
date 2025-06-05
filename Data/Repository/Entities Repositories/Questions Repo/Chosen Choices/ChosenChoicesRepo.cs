@@ -20,7 +20,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices
             _appDbContext = context;
         }
 
-
+       
 
         public async Task<int> DeleteChosenChoicesAsync(int ChoiceID)
         {
@@ -44,7 +44,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices
             return chosenChoices.Count;
         }
 
-        public async Task<Dictionary<int, Chosen_Choices>> GetChosenChoices(HashSet<int> QuestionIDs, int submitionID, int userID)
+        public async Task<Dictionary<int, Chosen_Choices>> GetChosenChoicesAsync(HashSet<int> QuestionIDs, int submitionID, int userID)
         {
             var result = await _appDbContext.Chosen_Choices
                 .Where(cc => cc.SubmitionID == submitionID && cc.UserID == userID)
