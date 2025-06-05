@@ -22,9 +22,9 @@ namespace API_Layer.Controllers.Questions
     //that is not thiers and private will make the API slower especially when the user sends a set of choices then u have to interate through
     //the set and make sure each choice is well authurized, so that makes the API SLOWER and speaking of security it does not really matter
     //AT THIS TIME if the user could break through this API and gets something they are not AUTHORIZED to do 
-    //bets choices here is making this API AS FAST AS WE CAN IN THIS RELEASE so no authrization is implemented here at all just the normal
+    //best choice here is making this API AS FAST AS WE CAN IN THIS RELEASE so no authrization is implemented here at all just the normal
     //AUTHENTICATION using JWT
-    //this method is just used for now 29 Apirl, so in the future we might consider using full authrization here with a diff method to make it 
+    //this method is just used for now 29 Apirl 2025, so in the future we might consider using full authrization here with a diff method to make it 
     //faster and more secure.
     //thanks for reading
 

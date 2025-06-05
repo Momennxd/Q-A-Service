@@ -24,6 +24,7 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices
 
         public async Task<int> DeleteChosenChoicesAsync(int ChoiceID)
         {
+
             var chosenChoices = await _appDbContext.Chosen_Choices
                                       .Where(c => c.ChoiceID == ChoiceID).ToListAsync();
 
@@ -42,5 +43,25 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices
 
             return chosenChoices.Count;
         }
+
+        public async Task<Dictionary<int, Chosen_Choices>> GetChosenChoices(HashSet<int> QuestionIDs, int submitionID, int userID)
+        {
+            var result = await _appDbContext.Chosen_Choices
+                .Where(cc => cc.SubmitionID == submitionID && cc.UserID == userID)
+                .Join(_appDbContext.Questions_Choices,
+                      cc => cc.ChoiceID,
+                      ch => ch.ChoiceID,
+                      (cc, ch) => new { ChosenChoice = cc, Choice = ch })
+                .Where(joined => QuestionIDs.Contains(joined.Choice.QuestionID))
+                .GroupBy(joined => joined.Choice.QuestionID)
+                .Select(g => g
+                    .OrderByDescending(x => x.ChosenChoice.ChosenDate)
+                    .First())
+                .ToDictionaryAsync(x => x.Choice.QuestionID, x => x.ChosenChoice);
+
+            return result;
+        }
+
+
     }
 }
