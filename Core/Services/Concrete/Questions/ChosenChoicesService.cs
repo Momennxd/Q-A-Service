@@ -2,10 +2,13 @@
 using Core.DTOs.Questions;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
+using Data.DatabaseContext;
 using Data.models.Collections;
 using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
+using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +21,14 @@ namespace Core.Services.Concrete.Questions
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<IChosenChoicesRepo, Chosen_Choices> _uowChosenChoices;
+
+        public ChosenChoicesService
+            (IMapper mapper, IUnitOfWork<IChosenChoicesRepo, Chosen_Choices> uowChosenChoices)
+        {
+            _uowChosenChoices = uowChosenChoices;
+            _mapper = mapper;
+        }
+
 
         public async Task<Dictionary<int, chosen_choicesDTOs.send_chosen_choicesDTO>> GetChosenChoices(HashSet<int> QuestionIDs, int submitionID, int userID)
         {

@@ -198,6 +198,16 @@ builder.Services.AddScoped<IUnitOfWork<IInstitutionsRepo, Institution>,
     UnitOfWork<IInstitutionsRepo, Institution>>();
 
 
+//
+
+builder.Services.AddScoped<IChosenChoicesService, ChosenChoicesService>();
+builder.Services.AddScoped<IChosenChoicesRepo, ChosenChoicesRepo>();
+builder.Services.AddScoped<IUnitOfWork<IChosenChoicesRepo, Chosen_Choices>,
+    UnitOfWork<IChosenChoicesRepo, Chosen_Choices>>();
+
+//
+
+
 
 builder.Services.AddScoped<ICollectionsReviewsService, CollectionsReviewsService>();
 builder.Services.AddScoped<ICollectionsReviewsRepo, CollectionsReviewsRepo>();
