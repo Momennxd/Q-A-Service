@@ -1,5 +1,4 @@
-﻿using API_Layer.Security;
-using Data.DatabaseContext;
+﻿using Data.DatabaseContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;

@@ -3,6 +3,7 @@ using Data.DatabaseContext;
 using Data.models.People;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -76,8 +77,22 @@ namespace Data.Repositories
 
             return null;
         }
+        public override Task<EntityEntry> AddItemAsync(User user)
+        {
+            
+            if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            user.Password = _passwordHasher.HashPassword(user, user.Password);
+            return base.AddItemAsync(user);
+        }
 
-
+        public async Task<SP_GetUser?> GetUserByEmail(string email)
+        {
+            return _context.Set<SP_GetUser>()
+                .FromSqlInterpolated($"EXEC SP_GetUserByEmail @Email = {email}")
+                .AsNoTracking()
+                .AsEnumerable()
+                .FirstOrDefault(); 
+        }
 
     }
 }

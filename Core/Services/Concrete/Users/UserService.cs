@@ -18,6 +18,9 @@ using Core.DTOs.Collections;
 using Data.Repository.Entities_Repositories.People_Repo;
 using static Core.DTOs.People.PeopleDTOs;
 using Microsoft.AspNetCore.Identity;
+using Data.Repository.Entities_Repositories.RefreshTokens_Repo;
+using Data.models.RefreshTokens;
+using Core.Services.Interfaces.RefreshTokens;
 
 namespace Core.Services.Concrete.Users
 {
@@ -28,12 +31,17 @@ namespace Core.Services.Concrete.Users
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<IUserRepo, User> _unitOfWork;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public UserService(IPasswordHasher<User> passwordHasher, IMapper mapper, IUnitOfWork<IUserRepo, User> unitOfWork)
+        public UserService(IPasswordHasher<User> passwordHasher, 
+            IMapper mapper, 
+            IUnitOfWork<IUserRepo, User> unitOfWork,
+            IRefreshTokenService refreshTokenService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _passwordHasher = passwordHasher;
+            _refreshTokenService = refreshTokenService;
         }
 
         public async Task<SendUserDTO?> CreateUserAsync(UsersDTOs.AddUserDTO addUserDTO)
@@ -166,6 +174,54 @@ namespace Core.Services.Concrete.Users
 
             // Return the mapped DTOs
             return userDtos;
+        }
+
+
+
+        public async Task<GetUserDTO> GetUser_ExternalAuth(string email, string fullName)
+        {
+            var user = await _unitOfWork.EntityRepo.GetUserByEmail(email);
+            if (user == null)
+            {
+                string firstname = fullName.Contains(' ') ? fullName.Substring(0, fullName.IndexOf(' ')) : fullName;
+                string lastname = fullName.Contains(' ') ? fullName.Substring(fullName.IndexOf(' ') + 1) : "";
+
+                string username = email.Split('@')[0].Replace(".", "");
+
+                var newUser = new User
+                {
+                    Username = username,
+                    Password = Guid.NewGuid().ToString(),
+                    Person = new Person
+                    {
+                        FirstName = firstname,
+                        LastName = lastname,
+                        Email = email
+                        
+                    }
+                };
+
+                await _unitOfWork.EntityRepo.AddItemAsync(newUser);
+                await _unitOfWork.CompleteAsync();
+
+                user = await _unitOfWork.EntityRepo.GetUserByID(newUser.UserId);
+            }
+
+            var userDto = _mapper.Map<GetUserDTO>(user);
+            return userDto;
+        }
+
+
+        public async Task<ExternalAuthResponseDTO?> GetExternalAuthResponse(string email, string fullName)
+        {
+            var user = await GetUser_ExternalAuth(email, fullName);
+            if (user == null) return null;
+            var tokens = await _refreshTokenService.GenerateTokensForUserAsync(user.UserId);
+            return new ExternalAuthResponseDTO
+            {
+                user = user,
+                tokens = tokens
+            };
         }
 
     }

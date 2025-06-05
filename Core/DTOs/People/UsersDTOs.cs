@@ -1,4 +1,6 @@
-﻿namespace Core.DTOs.People
+﻿using Core.DTOs.RefreshTokens;
+
+namespace Core.DTOs.People
 {
     public class UsersDTOs
     {
@@ -22,6 +24,7 @@
 
         public class GetUserDTO
         {
+            public int UserId { get; set; }
             public string Username { get; set; }
             public string FirstName { get; set; }
             public string SecondName { get; set; }
@@ -39,6 +42,10 @@
             );
 
 
-
+        public class ExternalAuthResponseDTO
+        {
+            public GetUserDTO user { get; set; }
+            public RefreshTokenDTOs.LoginResponseDto tokens { get; set; }
+        }
     }
 }

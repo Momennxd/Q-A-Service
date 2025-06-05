@@ -1,65 +1,67 @@
 ﻿using API_Layer.Authorization;
 using API_Layer.Exceptions;
-using API_Layer.Security;
+using API_Layer.Handlers;
+using API_Layer.LogsSettings;
+using API_Layer.Telegram;
 using CloudinaryDotNet;
 using Core.Authorization_Services.Concrete;
 using Core.Authorization_Services.Interfaces;
+using Core.Options;
 using Core.Services.Concrete.Collections;
+using Core.Services.Concrete.Institutions;
+using Core.Services.Concrete.nsCategories;
 using Core.Services.Concrete.Pictures;
+using Core.Services.Concrete.Questions;
+using Core.Services.Concrete.RefreshTokens;
 using Core.Services.Concrete.Users;
 using Core.Services.Interfaces;
+using Core.Services.Interfaces.Questions;
+using Core.Services.Interfaces.RefreshTokens;
+using Core.Unit_Of_Work;
 using Data.DatabaseContext;
 using Data.models.Collections;
+using Data.models.Institutions;
+using Data.models.nsCategories;
 using Data.models.People;
 using Data.models.Pictures;
-using Data.Repositories;
-using Data.Repository.Entities_Repositories.Collections_Repo;
-using Data.Repository.Entities_Repositories.Pictures.Base;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Services.Concrete;
-using Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Text;
-using Core.Unit_Of_Work;
-using Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo;
-using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
-using Core.Services.Concrete.Questions;
 using Data.models.Questions;
-using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
-using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
-using Data.Repository.Entities_Repositories.Questions_Repo;
-using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
-using Core.Services.Interfaces.Questions;
-using Core.Services.Concrete.Institutions;
-using Data.Repository.Entities_Repositories;
-using Data.models.Institutions;
-using Data.Repository.Entities_Repositories.Institutions_Repo;
-using Data.Repository.Entities_Repositories.People_Repo;
+using Data.models.RefreshTokens;
+using Data.Repositories;
 using Data.Repository.Entities_Repositories.Categories_Repo;
-using Data.models.nsCategories;
-using Core.Services.Concrete.nsCategories;
-using Microsoft.Data.SqlClient;
-using Data.Repository.Entities_Repositories.Questions_Repo.nsQuestions_Categories;
-using Newtonsoft.Json;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json.Serialization;
+using Data.Repository.Entities_Repositories.Collections_Repo;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collecs_Questions;
 using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
 using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitions;
-using Serilog;
-using Serilog.Sinks.SystemConsole;
-using Serilog.Sinks.File;
-using TelegramService.Interfaces;
-using TelegramService.Concrete;
-using Telegram.Bot;
-using API_Layer.Telegram;
-using Microsoft.Extensions.Options;
-using API_Layer.Handlers;
-using API_Layer.LogsSettings;
+using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
+using Data.Repository.Entities_Repositories.Institutions_Repo;
+using Data.Repository.Entities_Repositories.People_Repo;
+using Data.Repository.Entities_Repositories.Pics.Choices_Pics_Repo;
+using Data.Repository.Entities_Repositories.Pictures.Base;
+using Data.Repository.Entities_Repositories.Questions_Repo;
+using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
+using Data.Repository.Entities_Repositories.Questions_Repo.nsQuestions_Categories;
+using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Data.Repository.Entities_Repositories.RefreshTokens_Repo;
+using ExternalAuthentication.Concrete;
+using ExternalAuthentication.Interfaces;
+using ExternalAuthentication.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Serilog;
+using Services.Concrete;
+using Services.Interfaces;
+using System.Net;
+using System.Text;
+using Telegram.Bot;
+using TelegramService.Concrete;
+using TelegramService.Interfaces;
 
 
 
@@ -184,36 +186,55 @@ builder.Services.AddScoped<IUnitOfWork<IQuestionsCategoriesRepo, Questions_Categ
 
 
 
-builder.Services.AddScoped<IAnswerExplanationService , AnswerExplanationService>();
+builder.Services.AddScoped<IAnswerExplanationService, AnswerExplanationService>();
 builder.Services.AddScoped<IAnswerExplanationRepo, AnswerExplanationRepo>();
 builder.Services.AddScoped<IUnitOfWork<IAnswerExplanationRepo, AnswerExplanation>,
     UnitOfWork<IAnswerExplanationRepo, AnswerExplanation>>();
 
 
-builder.Services.AddScoped<IInstitutionServce , InstitutionService>();
+builder.Services.AddScoped<IInstitutionServce, InstitutionService>();
 builder.Services.AddScoped<IInstitutionsRepo, InstitutionsRepo>();
 builder.Services.AddScoped<IUnitOfWork<IInstitutionsRepo, Institution>,
     UnitOfWork<IInstitutionsRepo, Institution>>();
 
 
 
-builder.Services.AddScoped<ICollectionsReviewsService , CollectionsReviewsService>();
+builder.Services.AddScoped<ICollectionsReviewsService, CollectionsReviewsService>();
 builder.Services.AddScoped<ICollectionsReviewsRepo, CollectionsReviewsRepo>();
 builder.Services.AddScoped<IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>,
     UnitOfWork<ICollectionsReviewsRepo, Collections_Reviews>>();
 
 
-builder.Services.AddScoped<ICollectionsSubmitionsService , CollectionsSubmitionsService>();
+builder.Services.AddScoped<ICollectionsSubmitionsService, CollectionsSubmitionsService>();
 builder.Services.AddScoped<ICollectionsSubmitionsRepo, CollectionsSubmitionsRepo>();
 builder.Services.AddScoped<IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions>,
     UnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions>>();
 
 
-
-
-
 builder.Services.AddScoped<IPersonRepo, PersonRepo>();
 builder.Services.AddScoped<IUnitOfWork<IPersonRepo, Person>, UnitOfWork<IPersonRepo, Person>>();
+
+
+
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+
+
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
+builder.Services.AddScoped<IUnitOfWork<IRefreshTokenRepo, RefreshToken>,
+    UnitOfWork<IRefreshTokenRepo, RefreshToken>>();
+
+
+
+builder.Services.Configure<GoogleAuthSettings>(
+    builder.Configuration.GetSection("Authentication:Google"));
+builder.Services.AddScoped<IExternalAuthProvider, GoogleAuthService>();
+builder.Services.AddScoped<IExternalAuthProviderFactory, ExternalAuthProviderFactory>();
+
+
+
 #region Telegram Injection
 
 builder.Services.Configure<TelegramSettings>(builder.Configuration.GetSection("Telegram"));
@@ -239,32 +260,28 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 #region Jwt Config
 
-JwtOptions? jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
-builder.Services.AddAuthentication()
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-
-        options.SaveToken = true; // To access token string within the request
-
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = jwtOptions!.Issuer,
-
+            ValidIssuer = jwtOptions.Issuer,
             ValidateAudience = true,
-            ValidAudience = jwtOptions!.Audience,
-
+            ValidAudience = jwtOptions.Audience,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
-
             RequireExpirationTime = true,
-            ValidateLifetime = true, // Ensure the token's lifetime is validated
-            ClockSkew = TimeSpan.Zero // Optional: No tolerance on token expiration
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
-
     });
 
-clsToken.jwtOptions = jwtOptions;
 
 #endregion
 
@@ -315,7 +332,7 @@ app.UseExceptionHandler(config =>
             var ex = error.Error;
 
             // Default to 500 Internal Server Error
-             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             if (ex.GetBaseException().GetType() == typeof(SqlException))
             {
@@ -325,7 +342,7 @@ app.UseExceptionHandler(config =>
                 switch (ErrorCode)
                 {
                     case 2627:  // Unique constraint error
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;                      
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
 
                     case 547:   // Constraint check violation
@@ -356,7 +373,7 @@ app.UseExceptionHandler(config =>
                 }
             }
 
-            
+
 
             context.Response.ContentType = "application/json";
 
