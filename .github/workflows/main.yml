@@ -34,6 +34,9 @@ jobs:
     - name: Publish the app
       run: dotnet publish API_Layer/API_Layer.csproj --configuration Release --output publish
 
+    - name: Copy SerilogSettings.json to publish folder
+      run: cp API_Layer/SerilogSettings.json publish/
+
     - name: Create appsettings.json
       run: |
         mkdir -p publish/config
