@@ -69,6 +69,16 @@ using TelegramService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Configuration
+
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("config/appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+#endregion
+
 #region init serilog
 var criticalHandler = new CriticalLogHandler();
 builder.Services.AddSingleton(criticalHandler);
@@ -304,6 +314,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5216";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 
 var app = builder.Build();
