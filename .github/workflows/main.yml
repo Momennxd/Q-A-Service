@@ -45,6 +45,14 @@ jobs:
             }
           },
           "AllowedHosts": "*",
+            "Kestrel": {
+              "Endpoints": {
+                "Http": {
+                  "Url": "http://*:5000",
+                  "Protocols": "Http1"
+                }
+              }
+            },
           "ConnectionStrings": {
             "MyConnection": "'"${{ secrets.connection_string }}"'"
           },
@@ -69,7 +77,7 @@ jobs:
               "ClientSecret": "'"${{ secrets.Google_Client_Secret }}"'"
             }
           }
-        }' > publish/config/appsettings.json
+        }' > publish/appsettings.json
 
     - name: Zip artifact
       run: |
