@@ -69,6 +69,15 @@ using TelegramService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Configuration
+
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("config/appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+#endregion
+
 #region init serilog
 var criticalHandler = new CriticalLogHandler();
 builder.Services.AddSingleton(criticalHandler);
