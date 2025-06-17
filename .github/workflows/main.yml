@@ -69,7 +69,7 @@ jobs:
               "ClientSecret": "'"${{ secrets.Google_Client_Secret }}"'"
             }
           }
-        }' > publish/config/appsettings.json
+        }' > publish/appsettings.json
 
     - name: Zip artifact
       run: |
