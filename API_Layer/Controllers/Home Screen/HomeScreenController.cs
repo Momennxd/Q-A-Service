@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_Layer.Controllers
 {
-    [Route("api/HomeScreen")]
+    [Route("api/v1/home")]
     [ApiController]
     public class HomeScreenController : ControllerBase
     {
@@ -20,14 +20,14 @@ namespace API_Layer.Controllers
             _userService = userService;
         }
 
-        [HttpGet("Top20Collections")]
+        [HttpGet("collections/top")]
         public async Task<ActionResult<IEnumerable<CollectionsDTOs.SendCollectionDTO_Thumb>>> GetTop20Collections()
         {
             return Ok(await _collectionService.GetTop20Collections());
         }
 
 
-        [HttpGet("Top10FollowedUsers")]
+        [HttpGet("followers/top")]
         public async Task<IActionResult> GetTop10FollowedUsers()
         {
             return Ok(await _userService.GetTopUsersAsync());

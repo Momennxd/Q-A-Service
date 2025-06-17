@@ -16,7 +16,7 @@ using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 namespace API_Layer.Controllers.Categories
 {
 
-    [Route("api/categories")]
+    [Route("api/v1/categories")]
     [ApiController]
     [Authorize]
     public class CategoriesController : Controller

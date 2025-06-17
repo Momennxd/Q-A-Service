@@ -54,7 +54,6 @@ namespace TelegramService.Concrete
         {
             try
             {
-
                 await _client?.SendMessage(chatId, message);
             }
             catch { }

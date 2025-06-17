@@ -13,7 +13,7 @@ using static Core.DTOs.People.UsersDTOs;
 
 namespace API_Layer.Controllers.People
 {
-    [Route("api/users")]
+    [Route("api/v1/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {

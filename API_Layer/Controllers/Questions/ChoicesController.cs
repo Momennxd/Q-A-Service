@@ -21,7 +21,7 @@ namespace API_Layer.Controllers.Questions
     //faster and more secure.
     //thanks for reading
 
-    [Route("api/choices")]
+    [Route("api/v1/choices")]
     [ApiController]
     [Authorize]
     public class ChoicesController : Controller
@@ -91,7 +91,7 @@ namespace API_Layer.Controllers.Questions
         }
 
 
-        [HttpGet("answers")]
+        [HttpGet("answers/{questionID}")]
         public async Task<IActionResult> GetRightAnswers(int questionID)
         {
 

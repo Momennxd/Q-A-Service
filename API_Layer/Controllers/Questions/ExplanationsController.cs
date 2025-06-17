@@ -10,7 +10,7 @@ using static Core.DTOs.Questions.AnswerExplanationDTOs;
 
 namespace API_Layer.Controllers.Questions
 {
-    [Route("api/explanations")]
+    [Route("api/v1/explanations")]
     [ApiController]
     public class ExplanationsController : ControllerBase
     {
@@ -40,7 +40,7 @@ namespace API_Layer.Controllers.Questions
         }
 
 
-        [HttpGet("Questions/{QuestionID}")]
+        [HttpGet("questions/{QuestionID}")]
         public async Task<IActionResult> GetAnswerExplainationByQuestionID(int QuestionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);

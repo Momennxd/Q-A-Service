@@ -12,7 +12,7 @@ using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 namespace API_Layer.Controllers.Questions
 { 
 
-    [Route("api/choices/chosen")]
+    [Route("api/v1/choices/chosen")]
     [ApiController]
     [Authorize]
     public class ChosenChoicesController : Controller
@@ -28,16 +28,18 @@ namespace API_Layer.Controllers.Questions
 
 
 
-        [HttpGet("{submitionID}")]
+        [HttpGet("submition/{submitionID}")]
         public async Task<IActionResult> GetChosenChoices([FromHeader] HashSet<int> QuestionIDs, int submitionID)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
 
+            //authorization (checking if the sub is the user's) check will make the api slower and it is not really needed here at the moment
+
             return Ok(await _ChosenChoicesService.GetChosenChoices(QuestionIDs, submitionID, (int)userId));
         }
 
-        [HttpPost("")]
+        [HttpPost()]
         [AllowAnonymous]
         public async Task<IActionResult> AddChosenChoice([FromBody] Add_chosen_choicesDTO add_Chosen_Choice)
         {

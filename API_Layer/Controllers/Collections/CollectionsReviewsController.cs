@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
-    [Route("api/collections/Reviews")]
+    [Route("api/v1/collections/reviews")]
     [ApiController]
     [Authorize]
     public class CollectionsReviewsController : ControllerBase
@@ -32,7 +32,7 @@ namespace API_Layer.Controllers.Collections
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
-            
+
             return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
 
         }
@@ -44,13 +44,13 @@ namespace API_Layer.Controllers.Collections
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (userId == null) return Unauthorized();
-            
+
             await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
             return Ok();
         }
 
 
-        [HttpGet("all")]
+        [HttpGet("{CollectionID}")]
         public async Task<IActionResult> getAllCollectionReviews(int CollectionID, int Page)
         {
             if (Page < 1)

@@ -37,7 +37,7 @@
 //        {
 
 //            int UserId = clsToken.GetUserID(HttpContext);
-//            var inst =  await _InstitutionServce.GetInstitutionAsync(UserId);
+//            var inst = await _InstitutionServce.GetInstitutionAsync(UserId);
 //            if (inst == null) return NotFound();
 //            return Ok(inst);
 //        }

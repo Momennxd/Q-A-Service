@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
-    [Route("api/CollectionsLikes")]
+    [Route("api/v1/collections/likes")]
     [ApiController]
     public class CollectionsLikesController : ControllerBase
     {
@@ -28,15 +28,17 @@ namespace API_Layer.Controllers.Collections
             return Res ? Ok() : BadRequest();
         }
 
-        [HttpDelete]
-        [Authorize]
-        public async Task<IActionResult> Delete(int CollectionId)
-        {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
 
-            bool Res = await _collectionService.DeleteLikeAsync(CollectionId, (int)userId);
-            return Res ? Ok() : BadRequest();
-        }
+        ///this endpoint is commented out because it is not used in the current implementation
+        //[HttpDelete]
+        //[Authorize]
+        //public async Task<IActionResult> Delete(int CollectionId)
+        //{
+        //    int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        //    if (userId == null) return Unauthorized();
+
+        //    bool Res = await _collectionService.DeleteLikeAsync(CollectionId, (int)userId);
+        //    return Res ? Ok() : BadRequest();
+        //}
     }
 }

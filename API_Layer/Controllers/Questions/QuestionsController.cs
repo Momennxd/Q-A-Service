@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace API_Layer.Controllers.Questions
 {
 
-    [Route("api/questions")]
+    [Route("api/v1/questions")]
     [ApiController]
     [Authorize]
     public class QuestionsController : Controller
@@ -119,7 +119,7 @@ namespace API_Layer.Controllers.Questions
             return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
         }
 
-        [HttpGet("randomQuestion")]
+        [HttpGet("random")]
         public async Task<ActionResult<List<QuestionsDTOs.QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);

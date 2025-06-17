@@ -22,6 +22,7 @@ namespace Core.Authorization_Services.Concrete
     public class CollectionsAuthService : ICollectionsAuthService
     {
 
+
         private readonly IUnitOfWork<ICollectionRepo, QCollection> _uowCollec;
         private readonly IUnitOfWork<IQuestionRepo, Question> _uowQuestion;
         private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
