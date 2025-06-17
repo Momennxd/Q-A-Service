@@ -74,7 +74,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("config/appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 #endregion
 
