@@ -45,6 +45,14 @@ jobs:
             }
           },
           "AllowedHosts": "*",
+            "Kestrel": {
+              "Endpoints": {
+                "Http": {
+                  "Url": "http://*:5000",
+                  "Protocols": "Http1"
+                }
+              }
+            },
           "ConnectionStrings": {
             "MyConnection": "'"${{ secrets.connection_string }}"'"
           },
