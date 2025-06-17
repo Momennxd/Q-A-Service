@@ -23,7 +23,7 @@ namespace API_Layer.Controllers.Collections
     /// </summary>
 
 
-    [Route("api/collections")]
+    [Route("api/v1/collections")]
     [ApiController]
     [Authorize]
     public class CollectionsController : Controller
