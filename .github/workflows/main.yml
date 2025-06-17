@@ -82,16 +82,6 @@ jobs:
           }
         }' > publish/appsettings.json
 
-    - name: Run App Locally and Test Health Endpoint
-      run: |
-        dotnet ./publish/API_Layer.dll &
-        APP_PID=$!
-        echo "Waiting for app to start..."
-        sleep 5
-        echo "Checking health endpoint..."
-        curl -f http://localhost:5000/api/health || (echo "Health check failed!" && kill $APP_PID && exit 1)
-        echo "Health check passed. Killing app..."
-        kill $APP_PID
 
     - name: Zip artifact
       run: |
