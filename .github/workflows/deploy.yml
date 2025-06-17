@@ -1,4 +1,4 @@
-name: Deploy to Elastic Beanstalk
+name: Build and Deploy to Elastic Beanstalk
 
 on:
   push:
@@ -6,37 +6,78 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: '9.0.x' # غيّر لو بتستخدم غيرها
 
-    - name: Restore Dependencies
-      run: dotnet restore
+    - name: Restore dependencies
+      run: dotnet restore API_Layer/API_Layer.csproj
 
-    - name: Build
-      run: dotnet build --configuration Release
+    - name: Build the app
+      run: dotnet build API_Layer/API_Layer.csproj --configuration Release
 
-    - name: Publish
-      run: dotnet publish -c Release -o ./publish
+    - name: Publish the app
+      run: dotnet publish API_Layer/API_Layer.csproj -c Release -o publish
 
-    - name: Zip Artifact
-      run: zip -r deploy.zip ./publish
+    - name: Create appsettings.json
+      run: |
+        mkdir -p publish/config
+        cat > publish/config/appsettings.json << 'EOF'
+        {
+          "Logging": {
+            "LogLevel": {
+              "Default": "Information",
+              "Microsoft.AspNetCore": "Warning"
+            }
+          },
+          "AllowedHosts": "*",
+          "ConnectionStrings": {
+            "MyConnection": "${{ secrets.connection_string }}"
+          },
+          "Jwt": {
+            "Issuer": "none",
+            "Audience": "none",
+            "LifeTime": 30,
+            "SigningKey": "${{ secrets.JWT_SigningKey }}"
+          },
+          "Cloudinary": {
+            "CloudName": "${{ secrets.CloudName }}",
+            "ApiKey": "${{ secrets.Cloudinary_ApiKey }}",
+            "ApiSecret": "${{ secrets.Cloudinary_ApiSecret }}"
+          },
+          "Telegram": {
+            "Token": "${{ secrets.Telegram_Token }}",
+            "AdminGroupID": "${{ secrets.Telegram_Admin_Group_ID }}"
+          },
+          "Authentication": {
+            "Google": {
+              "ClientId": "${{ secrets.Google_Client_Id }}",
+              "ClientSecret": "${{ secrets.Google_Client_Secret }}"
+            }
+          }
+        }
+        EOF
+
+    - name: Zip artifact
+      run: |
+        cd publish
+        zip -r ../deployment.zip .
 
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: "NovaEDApp"
-        environment_name: "NovaEDApp-env"
-        version_label: ${{ github.sha }}
-        region: "me-south-1"
-        deployment_package: deploy.zip
+        application_name: NovaEDApp
+        environment_name: NovaEDApp-env
+        region: me-south-1
+        version_label: v-${{ github.run_number }}
+        deployment_package: deployment.zip
