@@ -313,6 +313,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5216";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 
 var app = builder.Build();
