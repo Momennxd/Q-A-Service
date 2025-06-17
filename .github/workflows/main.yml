@@ -29,7 +29,7 @@ jobs:
 
     - name: Run Unit Tests (Optional)
       run: dotnet test Tests/YourTestsProject.csproj --configuration Release --no-build
-      continue-on-error: true # خليها false لو عايز تفشل البايبلاين لو فيه test fail
+      continue-on-error: true
 
     - name: Publish the app
       run: dotnet publish API_Layer/API_Layer.csproj --configuration Release --output publish
@@ -45,14 +45,14 @@ jobs:
             }
           },
           "AllowedHosts": "*",
-            "Kestrel": {
-              "Endpoints": {
-                "Http": {
-                  "Url": "http://*:5000",
-                  "Protocols": "Http1"
-                }
+          "Kestrel": {
+            "Endpoints": {
+              "Http": {
+                "Url": "http://*:5000",
+                "Protocols": "Http1"
               }
-            },
+            }
+          },
           "ConnectionStrings": {
             "MyConnection": "'"${{ secrets.connection_string }}"'"
           },
@@ -78,6 +78,17 @@ jobs:
             }
           }
         }' > publish/appsettings.json
+
+    - name: Run App Locally and Test Health Endpoint
+      run: |
+        dotnet ./publish/API_Layer.dll &
+        APP_PID=$!
+        echo "Waiting for app to start..."
+        sleep 5
+        echo "Checking health endpoint..."
+        curl -f http://localhost:5000/api/health || (echo "Health check failed!" && kill $APP_PID && exit 1)
+        echo "Health check passed. Killing app..."
+        kill $APP_PID
 
     - name: Zip artifact
       run: |
