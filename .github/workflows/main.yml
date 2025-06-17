@@ -30,8 +30,7 @@ jobs:
     - name: Create appsettings.json
       run: |
         mkdir -p publish/config
-        cat > publish/config/appsettings.json << 'EOF'
-        {
+        echo '{
           "Logging": {
             "LogLevel": {
               "Default": "Information",
@@ -40,31 +39,31 @@ jobs:
           },
           "AllowedHosts": "*",
           "ConnectionStrings": {
-            "MyConnection": "${{ secrets.connection_string }}"
+            "MyConnection": "'"${{ secrets.connection_string }}"'"
           },
           "Jwt": {
             "Issuer": "none",
             "Audience": "none",
             "LifeTime": 30,
-            "SigningKey": "${{ secrets.JWT_SigningKey }}"
+            "SigningKey": "'"${{ secrets.JWT_SigningKey }}"'"
           },
           "Cloudinary": {
-            "CloudName": "${{ secrets.CloudName }}",
-            "ApiKey": "${{ secrets.Cloudinary_ApiKey }}",
-            "ApiSecret": "${{ secrets.Cloudinary_ApiSecret }}"
+            "CloudName": "'"${{ secrets.CloudName }}"'",
+            "ApiKey": "'"${{ secrets.Cloudinary_ApiKey }}"'",
+            "ApiSecret": "'"${{ secrets.Cloudinary_ApiSecret }}"'"
           },
           "Telegram": {
-            "Token": "${{ secrets.Telegram_Token }}",
-            "AdminGroupID": "${{ secrets.Telegram_Admin_Group_ID }}"
+            "Token": "'"${{ secrets.Telegram_Token }}"'",
+            "AdminGroupID": "'"${{ secrets.Telegram_Admin_Group_ID }}"'"
           },
           "Authentication": {
             "Google": {
-              "ClientId": "${{ secrets.Google_Client_Id }}",
-              "ClientSecret": "${{ secrets.Google_Client_Secret }}"
+              "ClientId": "'"${{ secrets.Google_Client_Id }}"'",
+              "ClientSecret": "'"${{ secrets.Google_Client_Secret }}"'"
             }
           }
-        }
-        EOF
+        }' > publish/config/appsettings.json
+
 
     - name: Zip artifact
       run: |
