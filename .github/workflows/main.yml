@@ -16,16 +16,23 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x' # غيّر لو بتستخدم غيرها
+        dotnet-version: '9.0.x'
+
+    - name: Clean previous builds
+      run: dotnet clean API_Layer/API_Layer.csproj
 
     - name: Restore dependencies
       run: dotnet restore API_Layer/API_Layer.csproj
 
     - name: Build the app
-      run: dotnet build API_Layer/API_Layer.csproj --configuration Release
+      run: dotnet build API_Layer/API_Layer.csproj --configuration Release --no-restore
+
+    - name: Run Unit Tests (Optional)
+      run: dotnet test Tests/YourTestsProject.csproj --configuration Release --no-build
+      continue-on-error: true # خليها false لو عايز تفشل البايبلاين لو فيه test fail
 
     - name: Publish the app
-      run: dotnet publish API_Layer/API_Layer.csproj -c Release -o publish
+      run: dotnet publish API_Layer/API_Layer.csproj --configuration Release --output publish
 
     - name: Create appsettings.json
       run: |
@@ -63,7 +70,6 @@ jobs:
             }
           }
         }' > publish/config/appsettings.json
-
 
     - name: Zip artifact
       run: |
