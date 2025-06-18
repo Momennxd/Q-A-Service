@@ -48,6 +48,7 @@ using ExternalAuthentication.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -68,6 +69,10 @@ using TelegramService.Interfaces;
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.Configure(context.Configuration.GetSection("Kestrel"));
+});
 
 #region Configuration
 
@@ -310,12 +315,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 #region Init App
 
-
-
-
-
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5216";
-builder.WebHost.UseUrls($"http://*:{port}");
 
 
 var app = builder.Build();

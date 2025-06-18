@@ -45,5 +45,17 @@
     <ProjectReference Include="..\Services\Services.csproj" />
     <ProjectReference Include="..\TelegramService\TelegramService.csproj" />
   </ItemGroup>
+	  
+  <ItemGroup>
+    <None Update="SerilogSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+<ItemGroup>
+  <None Update="config\appsettings.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+
 
 </Project>

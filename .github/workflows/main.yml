@@ -29,10 +29,13 @@ jobs:
 
     - name: Run Unit Tests (Optional)
       run: dotnet test Tests/YourTestsProject.csproj --configuration Release --no-build
-      continue-on-error: true # خليها false لو عايز تفشل البايبلاين لو فيه test fail
+      continue-on-error: true
 
     - name: Publish the app
       run: dotnet publish API_Layer/API_Layer.csproj --configuration Release --output publish
+
+    - name: Copy SerilogSettings.json to publish folder
+      run: cp API_Layer/SerilogSettings.json publish/
 
     - name: Create appsettings.json
       run: |
@@ -45,6 +48,14 @@ jobs:
             }
           },
           "AllowedHosts": "*",
+          "Kestrel": {
+            "Endpoints": {
+              "Http": {
+                "Url": "http://*:5000",
+                "Protocols": "Http1"
+              }
+            }
+          },
           "ConnectionStrings": {
             "MyConnection": "'"${{ secrets.connection_string }}"'"
           },
@@ -69,7 +80,8 @@ jobs:
               "ClientSecret": "'"${{ secrets.Google_Client_Secret }}"'"
             }
           }
-        }' > publish/config/appsettings.json
+        }' > publish/appsettings.json
+
 
     - name: Zip artifact
       run: |
