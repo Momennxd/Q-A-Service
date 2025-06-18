@@ -4,9 +4,56 @@ This document provides detailed information about the API endpoints for the Q-A 
 
 **GitHub Repository:** [https://github.com/Momennxd/Q-A-Service](https://github.com/Momennxd/Q-A-Service)
 
+## Table of Contents
+
+- [Base URL](#base-url)
+- [Authentication](#authentication)
+- [API Endpoints](#api-endpoints)
+  - [Auth Controller](#auth-controller)
+    - [Refresh Access Token](#refresh-access-token)
+  - [Users Controller](#users-controller)
+    - [User Signup](#user-signup)
+    - [User Login](#user-login)
+    - [External Provider Login](#external-provider-login)
+    - [Get Current User](#get-current-user)
+    - [Update User](#update-user)
+    - [User Logout](#user-logout)
+  - [Collections Controller](#collections-controller)
+    - [Create Collection](#create-collection)
+    - [Get All Collections (by user)](#get-all-collections-by-user)
+    - [Get Collections by User ID](#get-collections-by-user-id)
+    - [Get Collection by ID](#get-collection-by-id)
+    - [Search Collections](#search-collections)
+    - [Update Collection](#update-collection)
+    - [Delete Collection](#delete-collection)
+    - [Like/Unlike a Collection](#likeunlike-a-collection)
+    - [Add a Review](#add-a-review)
+    - [Get Reviews for a Collection](#get-reviews-for-a-collection)
+    - [Start a Collection Submission (Quiz)](#start-a-collection-submission-quiz)
+  - [Questions Controller](#questions-controller)
+    - [Add Questions to a Collection](#add-questions-to-a-collection)
+    - [Get Questions from a Collection](#get-questions-from-a-collection)
+    - [Get Random Questions](#get-random-questions)
+    - [Get a Single Question](#get-a-single-question)
+    - [Update a Question](#update-a-question)
+    - [Delete a Question](#delete-a-question)
+  - [Choices Controller](#choices-controller)
+    - [Add Choices to a Question](#add-choices-to-a-question)
+    - [Get Choices for a Question](#get-choices-for-a-question)
+    - [Get Right Answer and Explanation](#get-right-answer-and-explanation)
+    - [Submit a Chosen Answer](#submit-a-chosen-answer)
+    - [Get Submitted Answers for a Submission](#get-submitted-answers-for-a-submission)
+    - [Update a Choice](#update-a-choice)
+    - [Delete a Choice](#delete-a-choice)
+  - [Home Screen Controller](#home-screen-controller)
+    - [Get Top Collections](#get-top-collections)
+    - [Get Top Followers](#get-top-followers)
+
+
 ## Base URL
 
 The base URL for all API endpoints is: `http://novaedapp-env.eba-ceaqmh3m.me-south-1.elasticbeanstalk.com`
+
 
 ## Authentication
 
