@@ -328,10 +328,13 @@ criticalHandler.OnCriticalLog += async (msg) =>
 };
 
 
+if(app.Environment.IsDevelopment())
+{
+    // Configure the HTTP request pipeline.
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
 
 
 app.UseHttpsRedirection();
