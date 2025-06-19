@@ -5,50 +5,47 @@ This document provides detailed information about the API endpoints for the Q-A 
 **GitHub Repository:** [https://github.com/Momennxd/Q-A-Service](https://github.com/Momennxd/Q-A-Service)
 
 ## Table of Contents
-
-- [Base URL](#base-url)
-- [Authentication](#authentication)
-- [API Endpoints](#api-endpoints)
-  - [Auth Controller](#auth-controller)
-    - [Refresh Access Token](#refresh-access-token)
-  - [Users Controller](#users-controller)
-    - [User Signup](#user-signup)
-    - [User Login](#user-login)
-    - [External Provider Login](#external-provider-login)
-    - [Get Current User](#get-current-user)
-    - [Update User](#update-user)
-    - [User Logout](#user-logout)
-  - [Collections Controller](#collections-controller)
-    - [Create Collection](#create-collection)
-    - [Get All Collections (by user)](#get-all-collections-by-user)
-    - [Get Collections by User ID](#get-collections-by-user-id)
-    - [Get Collection by ID](#get-collection-by-id)
-    - [Search Collections](#search-collections)
-    - [Update Collection](#update-collection)
-    - [Delete Collection](#delete-collection)
-    - [Like/Unlike a Collection](#likeunlike-a-collection)
-    - [Add a Review](#add-a-review)
-    - [Get Reviews for a Collection](#get-reviews-for-a-collection)
-    - [Start a Collection Submission (Quiz)](#start-a-collection-submission-quiz)
-  - [Questions Controller](#questions-controller)
-    - [Add Questions to a Collection](#add-questions-to-a-collection)
-    - [Get Questions from a Collection](#get-questions-from-a-collection)
-    - [Get Random Questions](#get-random-questions)
-    - [Get a Single Question](#get-a-single-question)
-    - [Update a Question](#update-a-question)
-    - [Delete a Question](#delete-a-question)
-  - [Choices Controller](#choices-controller)
-    - [Add Choices to a Question](#add-choices-to-a-question)
-    - [Get Choices for a Question](#get-choices-for-a-question)
-    - [Get Right Answer and Explanation](#get-right-answer-and-explanation)
-    - [Submit a Chosen Answer](#submit-a-chosen-answer)
-    - [Get Submitted Answers for a Submission](#get-submitted-answers-for-a-submission)
-    - [Update a Choice](#update-a-choice)
-    - [Delete a Choice](#delete-a-choice)
-  - [Home Screen Controller](#home-screen-controller)
-    - [Get Top Collections](#get-top-collections)
-    - [Get Top Followers](#get-top-followers)
-
+| Controller | Endpoint | Method | Path |
+| :--- | :--- | :--- | :--- |
+| **Auth Controller** | | | |
+| | [Refresh Access Token](#refresh-access-token) | `POST` | `/api/auth/refresh-token` |
+| **Users Controller** | | | |
+| | [User Signup](#user-signup) | `POST` | `/api/v1/users/signup` |
+| | [User Login](#user-login) | `POST` | `/api/v1/users/login` |
+| | [External Provider Login](#external-provider-login) | `POST` | `/api/v1/users/external-login` |
+| | [Get Current User](#get-current-user) | `GET` | `/api/v1/users` |
+| | [Update User](#update-user) | `PATCH` | `/api/v1/users` |
+| | [User Logout](#user-logout) | `POST` | `/api/v1/users/logout` |
+| **Collections Controller** | | | |
+| | [Create Collection](#create-collection) | `POST` | `/api/v1/collections` |
+| | [Get All Collections (by user)](#get-all-collections-by-user) | `GET` | `/api/v1/collections` |
+| | [Get Collections by User ID](#get-collections-by-user-id) | `GET` | `/api/v1/collections/users/{UserID}` |
+| | [Get Collection by ID](#get-collection-by-id) | `GET` | `/api/v1/collections/{CollecID}` |
+| | [Search Collections](#search-collections) | `GET` | `/api/v1/collections/search` |
+| | [Update Collection](#update-collection) | `PATCH` | `/api/v1/collections` |
+| | [Delete Collection](#delete-collection) | `DELETE` | `/api/v1/collections` |
+| | [Like/Unlike a Collection](#likeunlike-a-collection) | `POST` | `/api/v1/collections/likes/Like` |
+| | [Add a Review](#add-a-review) | `POST` | `/api/v1/collections/reviews` |
+| | [Get Reviews for a Collection](#get-reviews-for-a-collection) | `GET` | `/api/v1/collections/reviews/{CollectionID}` |
+| | [Start a Collection Submission (Quiz)](#start-a-collection-submission-quiz) | `POST` | `/api/v1/submitions` |
+| **Questions Controller** | | | |
+| | [Add Questions to a Collection](#add-questions-to-a-collection) | `POST` | `/api/v1/questions` |
+| | [Get Questions from a Collection](#get-questions-from-a-collection) | `GET` | `/api/v1/questions` |
+| | [Get Random Questions](#get-random-questions) | `GET` | `/api/v1/questions/random` |
+| | [Get a Single Question](#get-a-single-question) | `GET` | `/api/v1/questions/{QuestionID}` |
+| | [Update a Question](#update-a-question) | `PATCH` | `/api/v1/questions/{QuestionID}` |
+| | [Delete a Question](#delete-a-question) | `DELETE` | `/api/v1/questions` |
+| **Choices Controller** | | | |
+| | [Add Choices to a Question](#add-choices-to-a-question) | `POST` | `/api/v1/choices` |
+| | [Get Choices for a Question](#get-choices-for-a-question) | `GET` | `/api/v1/choices/questions/{questionID}` |
+| | [Get Right Answer and Explanation](#get-right-answer-and-explanation) | `GET` | `/api/v1/choices/explanation/{choiceId}/{questionId}` |
+| | [Submit a Chosen Answer](#submit-a-chosen-answer) | `POST` | `/api/v1/choices/chosen` |
+| | [Get Submitted Answers for a Submission](#get-submitted-answers-for-a-submission) | `GET` | `/api/v1/choices/chosen/submition/{submitionID}` |
+| | [Update a Choice](#update-a-choice) | `PATCH` | `/api/v1/choices/{ChoiceID}` |
+| | [Delete a Choice](#delete-a-choice) | `DELETE` | `/api/v1/choices/{ChoiceID}` |
+| **Home Screen Controller** | | | |
+| | [Get Top Collections](#get-top-collections) | `GET` | `/api/v1/home/collections/top` |
+| | [Get Top Followers](#get-top-followers) | `GET` | `/api/v1/home/followers/top` |
 
 ## Base URL
 
