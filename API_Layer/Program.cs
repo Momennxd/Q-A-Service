@@ -335,14 +335,6 @@ if(app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-//app.UseMiddleware<CustomSessionMiddleware>();
-
 // Exception Handling Middleware
 app.UseExceptionHandler(config =>
 {
@@ -409,6 +401,12 @@ app.UseExceptionHandler(config =>
         }
     });
 });
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+//app.UseMiddleware<CustomSessionMiddleware>();
 
 
 

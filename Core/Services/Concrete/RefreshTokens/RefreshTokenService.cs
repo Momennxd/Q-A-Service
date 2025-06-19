@@ -73,12 +73,12 @@ namespace Core.Services.Concrete.RefreshTokens
         }
 
 
-        public async Task<TokenResponseDto> RefreshTokensAsync(string oldToken)
+        public async Task<TokenResponseDto?> RefreshTokensAsync(string oldToken)
         {
             var refreshToken = await GetByTokenAsync(oldToken);
 
             if (refreshToken == null || !refreshToken.IsActive)
-                throw new UnauthorizedAccessException("Invalid or expired refresh token");
+                return null;
 
             await RevokeTokenAsync(refreshToken);
 
