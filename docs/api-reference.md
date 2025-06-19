@@ -1,6 +1,17 @@
+Of course! Here is the updated API documentation, which has been revised to be consistent with the provided OpenAPI specification.
+
+Changes include:
+*   Addition of new controllers: `Categories`, `Explanations`, `Health`, and `Question Categories`.
+*   Addition of new endpoints for existing controllers (e.g., updating reviews, deleting submissions).
+*   Reorganization of related endpoints (like Likes, Reviews, Submissions) into their own distinct sections for clarity.
+*   Correction of paths and parameters to match the latest specification.
+*   Updated Table of Contents for easy navigation.
+
+---
+
 # Q-A Service API Documentation
 
-This document provides detailed information about the API endpoints for the Q-A Service.
+This document provides detailed information about the API endpoints for the Q-A Service, updated to reflect the latest version.
 
 **GitHub Repository:** [https://github.com/Momennxd/Q-A-Service](https://github.com/Momennxd/Q-A-Service)
 
@@ -8,7 +19,7 @@ This document provides detailed information about the API endpoints for the Q-A 
 | Controller | Endpoint | Method | Path |
 | :--- | :--- | :--- | :--- |
 | **Auth Controller** | | | |
-| | [Refresh Access Token](#refresh-access-token) | `POST` | `/api/auth/refresh-token` |
+| | [Refresh Access Token](#refresh-access-token) | `POST` | `/api/v1/auth/refresh-token` |
 | **Users Controller** | | | |
 | | [User Signup](#user-signup) | `POST` | `/api/v1/users/signup` |
 | | [User Login](#user-login) | `POST` | `/api/v1/users/login` |
@@ -24,33 +35,56 @@ This document provides detailed information about the API endpoints for the Q-A 
 | | [Search Collections](#search-collections) | `GET` | `/api/v1/collections/search` |
 | | [Update Collection](#update-collection) | `PATCH` | `/api/v1/collections` |
 | | [Delete Collection](#delete-collection) | `DELETE` | `/api/v1/collections` |
+| **Collection Likes Controller** | | | |
 | | [Like/Unlike a Collection](#likeunlike-a-collection) | `POST` | `/api/v1/collections/likes/Like` |
+| **Collection Reviews Controller** | | | |
 | | [Add a Review](#add-a-review) | `POST` | `/api/v1/collections/reviews` |
 | | [Get Reviews for a Collection](#get-reviews-for-a-collection) | `GET` | `/api/v1/collections/reviews/{CollectionID}` |
-| | [Start a Collection Submission (Quiz)](#start-a-collection-submission-quiz) | `POST` | `/api/v1/submitions` |
+| | [Update a Review](#update-a-review) | `PATCH` | `/api/v1/collections/reviews` |
+| | [Delete a Review](#delete-a-review) | `DELETE` | `/api/v1/collections/reviews` |
+| **Collection Submissions Controller**| | | |
+| | [Start a Submission (Quiz)](#start-a-submission-quiz) | `POST` | `/api/v1/submitions` |
+| | [Get Submission Details](#get-submission-details) | `GET` | `/api/v1/submitions` |
+| | [Delete a Submission](#delete-a-submission) | `DELETE` | `/api/v1/submitions` |
 | **Questions Controller** | | | |
 | | [Add Questions to a Collection](#add-questions-to-a-collection) | `POST` | `/api/v1/questions` |
 | | [Get Questions from a Collection](#get-questions-from-a-collection) | `GET` | `/api/v1/questions` |
-| | [Get Random Questions](#get-random-questions) | `GET` | `/api/v1/questions/random` |
 | | [Get a Single Question](#get-a-single-question) | `GET` | `/api/v1/questions/{QuestionID}` |
+| | [Get Random Questions](#get-random-questions) | `GET` | `/api/v1/questions/random` |
 | | [Update a Question](#update-a-question) | `PATCH` | `/api/v1/questions/{QuestionID}` |
+| | [Update Question Points](#update-question-points) | `PATCH` | `/api/v1/questions/points/{QuestionID}` |
 | | [Delete a Question](#delete-a-question) | `DELETE` | `/api/v1/questions` |
 | **Choices Controller** | | | |
 | | [Add Choices to a Question](#add-choices-to-a-question) | `POST` | `/api/v1/choices` |
 | | [Get Choices for a Question](#get-choices-for-a-question) | `GET` | `/api/v1/choices/questions/{questionID}` |
+| | [Get Right Answers for a Question](#get-right-answers-for-a-question) | `GET` | `/api/v1/choices/answers/{questionID}` |
 | | [Get Right Answer and Explanation](#get-right-answer-and-explanation) | `GET` | `/api/v1/choices/explanation/{choiceId}/{questionId}` |
-| | [Submit a Chosen Answer](#submit-a-chosen-answer) | `POST` | `/api/v1/choices/chosen` |
-| | [Get Submitted Answers for a Submission](#get-submitted-answers-for-a-submission) | `GET` | `/api/v1/choices/chosen/submition/{submitionID}` |
 | | [Update a Choice](#update-a-choice) | `PATCH` | `/api/v1/choices/{ChoiceID}` |
 | | [Delete a Choice](#delete-a-choice) | `DELETE` | `/api/v1/choices/{ChoiceID}` |
+| **Chosen Choices Controller** | | | |
+| | [Submit a Chosen Answer](#submit-a-chosen-answer) | `POST` | `/api/v1/choices/chosen` |
+| | [Get Submitted Answers for a Submission](#get-submitted-answers-for-a-submission) | `GET` | `/api/v1/choices/chosen/submition/{submitionID}` |
+| **Explanations Controller** | | | |
+| | [Create an Explanation](#create-an-explanation) | `POST` | `/api/v1/explanations` |
+| | [Get Explanations for a Question](#get-explanations-for-a-question) | `GET` | `/api/v1/explanations/questions/{QuestionID}` |
+| | [Get a Single Explanation](#get-a-single-explanation) | `GET` | `/api/v1/explanations/{ExplainID}` |
+| **Categories Controller** | | | |
+| | [Create Category](#create-category) | `POST` | `/api/v1/categories` |
+| | [Get Categories](#get-categories) | `GET` | `/api/v1/categories/{RowsCount}` |
+| **Question Categories Controller**| | | |
+| | [Add Categories to Question](#add-categories-to-question) | `POST` | `/api/v1/categories/questions/{QuestionID}` |
+| | [Get Categories for Question](#get-categories-for-question) | `GET` | `/api/v1/categories/questions/{QuestionID}` |
+| | [Delete All Categories from Question](#delete-all-categories-from-question) | `DELETE` | `/api/v1/categories/questions/{QuestionID}` |
+| | [Delete a Question-Category Link](#delete-a-question-category-link) | `DELETE` | `/api/v1/categories/{QuestionCategoryID}` |
 | **Home Screen Controller** | | | |
 | | [Get Top Collections](#get-top-collections) | `GET` | `/api/v1/home/collections/top` |
 | | [Get Top Followers](#get-top-followers) | `GET` | `/api/v1/home/followers/top` |
+| **Health Controller** | | | |
+| | [Health Check](#health-check) | `GET` | `/api/health` |
 
 ## Base URL
 
 The base URL for all API endpoints is: `http://novaedapp-env.eba-ceaqmh3m.me-south-1.elasticbeanstalk.com`
-
 
 ## Authentication
 
@@ -60,7 +94,7 @@ Most endpoints in this API are protected and require authentication. The authent
 2.  **Receive Tokens:** Upon successful login, the API returns an `accessToken` and a `refreshToken`.
 3.  **Authorize Requests:** For all subsequent requests to protected endpoints, you must include the `accessToken` in the `Authorization` header as a Bearer token.
     - **Header:** `Authorization: Bearer <your_accessToken>`
-4.  **Refresh Token:** The `accessToken` has a limited lifespan. When it expires, use the `refreshToken` with the `POST /api/auth/refresh-token` endpoint to obtain a new pair of tokens without requiring the user to log in again.
+4.  **Refresh Token:** The `accessToken` has a limited lifespan. When it expires, use the `refreshToken` with the `POST /api/v1/auth/refresh-token` endpoint to obtain a new pair of tokens without requiring the user to log in again.
 
 ---
 
@@ -74,7 +108,7 @@ Endpoints related to token management.
 Refreshes an expired access token using a valid refresh token.
 
 - **Method:** `POST`
-- **Path:** `/api/auth/refresh-token`
+- **Path:** `/api/v1/auth/refresh-token`
 - **Request Body:**
   ```json
   {
@@ -250,7 +284,7 @@ Invalidates the user's refresh token, effectively logging them out.
 
 ### Collections Controller
 
-Endpoints for creating, managing, and interacting with question collections.
+Endpoints for creating and managing question collections.
 
 #### Create Collection
 Creates a new question collection.
@@ -289,26 +323,29 @@ Retrieves all collections created by the authenticated user.
 - **Method:** `GET`
 - **Path:** `/api/v1/collections`
 - **Authentication:** Required.
-- **Success Response (200 OK):** A list of collections.
+- **Success Response (200 OK):** A list of collection objects.
 
 #### Get Collections by User ID
 Retrieves all public collections for a specific user.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/collections/users/{UserID}`
-- **Parameters:**
+- **Parameters:** 
+ 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `UserID` | path | True | integer | The ID of the user. |
-- **Success Response (200 OK):** A list of collections.
+- **Success Response (200 OK):** A list of collection objects.
 
 #### Get Collection by ID
 Retrieves a specific collection by its ID.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/collections/{CollecID}`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -320,14 +357,15 @@ Searches for public collections based on text.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/collections/search`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `SearchText` | query | False | string | The text to search for. |
 | `PageNumber` | query | False | integer | The page number for pagination. |
 | `PageSize` | query | False | integer | The number of results per page. |
-- **Success Response (200 OK):** A paginated list of collections.
+- **Success Response (200 OK):** A paginated list of collection objects.
 
 #### Update Collection
 Updates a collection's details using a JSON Patch request.
@@ -335,7 +373,8 @@ Updates a collection's details using a JSON Patch request.
 - **Method:** `PATCH`
 - **Path:** `/api/v1/collections`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -349,12 +388,17 @@ Deletes a collection.
 - **Method:** `DELETE`
 - **Path:** `/api/v1/collections`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `CollecID` | query | True | integer | The ID of the collection to delete. |
 - **Success Response (200 OK):** Success message.
+
+---
+
+### Collection Likes Controller
 
 #### Like/Unlike a Collection
 Adds or removes a like from a collection.
@@ -362,13 +406,18 @@ Adds or removes a like from a collection.
 - **Method:** `POST`
 - **Path:** `/api/v1/collections/likes/Like`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `CollectionId` | query | True | integer | The ID of the collection. |
 | `IsLike` | query | True | boolean | `true` to like, `false` to unlike. |
 - **Success Response (200 OK):** Success message.
+
+---
+
+### Collection Reviews Controller
 
 #### Add a Review
 Adds a review to a collection.
@@ -393,20 +442,57 @@ Retrieves all reviews for a specific collection.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/collections/reviews/{CollectionID}`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `CollectionID` | path | True | integer | The ID of the collection. |
 | `Page` | query | False | integer | The page number for pagination. |
-- **Success Response (200 OK):** A list of reviews.
+- **Success Response (200 OK):** A list of review objects.
 
-#### Start a Collection Submission (Quiz)
-Initializes a new submission (quiz session) for a collection and returns a unique submission ID.
+#### Update a Review
+Updates a review using a JSON Patch request.
+
+- **Method:** `PATCH`
+- **Path:** `/api/v1/collections/reviews`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `CollectionID` | query | True | integer | The ID of the collection containing the review. |
+- **Request Body:** An array of JSON Patch operations.
+- **Success Response (200 OK):** Success message.
+
+#### Delete a Review
+Deletes a review from a collection.
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/collections/reviews`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `CollectionID` | query | True | integer | The ID of the collection containing the review. |
+- **Success Response (200 OK):** Success message.
+
+---
+
+### Collection Submissions Controller
+
+Endpoints for handling quiz sessions (submissions).
+
+#### Start a Submission (Quiz)
+Initializes a new submission for a collection and returns a unique submission ID.
 
 - **Method:** `POST`
 - **Path:** `/api/v1/submitions`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -415,6 +501,34 @@ Initializes a new submission (quiz session) for a collection and returns a uniqu
   ```json
   integer // The unique SubmitionID
   ```
+
+#### Get Submission Details
+Retrieves details about a specific submission.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/submitions`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `SubmissionID`| query | True | integer | The ID of the submission to retrieve. |
+- **Success Response (200 OK):** Submission details object.
+
+#### Delete a Submission
+Deletes a quiz submission.
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/submitions`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `SubmitionID`| query | True | integer | The ID of the submission to delete. |
+- **Success Response (200 OK):** Success message.
 
 ---
 
@@ -428,7 +542,8 @@ Adds one or more questions to an existing collection.
 - **Method:** `POST`
 - **Path:** `/api/v1/questions`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -455,19 +570,34 @@ Retrieves all questions for a given collection.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/questions`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `CollectionID`| query | True | integer | The ID of the collection. |
-- **Success Response (200 OK):** A list of questions.
+- **Success Response (200 OK):** A list of question objects.
+
+#### Get a Single Question
+Retrieves a specific question by its ID.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/questions/{QuestionID}`
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionID`| path | True | integer | The ID of the question. |
+- **Success Response (200 OK):** The question object.
 
 #### Get Random Questions
 Retrieves a random set of questions from a collection, typically for a quiz.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/questions/random`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -489,30 +619,34 @@ Retrieves a random set of questions from a collection, typically for a quiz.
   ]
   ```
 
-#### Get a Single Question
-Retrieves a specific question by its ID.
-
-- **Method:** `GET`
-- **Path:** `/api/v1/questions/{QuestionID}`
-- **Parameters:**
-
-| Name | In | Required | Type | Description |
-|---|---|---|---|---|
-| `QuestionID`| path | True | integer | The ID of the question. |
-- **Success Response (200 OK):** The question object.
-
 #### Update a Question
 Updates a question's details using a JSON Patch request.
 
 - **Method:** `PATCH`
 - **Path:** `/api/v1/questions/{QuestionID}`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `QuestionID`| path | True | integer | The ID of the question to update. |
 - **Request Body:** An array of JSON Patch operations.
+- **Success Response (200 OK):** Success message.
+
+#### Update Question Points
+Updates the point value for a specific question.
+
+- **Method:** `PATCH`
+- **Path:** `/api/v1/questions/points/{QuestionID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionID` | path | True | integer | The ID of the question. |
+| `NewPointsVal` | query | True | integer | The new point value. |
 - **Success Response (200 OK):** Success message.
 
 #### Delete a Question
@@ -521,7 +655,8 @@ Deletes a question from a collection.
 - **Method:** `DELETE`
 - **Path:** `/api/v1/questions`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -532,7 +667,7 @@ Deletes a question from a collection.
 
 ### Choices Controller
 
-Endpoints for managing choices for questions and handling user answers.
+Endpoints for managing choices for questions.
 
 #### Add Choices to a Question
 Adds one or more choices to an existing question.
@@ -540,7 +675,8 @@ Adds one or more choices to an existing question.
 - **Method:** `POST`
 - **Path:** `/api/v1/choices`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -562,19 +698,34 @@ Retrieves all choices associated with a specific question.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/choices/questions/{questionID}`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `questionID`| path | True | integer | The ID of the question. |
-- **Success Response (200 OK):** A list of choices.
+- **Success Response (200 OK):** A list of choice objects.
+
+#### Get Right Answers for a Question
+Retrieves the correct answer(s) for a question.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/choices/answers/{questionID}`
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `questionID`| path | True | integer | The ID of the question. |
+- **Success Response (200 OK):** A list of the correct choice objects.
 
 #### Get Right Answer and Explanation
-Retrieves a specific choice along with its explanation text (if available). Used for showing results after an answer.
+After an answer is submitted, this retrieves the choice details, whether it was correct, and any associated explanation.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/choices/explanation/{choiceId}/{questionId}`
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
@@ -590,6 +741,41 @@ Retrieves a specific choice along with its explanation text (if available). Used
     "explanationID": integer
   }
   ```
+
+#### Update a Choice
+Updates a choice's details using a JSON Patch request.
+
+- **Method:** `PATCH`
+- **Path:** `/api/v1/choices/{ChoiceID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `ChoiceID`| path | True | integer | The ID of the choice to update. |
+- **Request Body:** An array of JSON Patch operations.
+- **Success Response (200 OK):** Success message.
+
+#### Delete a Choice
+Deletes a choice.
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/choices/{ChoiceID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `ChoiceID`| path | True | integer | The ID of the choice to delete. |
+- **Success Response (200 OK):** Success message.
+
+---
+
+### Chosen Choices Controller
+
+Endpoints for handling user answers during a submission.
 
 #### Submit a Chosen Answer
 Submits a user's choice for a question as part of a quiz submission.
@@ -612,39 +798,163 @@ Retrieves the choices selected by a user for a specific submission.
 - **Method:** `GET`
 - **Path:** `/api/v1/choices/chosen/submition/{submitionID}`
 - **Authentication:** Required.
-- **Parameters:**
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
 | `submitionID`| path | True | integer | The unique ID of the submission. |
 | `QuestionIDs`| header| False | array[int] | Optional: Filter by specific question IDs. |
-- **Success Response (200 OK):** A list of chosen choices.
+- **Success Response (200 OK):** A list of chosen choice objects.
 
-#### Update a Choice
-Updates a choice's details using a JSON Patch request.
+---
 
-- **Method:** `PATCH`
-- **Path:** `/api/v1/choices/{ChoiceID}`
+### Explanations Controller
+
+Endpoints for managing answer explanations.
+
+#### Create an Explanation
+Adds an explanation to a question.
+
+- **Method:** `POST`
+- **Path:** `/api/v1/explanations`
 - **Authentication:** Required.
-- **Parameters:**
-
-| Name | In | Required | Type | Description |
-|---|---|---|---|---|
-| `ChoiceID`| path | True | integer | The ID of the choice to update. |
-- **Request Body:** An array of JSON Patch operations.
+- **Request Body:**
+  ```json
+  {
+    "explanationText": "string",
+    "questionID": integer
+  }
+  ```
 - **Success Response (200 OK):** Success message.
 
-#### Delete a Choice
-Deletes a choice.
+#### Get Explanations for a Question
+Retrieves all explanations for a given question.
 
-- **Method:** `DELETE`
-- **Path:** `/api/v1/choices/{ChoiceID}`
-- **Authentication:** Required.
-- **Parameters:**
+- **Method:** `GET`
+- **Path:** `/api/v1/explanations/questions/{QuestionID}`
+- **Parameters:** 
+ 
 
 | Name | In | Required | Type | Description |
 |---|---|---|---|---|
-| `ChoiceID`| path | True | integer | The ID of the choice to delete. |
+| `QuestionID` | path | True | integer | The ID of the question. |
+- **Success Response (200 OK):** A list of explanation objects.
+
+#### Get a Single Explanation
+Retrieves a specific explanation by its ID.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/explanations/{ExplainID}`
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `ExplainID` | path | True | integer | The ID of the explanation. |
+- **Success Response (200 OK):** The explanation object.
+
+---
+
+### Categories Controller
+
+Endpoints for managing global categories.
+
+#### Create Category
+Creates a new category.
+
+- **Method:** `POST`
+- **Path:** `/api/v1/categories`
+- **Authentication:** Required.
+- **Request Body:**
+  ```json
+  {
+    "categoryName": "string"
+  }
+  ```
+- **Success Response (200 OK):** Success message.
+
+#### Get Categories
+Retrieves a list of categories.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/categories/{RowsCount}`
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `RowsCount` | path | True | integer | The maximum number of categories to return. |
+| `CategorySumName` | query | False | string | Search term to filter categories by name. |
+- **Success Response (200 OK):** A list of category objects.
+
+---
+
+### Question Categories Controller
+
+Endpoints for linking questions to categories.
+
+#### Add Categories to Question
+Assigns one or more existing categories to a question.
+
+- **Method:** `POST`
+- **Path:** `/api/v1/categories/questions/{QuestionID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionID` | path | True | integer | The ID of the question. |
+- **Request Body:** An array of category IDs.
+  ```json
+  [
+    {
+      "categoryID": integer
+    }
+  ]
+  ```
+- **Success Response (200 OK):** Success message.
+
+#### Get Categories for Question
+Retrieves all categories assigned to a specific question.
+
+- **Method:** `GET`
+- **Path:** `/api/v1/categories/questions/{QuestionID}`
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionID` | path | True | integer | The ID of the question. |
+- **Success Response (200 OK):** A list of category objects.
+
+#### Delete All Categories from Question
+Removes all category associations from a specific question.
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/categories/questions/{QuestionID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionID` | path | True | integer | The ID of the question. |
+- **Success Response (200 OK):** Success message.
+
+#### Delete a Question-Category Link
+Deletes a specific link between a question and a category.
+
+- **Method:** `DELETE`
+- **Path:** `/api/v1/categories/{QuestionCategoryID}`
+- **Authentication:** Required.
+- **Parameters:** 
+ 
+
+| Name | In | Required | Type | Description |
+|---|---|---|---|---|
+| `QuestionCategoryID` | path | True | integer | The unique ID of the question-category association. |
 - **Success Response (200 OK):** Success message.
 
 ---
@@ -681,4 +991,17 @@ Retrieves a list of the top followed users.
 
 - **Method:** `GET`
 - **Path:** `/api/v1/home/followers/top`
-- **Success Response (200 OK):** Success. (Response body schema not defined in Swagger doc).
+- **Success Response (200 OK):** A list of top user objects.
+
+---
+
+### Health Controller
+
+Endpoints for monitoring the service's health.
+
+#### Health Check
+Checks the health status of the API.
+
+- **Method:** `GET`
+- **Path:** `/api/health`
+- **Success Response (200 OK):** A health status report.
