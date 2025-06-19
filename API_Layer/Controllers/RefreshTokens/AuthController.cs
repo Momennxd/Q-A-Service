@@ -4,31 +4,28 @@ using static Core.DTOs.RefreshTokens.RefreshTokenDTOs;
 
 namespace API_Layer.Controllers.RefreshTokens
 {
-    [Route("api/auth")]
+    [Route("api/v1/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        IRefreshTokenService _refreshTokenService;
+        private readonly IRefreshTokenService _refreshTokenService;
         public AuthController(IRefreshTokenService refreshTokenService)
         {
             _refreshTokenService = refreshTokenService;
         }
 
         [HttpPost("refresh-token")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+
         public async Task<ActionResult<TokenResponseDto>> RefreshToken([FromBody] RefreshTokenDTO request)
         {
-            if (string.IsNullOrEmpty(request.Token))
-                return BadRequest(new { message = "Refresh token is required" });
-
-            try
-            {
-                var response = await _refreshTokenService.RefreshTokensAsync(request.Token);
-                return Ok(response);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+            
+            var newTokens = await _refreshTokenService.RefreshTokensAsync(request.Token);
+            if (newTokens == null)
+                return NotFound(new { message = "Invalid or expired refresh token." });
+            return Ok(newTokens);
+            
         }
 
     }

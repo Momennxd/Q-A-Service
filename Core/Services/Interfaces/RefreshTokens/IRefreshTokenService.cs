@@ -11,7 +11,7 @@ namespace Core.Services.Interfaces.RefreshTokens
         Task RevokeTokenAsync(RefreshToken token);
         Task<RefreshToken> GenerateRefreshTokenAsync(int userId);
         Task<RefreshTokenDTOs.LoginResponseDto> GenerateTokensForUserAsync(int userId);
-        Task<TokenResponseDto> RefreshTokensAsync(string oldToken);
+        Task<TokenResponseDto?> RefreshTokensAsync(string oldToken);
         Task<bool> LogoutAsync(string refreshToken);
     }
 }
