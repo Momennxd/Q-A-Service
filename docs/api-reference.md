@@ -1,14 +1,3 @@
-Of course! Here is the updated API documentation, which has been revised to be consistent with the provided OpenAPI specification.
-
-Changes include:
-*   Addition of new controllers: `Categories`, `Explanations`, `Health`, and `Question Categories`.
-*   Addition of new endpoints for existing controllers (e.g., updating reviews, deleting submissions).
-*   Reorganization of related endpoints (like Likes, Reviews, Submissions) into their own distinct sections for clarity.
-*   Correction of paths and parameters to match the latest specification.
-*   Updated Table of Contents for easy navigation.
-
----
-
 # Q-A Service API Documentation
 
 This document provides detailed information about the API endpoints for the Q-A Service, updated to reflect the latest version.
