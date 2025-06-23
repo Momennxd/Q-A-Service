@@ -106,6 +106,8 @@ Optional extensions:
    ```bash
    git clone https://github.com/Momennxd/Q-A-Service.git
 
+2. Add the right app settings app as `appsettings.json`
+
 
 ## 6. Contributors
 
