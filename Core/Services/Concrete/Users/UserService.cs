@@ -66,25 +66,6 @@ namespace Core.Services.Concrete.Users
             if (await _unitOfWork.CompleteAsync() < 1) return false;
             return true;
         }
-
-        public async Task<SendUserDTO?> GetUser(int UserID)
-        {
-            var user = await _unitOfWork.EntityRepo.FindAsync(UserID);
-
-            if (user == null) return null;
-
-            //getting the send user dto
-            var sendDto = _mapper.Map<SendUserDTO>(user);
-
-            //getting the person send dto 
-            sendDto.Person = _mapper.Map<PeopleDTOs.SendPersonDTO>(user.Person);
-
-            return sendDto;
-        }
-
-
-
-
         public async Task<SendUserDTO?> Login(UsersDTOs.LoginDTO loginDTO)
         {
             var user = await _unitOfWork.EntityRepo.LoginAsync(loginDTO.Username, loginDTO.Password);
@@ -138,21 +119,18 @@ namespace Core.Services.Concrete.Users
 
 
 
-        public async Task<GetUserDTO?> GetUserByIdAsync(int UserID)
+        public async Task<GetUserDTO?> GetUser(int UserID)
         {
-            var user = await _unitOfWork.EntityRepo.GetUserByID(UserID);
-
+            var user = await _unitOfWork.EntityRepo.GetUser(UserID);
             //getting the send user dto
             var sendDto = _mapper.Map<GetUserDTO>(user);
-
-
             return sendDto;
         }
 
 
-        public async Task<SendUserDTO?> GetUserByUsernameAsync(string Username)
+        public async Task<SendUserDTO?> GetUser(string Username)
         {
-            var user = await _unitOfWork.EntityRepo.GetUserUsernameAsync(Username);
+            var user = await _unitOfWork.EntityRepo.GetUser(Username);
 
             if (user == null) return null;
 
@@ -178,35 +156,9 @@ namespace Core.Services.Concrete.Users
 
 
 
-        public async Task<GetUserDTO> GetUser_ExternalAuth(string email, string fullName)
+        private async Task<GetUserDTO> _GetUser_ExternalAuth(string email, string fullName)
         {
-            var user = await _unitOfWork.EntityRepo.GetUserByEmail(email);
-            if (user == null)
-            {
-                string firstname = fullName.Contains(' ') ? fullName.Substring(0, fullName.IndexOf(' ')) : fullName;
-                string lastname = fullName.Contains(' ') ? fullName.Substring(fullName.IndexOf(' ') + 1) : "";
-
-                string username = email.Split('@')[0].Replace(".", "");
-
-                var newUser = new User
-                {
-                    Username = username,
-                    Password = Guid.NewGuid().ToString(),
-                    Person = new Person
-                    {
-                        FirstName = firstname,
-                        LastName = lastname,
-                        Email = email
-                        
-                    }
-                };
-
-                await _unitOfWork.EntityRepo.AddItemAsync(newUser);
-                await _unitOfWork.CompleteAsync();
-
-                user = await _unitOfWork.EntityRepo.GetUserByID(newUser.UserId);
-            }
-
+            var user = await _unitOfWork.EntityRepo.GetUser(email, fullName);
             var userDto = _mapper.Map<GetUserDTO>(user);
             return userDto;
         }
@@ -214,9 +166,10 @@ namespace Core.Services.Concrete.Users
 
         public async Task<ExternalAuthResponseDTO?> GetExternalAuthResponse(string email, string fullName)
         {
-            var user = await GetUser_ExternalAuth(email, fullName);
+            var user = await _GetUser_ExternalAuth(email, fullName);
             if (user == null) return null;
             var tokens = await _refreshTokenService.GenerateTokensForUserAsync(user.UserId);
+            await _unitOfWork.CompleteAsync();
             return new ExternalAuthResponseDTO
             {
                 user = user,

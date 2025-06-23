@@ -17,12 +17,12 @@
 //            _userService = userService;
 //        }
 
-//        [HttpGet("GetUserByID/{UserID}")]
+//        [HttpGet("GetUser/{UserID}")]
 //        [Authorize]
 //        [CheckPermission(Permissions.GetUser)]
-//        public async Task<IActionResult> GetUserByID(int UserID)
+//        public async Task<IActionResult> GetUser(int UserID)
 //        {
-//            var user = await _userService.GetUserByIdAsync(UserID);
+//            var user = await _userService.GetUser(UserID);
 //            if (user == null)
 //                return NotFound();
 
@@ -33,7 +33,7 @@
 //        [CheckPermission(Permissions.GetUser)]
 //        public async Task<IActionResult> GetUserByUsername(string Username)
 //        {
-//            var user = await _userService.GetUserByUsernameAsync(Username);
+//            var user = await _userService.GetUser(Username);
 //            if (user == null)
 //                return NotFound();
 

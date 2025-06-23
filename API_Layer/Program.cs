@@ -63,16 +63,34 @@ using System.Text;
 using Telegram.Bot;
 using TelegramService.Concrete;
 using TelegramService.Interfaces;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel((context, options) =>
+
+#region Rate Limiting
+builder.Services.AddRateLimiter(options =>
 {
-    options.Configure(context.Configuration.GetSection("Kestrel"));
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetSlidingWindowLimiter(ip, _ => new SlidingWindowRateLimiterOptions
+        {
+            PermitLimit = 20, // Allowed requests
+            Window = TimeSpan.FromSeconds(30),
+            SegmentsPerWindow = 1,
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        });
+    });
+
+    options.RejectionStatusCode = 429;
 });
+#endregion
 
 #region Configuration
 
@@ -403,7 +421,8 @@ app.UseExceptionHandler(config =>
 });
 
 app.UseHttpsRedirection();
-
+app.UseRateLimiter();
+app.UseAuthentication();
 app.UseAuthorization();
 
 //app.UseMiddleware<CustomSessionMiddleware>();

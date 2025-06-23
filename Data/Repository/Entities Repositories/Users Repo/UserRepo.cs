@@ -4,13 +4,6 @@ using Data.models.People;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Data.Repositories
 {
@@ -25,10 +18,6 @@ namespace Data.Repositories
             _passwordHasher = passwordHasher;
         }
 
-        public Task<User?> FindUserByUsernameAsync(string Username)
-        {
-           throw new NotImplementedException();
-        }
 
         public async Task<List<User>> GetTopUsersAsync(int topN)
         {
@@ -39,7 +28,7 @@ namespace Data.Repositories
 
         }
 
-        public async Task<SP_GetUser?> GetUserByID(int userID)
+        public async Task<SP_GetUser?> GetUser(int userID)
         {
             var users = await _context.Set<SP_GetUser>()
                 .FromSqlInterpolated($"EXEC SP_GetUser @UserID = {userID}")
@@ -52,7 +41,7 @@ namespace Data.Repositories
 
 
 
-        public async Task<User?> GetUserUsernameAsync(string Username)
+        public async Task<User?> GetUser(string Username)
         {
             var user = await _context
                 .Users
@@ -79,19 +68,52 @@ namespace Data.Repositories
         }
         public override Task<EntityEntry> AddItemAsync(User user)
         {
-            
+
             if (user == null) throw new ArgumentNullException(nameof(user), "User cannot be null.");
             user.Password = _passwordHasher.HashPassword(user, user.Password);
             return base.AddItemAsync(user);
         }
-
-        public async Task<SP_GetUser?> GetUserByEmail(string email)
+        private async Task<User> _CreateUserAsync(string email, string fullName, CancellationToken cancellationToken = default)
         {
-            return _context.Set<SP_GetUser>()
+            string firstname = fullName.Contains(' ') ? fullName.Substring(0, fullName.IndexOf(' ')) : fullName;
+            string lastname = fullName.Contains(' ') ? fullName.Substring(fullName.IndexOf(' ') + 1) : "";
+            string username = email.Split('@')[0].Replace(".", "");
+            var newUser = new User
+            {
+                Username = username,
+                Password = Guid.NewGuid().ToString(),
+                Person = new Person
+                {
+                    FirstName = firstname,
+                    LastName = lastname,
+                    Email = email
+                }
+            };
+            await AddItemAsync(newUser);
+            await _context.SaveChangesAsync(cancellationToken);
+            return newUser;
+        }
+        public async Task<SP_GetUser?> GetUser(string email, string fullName, CancellationToken cancellationToken = default)
+        {
+            var user = (await _context.Set<SP_GetUser>()
                 .FromSqlInterpolated($"EXEC SP_GetUserByEmail @Email = {email}")
                 .AsNoTracking()
-                .AsEnumerable()
-                .FirstOrDefault(); 
+                .ToListAsync(cancellationToken))
+                .FirstOrDefault();
+
+
+            if (user != null)
+                return user;
+
+            await _CreateUserAsync(email, fullName, cancellationToken);
+            var createdUser = (await _context.Set<SP_GetUser>()
+                .FromSqlInterpolated($"EXEC SP_GetUserByEmail @Email = {email}")
+                .AsNoTracking()
+                .ToListAsync(cancellationToken))
+                .FirstOrDefault();
+
+
+            return createdUser;
         }
 
     }
