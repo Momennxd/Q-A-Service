@@ -12,6 +12,7 @@ namespace API_Layer.Controllers.Questions
 {
     [Route("api/v1/explanations")]
     [ApiController]
+    [Authorize]
     public class ExplanationsController : ControllerBase
     {
         IAnswerExplanationService _answerExplanationService;
@@ -24,7 +25,6 @@ namespace API_Layer.Controllers.Questions
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddExplain(AnswerExplanationMainDTO addAnswerExplanationDTO)
         {
             int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);

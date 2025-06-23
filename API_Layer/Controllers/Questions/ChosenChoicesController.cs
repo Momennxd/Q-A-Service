@@ -1,4 +1,5 @@
-﻿using Core.Authorization_Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Authorization_Services.Interfaces;
 using Core.DTOs.Questions;
 using Core.Services.Concrete.Questions;
 using Core.Services.Interfaces;
@@ -30,8 +31,7 @@ namespace API_Layer.Controllers.Questions
         [HttpGet("submition/{submitionID}")]
         public async Task<IActionResult> GetChosenChoices([FromHeader] HashSet<int> QuestionIDs, int submitionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int? userId = User.GetUserId();
 
             //authorization (checking if the sub is the user's) check will make the api slower and it is not really needed here at the moment
 
@@ -39,11 +39,9 @@ namespace API_Layer.Controllers.Questions
         }
 
         [HttpPost()]
-        [AllowAnonymous]
         public async Task<IActionResult> AddChosenChoice([FromBody] Add_chosen_choicesDTO add_Chosen_Choice)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int? userId = User.GetUserId();
 
             //submition has to be the user's who is chosing the this choice
             if (!await _collectionsAuthService.IsUserSubmitionOwnerAsync(add_Chosen_Choice.SubmitionID, (int)userId)) return Unauthorized();

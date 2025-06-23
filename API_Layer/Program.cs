@@ -328,19 +328,12 @@ criticalHandler.OnCriticalLog += async (msg) =>
 };
 
 
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if(app.Environment.IsDevelopment())
 {
+    // Configure the HTTP request pipeline.
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-//app.UseMiddleware<CustomSessionMiddleware>();
 
 // Exception Handling Middleware
 app.UseExceptionHandler(config =>
@@ -408,6 +401,12 @@ app.UseExceptionHandler(config =>
         }
     });
 });
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+//app.UseMiddleware<CustomSessionMiddleware>();
 
 
 

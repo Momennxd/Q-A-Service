@@ -9,20 +9,10 @@ namespace Data.Repositories
 {
     public interface IUserRepo : IRepository<User>
     {
-
-
-
-        Task<User> FindUserByUsernameAsync(string Username);
-
-
         Task<User?> LoginAsync(string Username, string Password);
-
-
-
-        Task<SP_GetUser?> GetUserByID(int UserID);
-        Task<SP_GetUser?> GetUserByEmail(string email);
-        Task<User?> GetUserUsernameAsync(string Username);
-
+        Task<SP_GetUser?> GetUser(int UserID);
+        Task<SP_GetUser?> GetUser(string email, string fullName, CancellationToken cancellation = default);
+        Task<User?> GetUser(string Username);
         Task<List<User>> GetTopUsersAsync(int topN);
     }
 }

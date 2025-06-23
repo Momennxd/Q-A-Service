@@ -17,10 +17,10 @@
 //            _userService = userService;
 //        }
 
-//        [HttpGet("GetUserByID/{UserID}")]
+//        [HttpGet("GetUser/{UserID}")]
 //        [Authorize]
 //        [CheckPermission(Permissions.GetUser)]
-//        public async Task<IActionResult> GetUserByID(int UserID)
+//        public async Task<IActionResult> GetUser(int UserID)
 //        {
 //            var user = await _userService.GetUserByIdAsync(UserID);
 //            if (user == null)
