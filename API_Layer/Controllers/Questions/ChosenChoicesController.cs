@@ -12,7 +12,6 @@ using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 
 namespace API_Layer.Controllers.Questions
 { 
-
     [Route("api/v1/choices/chosen")]
     [ApiController]
     [Authorize]
