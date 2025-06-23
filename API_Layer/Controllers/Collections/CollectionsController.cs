@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static Core.DTOs.Collections.CollectionsDTOs;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -50,7 +51,7 @@ namespace API_Layer.Controllers.Collections
         /// <returns></returns>
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<IActionResult> CollectionsSearch(string SearchText, int PageNumber, int PageSize)
+        public async Task<ActionResult<SendCollectionDTO_Search>> CollectionsSearch(string SearchText, int PageNumber, int PageSize)
         {
             return Ok(await _collectionService.CollectionsSearch
                 (SearchText, PageNumber, PageSize > DEF.MAX_SEARCH_ROWS_OUTPUT ? DEF.MAX_SEARCH_ROWS_OUTPUT : PageSize));

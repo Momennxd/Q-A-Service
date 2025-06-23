@@ -48,14 +48,11 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
 
         public async Task<List<SP_Question>> GetAllQuestionsAsync(int CollectionID)
         {
-
             // Execute the stored procedure and map results to the SP_Question
             return await _appDbContext.Set<SP_Question>()
                 .FromSqlRaw("EXEC SP_GetCollectionQuestions @CollectionID",
                              new SqlParameter("@CollectionID", CollectionID))
                 .ToListAsync();
-
-
         }
 
         public async Task<List<Question>> GetAllQuestionsAsync(HashSet<int> QuestionIDs)

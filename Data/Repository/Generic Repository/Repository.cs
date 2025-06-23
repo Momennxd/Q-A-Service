@@ -29,9 +29,7 @@ namespace Data.Repositories
 
         public virtual async Task<T?> FindAsync(dynamic ItemPK)
         {
-
             return await _dbSet.FindAsync(ItemPK);
-
         }
 
 
