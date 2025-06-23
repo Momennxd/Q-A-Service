@@ -15,8 +15,8 @@ namespace Core.Services.Interfaces
         Task<SendUserDTO?> Login(LoginDTO loginDTO);
         //Task<GetUserDTO?> GetUser(int UserID);
         Task<SendUserDTO> PatchUser(JsonPatchDocument<AddUserDTO> patchDoc, int UserID);
-        Task<GetUserDTO?> GetUserByIdAsync(int UserID);
-        Task<SendUserDTO?> GetUserByUsernameAsync(string UserID);
+        Task<GetUserDTO?> GetUser(int UserID);
+        Task<SendUserDTO?> GetUser(string UserID);
         Task<bool> DeleteUserAsync(int id);
         Task<List<SendUserDTO>> GetTopUsersAsync(int topN = 10);
         Task<ExternalAuthResponseDTO?> GetExternalAuthResponse(string email, string fullName);
