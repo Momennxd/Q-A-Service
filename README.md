@@ -37,22 +37,22 @@ At its heart, the main content unit is the **Question**, grouped into **Collecti
 
 ## 2. Main Concepts
 
-### 2.1 User  
+### 1 User  
 - Represents a person or institution (role: consumer or creator)  
 - Holds a profile (name, email, avatar, bio) and a personal library of saved collections  
 
-### 2.2 Question  
+### 2 Question  
 - Text or image prompt + multiple choices  
 - At least one correct answer, optional explanation for learning  
 
-### 2.3 Collection  
+### 3 Collection  
 - A named group of questions, with description, reviews, likes/dislikes  
 - Created & published by a Creator; can be public or private  
 
-### 2.4 Test  
+### 4 Test  
 - A timed version of a Collection (e.g. “15-minute Biology Quiz”)  
 
-### 2.5 Submission  
+### 5 Submission  
 - A user’s attempt at a Collection or Test  
 - Records which choices were selected, timestamp, and score  
 - Supports multiple submissions per Collection for practice  
@@ -94,8 +94,7 @@ At its heart, the main content unit is the **Question**, grouped into **Collecti
 - **Hosting:** AWS (EC2 / Elastic Beanstalk) for services, RDS for SQL Server  
 
 Optional extensions:
-
-- **Caching:** Redis for hot leaderboard data  
+  
 - **CI/CD:** GitHub Actions → Docker → AWS ECR/ECS  
 - **Monitoring:** CloudWatch, Prometheus + Grafana
 
