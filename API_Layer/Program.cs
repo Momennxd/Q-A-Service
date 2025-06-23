@@ -71,10 +71,6 @@ using Microsoft.AspNetCore.RateLimiting;
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel((context, options) =>
-{
-    options.Configure(context.Configuration.GetSection("Kestrel"));
-});
 
 #region Rate Limiting
 builder.Services.AddRateLimiter(options =>
