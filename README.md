@@ -25,7 +25,7 @@ This is a backend service built around three core roles:
 - **Consumers** (students) who practice and compete  
 - **Content** (Collections of Questions)
 
-At its heart, the main content unit is the **Question**, grouped into **Collections**.  Beyond simple Q&A, the system:
+At its heart, the main content unit is the **Question**, grouped into **Collections**. Beyond simple Q&A, the system:
 
 - Tracks **submissions** per user & per collection  
 - Awards **points** for correct answers  
@@ -37,22 +37,22 @@ At its heart, the main content unit is the **Question**, grouped into **Collecti
 
 ## 2. Main Concepts
 
-### 1 User  
+### 2.1 User  
 - Represents a person or institution (role: consumer or creator)  
 - Holds a profile (name, email, avatar, bio) and a personal library of saved collections  
 
-### 2 Question  
+### 2.2 Question  
 - Text or image prompt + multiple choices  
 - At least one correct answer, optional explanation for learning  
 
-### 3 Collection  
+### 2.3 Collection  
 - A named group of questions, with description, reviews, likes/dislikes  
 - Created & published by a Creator; can be public or private  
 
-### 4 Test  
+### 2.4 Test  
 - A timed version of a Collection (e.g. “15-minute Biology Quiz”)  
 
-### 5 Submission  
+### 2.5 Submission  
 - A user’s attempt at a Collection or Test  
 - Records which choices were selected, timestamp, and score  
 - Supports multiple submissions per Collection for practice  
@@ -100,29 +100,15 @@ Optional extensions:
 
 ---
 
-## 📥 getting-started
+## 5. Getting Started
 
 1. Clone the repo:
    ```bash
    git clone https://github.com/Momennxd/Q-A-Service.git
-   ```
 
-2. Update DB connection in `appsettings.json`
 
-3. Apply migrations:
-   ```bash
-   dotnet ef database update
-   ```
+## 6. Contributors
 
-4. Run the API:
-   ```bash
-   dotnet run
-   ```
-
----
-
-## 🙌 Contributors
-
-- Ahmed  [@AhmedMohammed204 ](https://github.com/AhmedMohammed204)
-- Moamen [@Momennxd](https://github.com/Momennxd)  
-- Mohamed Hamdy [@MohamedHamdySoftwareEngineer](https://github.com/MohamedHamdySoftwareEngineer)  (Flutter app)
+- **Ahmed** [@AhmedMohammed204](https://github.com/AhmedMohammed204)  
+- **Moamen** [@Momennxd](https://github.com/Momennxd)  
+- **Mohamed Hamdy** [@MohamedHamdySoftwareEngineer](https://github.com/MohamedHamdySoftwareEngineer)  
