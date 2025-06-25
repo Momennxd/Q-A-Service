@@ -1,6 +1,7 @@
 ﻿using API_Layer.Authorization;
 using API_Layer.ChatOps;
 using API_Layer.Exceptions;
+using API_Layer.Extensions;
 using API_Layer.Handlers;
 using API_Layer.LogsSettings;
 using API_Layer.Telegram;
@@ -61,6 +62,7 @@ using Prometheus;
 using Serilog;
 using Services.Concrete;
 using Services.Interfaces;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -293,7 +295,7 @@ builder.Services.AddSingleton<ITelegramBot, clsTBot>();
 #endregion
 
 builder.Services.AddSingleton<TelegramChatOps>();
-builder.Services.AddSingleton<MetricsParser>();
+builder.Services.AddAppMonitoring();
 
 
 
@@ -419,15 +421,16 @@ app.UseExceptionHandler(config =>
     });
 });
 
+
+
+
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseHttpMetrics();
+app.UseAppMonitoring();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
-
 //app.UseMiddleware<CustomSessionMiddleware>();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -437,7 +440,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-//app.MapMetrics();
 
 _ = app.Services.GetRequiredService<TelegramChatOps>();
 
