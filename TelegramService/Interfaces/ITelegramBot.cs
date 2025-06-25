@@ -22,5 +22,7 @@ namespace TelegramService.Interfaces
         //Task SendLocationAsync(string chatId, double latitude, double longitude);
         //Task SendContactAsync(string chatId, string phoneNumber, string firstName);
         //Task SendPollAsync(string chatId, string question, IEnumerable<string> options);
+        
+        void AddAction(string key, Action action);
     }
 }
