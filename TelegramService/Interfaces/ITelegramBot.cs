@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 
 namespace TelegramService.Interfaces
 {
@@ -22,7 +23,7 @@ namespace TelegramService.Interfaces
         //Task SendLocationAsync(string chatId, double latitude, double longitude);
         //Task SendContactAsync(string chatId, string phoneNumber, string firstName);
         //Task SendPollAsync(string chatId, string question, IEnumerable<string> options);
-        
-        void AddAction(string key, Action action);
+
+        void AddAction(string key, Func<Update, Task> action);
     }
 }
