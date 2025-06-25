@@ -1,9 +1,7 @@
-﻿using Telegram.Bot.Types;
-using TelegramService.Interfaces;
-using Prometheus;
-using System.IO;
+﻿using Prometheus;
 using System.Text;
-using System.Threading.Tasks;
+using Telegram.Bot.Types;
+using TelegramService.Interfaces;
 
 namespace API_Layer.ChatOps
 {
