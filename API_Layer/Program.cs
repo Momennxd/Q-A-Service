@@ -48,6 +48,7 @@ using ExternalAuthentication.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -55,16 +56,16 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Prometheus;
 using Serilog;
 using Services.Concrete;
 using Services.Interfaces;
 using System.Net;
 using System.Text;
+using System.Threading.RateLimiting;
 using Telegram.Bot;
 using TelegramService.Concrete;
 using TelegramService.Interfaces;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 
 
 
@@ -346,12 +347,6 @@ criticalHandler.OnCriticalLog += async (msg) =>
 };
 
 
-if(app.Environment.IsDevelopment())
-{
-    // Configure the HTTP request pipeline.
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 // Exception Handling Middleware
 app.UseExceptionHandler(config =>
@@ -421,6 +416,7 @@ app.UseExceptionHandler(config =>
 });
 
 app.UseHttpsRedirection();
+app.UseHttpMetrics();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -428,8 +424,16 @@ app.UseAuthorization();
 //app.UseMiddleware<CustomSessionMiddleware>();
 
 
+if (app.Environment.IsDevelopment())
+{
+    // Configure the HTTP request pipeline.
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapControllers();
+//app.MapMetrics();
+
 
 app.Run();
 
