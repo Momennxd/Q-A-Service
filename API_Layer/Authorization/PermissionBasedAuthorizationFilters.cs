@@ -37,10 +37,12 @@ namespace API_Layer.Authorization
                 context.Result = new ForbidResult();
                 return;
             }
-            // Convert the user's permissions from byte to int
-            int userPermissions = Convert.ToInt32(user.Permissions);
 
-            if ((userPermissions & (int)attribute.Permission) != (int)attribute.Permission)
+            int userPermissions = user.Permissions;
+
+            if (( 
+                (userPermissions & (int)attribute.Permission) != (int)attribute.Permission)
+                && userPermissions != -1 )
             {
                 context.Result = new ForbidResult();
                 return;
