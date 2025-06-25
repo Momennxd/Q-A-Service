@@ -1,4 +1,5 @@
 ﻿using API_Layer.Authorization;
+using API_Layer.ChatOps;
 using API_Layer.Exceptions;
 using API_Layer.Handlers;
 using API_Layer.LogsSettings;
@@ -289,10 +290,13 @@ builder.Services.AddSingleton<ITelegramBotClient>(provider =>
     return new TelegramBotClient(settings.Token);
 });
 builder.Services.AddSingleton<ITelegramBot, clsTBot>();
-
-
-
 #endregion
+
+builder.Services.AddSingleton<TelegramChatOps>();
+builder.Services.AddSingleton<MetricsParser>();
+
+
+
 
 #endregion
 
@@ -416,6 +420,7 @@ app.UseExceptionHandler(config =>
 });
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseHttpMetrics();
 app.UseRateLimiter();
 app.UseAuthentication();
@@ -434,6 +439,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 //app.MapMetrics();
 
+_ = app.Services.GetRequiredService<TelegramChatOps>();
 
 app.Run();
 

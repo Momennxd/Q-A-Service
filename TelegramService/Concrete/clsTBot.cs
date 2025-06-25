@@ -52,7 +52,7 @@ namespace TelegramService.Concrete
         {
             try
             {
-                await _client?.SendMessage(chatId, message);
+                await _client.SendMessage(chatId, message, ParseMode.Markdown);
             }
             catch { }
         }
