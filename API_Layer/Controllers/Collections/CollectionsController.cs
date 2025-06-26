@@ -12,7 +12,7 @@ using static Core.DTOs.Collections.CollectionsDTOs;
 namespace API_Layer.Controllers.Collections
 {
 
-
+    ////TESTED_NumberOfTestsDone_TesterName_month_day,year
 
     //READ THIS to understand collections DTOs types----->
     /// <summary>
@@ -29,6 +29,7 @@ namespace API_Layer.Controllers.Collections
     [Route("api/v1/collections")]
     [ApiController]
     [Authorize]
+    //THIS CONTROLLER IS FULLY TESTED by MOMEN on March 26, 2024
     public class CollectionsController : Controller
     {
 
@@ -46,6 +47,7 @@ namespace API_Layer.Controllers.Collections
 
 
 
+        //TESTED_1_MOMEN_MARCH_26,2024
         /// <summary>
         /// Used to search for public collections based on text that is related to the collection info like
         /// {collection name or description} it's built on the 'full text search index' in sql server
@@ -61,6 +63,7 @@ namespace API_Layer.Controllers.Collections
 
 
 
+        //TESTED_1_MOMEN_MARCH_26,2024
         [HttpPost]
         public async Task<ActionResult<int>> AddCollection([FromBody] CollectionsDTOs.CreateQCollectionDTO createDTO)
         {
@@ -71,6 +74,7 @@ namespace API_Layer.Controllers.Collections
 
 
 
+        //TESTED_1_MOMEN_MARCH_26,2024
         [HttpGet("{CollecID}")]
         public async Task<ActionResult<SendCollectionDTO_Full>> GetFullCollection(int CollecID)
         {
@@ -84,7 +88,7 @@ namespace API_Layer.Controllers.Collections
         }
 
 
-
+        //TESTED_1_MOMEN_MARCH_26,2024
         [HttpGet("users/{UserID}")]
         [AllowAnonymous]
         public async Task<ActionResult<SendCollectionDTO_Thumb>> GetThumbCollection(int UserID)
@@ -94,6 +98,7 @@ namespace API_Layer.Controllers.Collections
         }
 
 
+        //TESTED_1_MOMEN_MARCH_26,2024
         /// <summary>
         /// Gets all the public and Private collections by the current logged in user..
         /// </summary>
@@ -108,6 +113,9 @@ namespace API_Layer.Controllers.Collections
         }
 
 
+
+
+        //TESTED_1_MOMEN_MARCH_26,2024
         [HttpPatch]
         public async Task<ActionResult<SendCollectionDTO_Full>> PatchCollection
             ([FromBody] JsonPatchDocument<CollectionsDTOs.PatchQCollectionDTO> patchDoc, int CollecID)
@@ -123,7 +131,7 @@ namespace API_Layer.Controllers.Collections
 
 
 
-
+        //TESTED_1_MOMEN_MARCH_26,2024
         [HttpDelete]
         public async Task<ActionResult<int>> DeleteCollection(int CollecID)
         {

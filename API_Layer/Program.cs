@@ -364,47 +364,28 @@ app.UseExceptionHandler(config =>
         {
             var ex = error.Error;
 
-            // Default to 500 Internal Server Error
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-            if (ex.GetBaseException().GetType() == typeof(SqlException))
+            switch (ex)
             {
+                case UnauthorizedAccessException:
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    break;
+                case KeyNotFoundException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    break;
+                case NotImplementedException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
+                    break;
+                case ArgumentNullException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    break;
+                default:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
 
-                int ErrorCode = ((SqlException)ex.InnerException).Number;
-
-                switch (ErrorCode)
-                {
-                    case 2627:  // Unique constraint error
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-
-                    case 547:   // Constraint check violation
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-
-                    case 2601:  // Duplicated key row error
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-                    default:
-                        break;
-                }
             }
-            else
-            {
-                // Check for specific exceptions
-                switch (ex)
-                {
-                    case UnauthorizedAccessException:
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        break;
-                    case KeyNotFoundException:
-                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                        break;
-                    case NotImplementedException:
-                        context.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
-                        break;
-                }
-            }
+
 
 
 
@@ -416,7 +397,7 @@ app.UseExceptionHandler(config =>
                 ErrorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message
             };
 
-            await context.Response.WriteAsync(errorResponse.ToString());
+            await context.Response.WriteAsync("Error");
         }
     });
 });
