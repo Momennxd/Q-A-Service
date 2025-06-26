@@ -118,10 +118,19 @@ Endpoints for handling authentication-related tasks, specifically refreshing acc
 **Description**
 When a user's `accessToken` expires, the client application should use this endpoint to get a new one without forcing the user to log in again. Provide the `refreshToken` obtained during the initial login. A successful call returns a new pair of access and refresh tokens.
 
+#### Request Structure
 **Request Body** (`RefreshTokenDTO`)
 ```json
 {
   "token": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJ0eXBlIjoicmVmcmVzaCJ9.some_long_signature"
 }
 ```
 
@@ -131,11 +140,21 @@ When a user's `accessToken` expires, the client application should use this endp
 | `200 OK` | Success | A `TokenResponseDto` object. |
 | `404 Not Found` | Invalid Token | The provided refresh token is invalid, expired, or has been revoked. The user must log in again. |
 
-*Example `200 OK` Response (`TokenResponseDto`):*
+#### Response Structure
+**`200 OK` Response Body** (`TokenResponseDto`)
 ```json
 {
   "accessToken": "string",
   "refreshToken": "string"
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdfYWNjZXNzX3Rva2VuIjoiLi4uIn0.signature",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdfcmVmcmVzaF90b2tlbiI6Ii4uLiJ9.signature"
 }
 ```
 ---
@@ -159,6 +178,7 @@ Manages all aspects of user accounts, including registration, login, logout, and
 **Description**
 Creates a new user account with a username, password, and associated personal details. A successful registration returns the newly created user's profile information, confirming the account has been created.
 
+#### Request Structure
 **Request Body** (`AddUserDTO`)
 ```json
 {
@@ -179,13 +199,35 @@ Creates a new user account with a username, password, and associated personal de
 }
 ```
 
+#### Example Request
+**Request Body**
+```json
+{
+  "username": "newuser",
+  "password": "aVeryStrongP@ssword123",
+  "person": {
+    "firstName": "Jane",
+    "secondName": "M.",
+    "lastName": "Doe",
+    "address": "456 Oak Avenue, Anytown",
+    "gender": false,
+    "countryID": 2,
+    "dateOfBirth": "1995-08-22T00:00:00Z",
+    "email": "jane.doe@example.com",
+    "notes": "New user account created via API.",
+    "preferredLanguageID": 1
+  }
+}
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | A `SendUserDTO` object. |
 | `400 Bad Request` | Validation Error | The request is invalid. This could be due to a username that already exists, a weak password, or other failed validation rules. |
 
-*Example `200 OK` Response (`SendUserDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendUserDTO`)
 ```json
 {
   "userId": 0,
@@ -206,6 +248,29 @@ Creates a new user account with a username, password, and associated personal de
   }
 }
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "userId": 123,
+  "username": "newuser",
+  "person": {
+    "firstName": "Jane",
+    "secondName": "M.",
+    "lastName": "Doe",
+    "address": "456 Oak Avenue, Anytown",
+    "gender": false,
+    "countryID": 2,
+    "dateOfBirth": "1995-08-22T00:00:00Z",
+    "email": "jane.doe@example.com",
+    "notes": "New user account created via API.",
+    "preferredLanguageID": 1,
+    "personID": 45,
+    "joinedDate": "2024-05-21T12:30:00Z"
+  }
+}
+```
 ---
 ### User Login
 <a id="user-login"></a>
@@ -219,11 +284,21 @@ Creates a new user account with a username, password, and associated personal de
 **Description**
 This is the primary endpoint for authenticating a user with their username and password. A successful login provides an `accessToken` (for API access) and a `refreshToken` (for session renewal).
 
+#### Request Structure
 **Request Body** (`LoginDTO`)
 ```json
 {
   "username": "string",
   "password": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "username": "newuser",
+  "password": "aVeryStrongP@ssword123"
 }
 ```
 
@@ -233,11 +308,21 @@ This is the primary endpoint for authenticating a user with their username and p
 | `200 OK` | Success | A `LoginResponseDto` object. |
 | `401 Unauthorized` | Invalid Credentials | The provided username or password was incorrect. |
 
-*Example `200 OK` Response (`LoginResponseDto`):*
+#### Response Structure
+**`200 OK` Response Body** (`LoginResponseDto`)
 ```json
 {
   "accessToken": "string",
   "refreshToken": "string"
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJuYW1lIjoibmV3dXNlciIsImlhdCI6MTUxNjIzOTAyMn0.signature",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJ0eXBlIjoicmVmcmVzaCJ9.long_signature"
 }
 ```
 ---
@@ -253,11 +338,21 @@ This is the primary endpoint for authenticating a user with their username and p
 **Description**
 Handles both login and registration for users authenticating with a third-party OAuth provider (e.g., Google, Facebook). Send the token provided by the external service. If a user with the associated external ID exists, they are logged in. If not, a new user account is created and then logged in.
 
+#### Request Structure
 **Request Body** (`ExternalLoginRequestDTO`)
 ```json
 {
   "provider": "string",
   "idToken": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "provider": "Google",
+  "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjEyMzRhYmM1Njc4OWRlZiIsImFsZyI6IlJTMjU2In0.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMjM0NTY3ODkwLWFzZGYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIxMjM0NTY3ODkwLWFzZGYuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDk4NzY1NDMyMTA5ODc2NTQzMjEiLCJlbWFpbCI6ImphbmUuZG9lQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiSmFuZSBEb2UiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJnaXZlbl9uYW1lIjoiSmFuZSIsImZhbWlseV9uYW1lIjoiRG9lIiwibG9jYWxlIjoiZW4ifQ.signature"
 }
 ```
 
@@ -267,7 +362,8 @@ Handles both login and registration for users authenticating with a third-party 
 | `200 OK` | Success | An `ExternalAuthResponseDTO` object. |
 | `400 Bad Request` | Invalid Token | The provider token is invalid, expired, or could not be verified by the server. |
 
-*Example `200 OK` Response (`ExternalAuthResponseDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`ExternalAuthResponseDTO`)
 ```json
 {
   "user": {
@@ -284,6 +380,28 @@ Handles both login and registration for users authenticating with a third-party 
   "tokens": {
     "accessToken": "string",
     "refreshToken": "string"
+  }
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "user": {
+    "userId": 124,
+    "username": "jane.doe@gmail.com",
+    "firstName": "Jane",
+    "secondName": null,
+    "lastName": "Doe",
+    "gender": null,
+    "email": "jane.doe@gmail.com",
+    "notes": "Account created from Google login.",
+    "userPoints": 0
+  },
+  "tokens": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJuYW1lIjoiamFuZS5kb2VAZ21haWwuY29tIiwiaWF0IjoxNTE2MjM5MDIyfQ.signature",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjQiLCJ0eXBlIjoicmVmcmVzaCJ9.long_signature"
   }
 }
 ```
@@ -306,7 +424,8 @@ Fetches the detailed profile of the user associated with the `accessToken` sent 
 | `200 OK` | Success | A `GetUserDTO` object. |
 | `401 Unauthorized` | No Token | The request lacks a valid `Authorization` header or the token is expired. |
 
-*Example `200 OK` Response (`GetUserDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`GetUserDTO`)
 ```json
 {
   "userId": 0,
@@ -318,6 +437,22 @@ Fetches the detailed profile of the user associated with the `accessToken` sent 
   "email": "string",
   "notes": "string",
   "userPoints": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "userId": 123,
+  "username": "newuser",
+  "firstName": "Jane",
+  "secondName": "M.",
+  "lastName": "Doe",
+  "gender": false,
+  "email": "jane.doe@example.com",
+  "notes": "New user account created via API.",
+  "userPoints": 250
 }
 ```
 ---
@@ -333,6 +468,7 @@ Fetches the detailed profile of the user associated with the `accessToken` sent 
 **Description**
 Allows the authenticated user to update their own profile details using the JSON Patch standard (RFC 6902). This method is efficient for making partial updates, as you only need to send the fields that are changing.
 
+#### Request Structure
 **Request Body** (Array of `Operation` objects)
 ```json
 [
@@ -346,6 +482,23 @@ Allows the authenticated user to update their own profile details using the JSON
 ]
 ```
 
+#### Example Request
+**Request Body**
+```json
+[
+  {
+    "op": "replace",
+    "path": "/notes",
+    "value": "Updated my notes."
+  },
+  {
+    "op": "replace",
+    "path": "/address",
+    "value": "789 Pine Street, New City"
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
@@ -353,7 +506,8 @@ Allows the authenticated user to update their own profile details using the JSON
 | `400 Bad Request` | Invalid Patch | The JSON Patch document was malformed or tried to update a non-existent/protected field. |
 | `401 Unauthorized` | No Token | The request lacks a valid `Authorization` header. |
 
-*Example `200 OK` Response (`SendUserDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendUserDTO`)
 ```json
 {
   "userId": 0,
@@ -374,6 +528,29 @@ Allows the authenticated user to update their own profile details using the JSON
   }
 }
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "userId": 123,
+  "username": "newuser",
+  "person": {
+    "firstName": "Jane",
+    "secondName": "M.",
+    "lastName": "Doe",
+    "address": "789 Pine Street, New City",
+    "gender": false,
+    "countryID": 2,
+    "dateOfBirth": "1995-08-22T00:00:00Z",
+    "email": "jane.doe@example.com",
+    "notes": "Updated my notes.",
+    "preferredLanguageID": 1,
+    "personID": 45,
+    "joinedDate": "2024-05-21T12:30:00Z"
+  }
+}
+```
 ---
 ### User Logout
 <a id="user-logout"></a>
@@ -387,10 +564,19 @@ Allows the authenticated user to update their own profile details using the JSON
 **Description**
 To securely log a user out, the client application must call this endpoint to revoke the current `refreshToken`. This prevents it from being used to generate new access tokens in the future. After calling this, the client should also discard the `accessToken` and `refreshToken` locally.
 
+#### Request Structure
 **Request Body** (`RefreshTokenDTO`)
 ```json
 {
   "token": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJ0eXBlIjoicmVmcmVzaCJ9.long_signature"
 }
 ```
 
@@ -422,6 +608,7 @@ The Collections API is the central hub for managing question collections. A "col
 **Description**
 This is the primary endpoint for creating new content. It allows you to create a new question collection, including all of its nested questions and their respective choices, in a single atomic operation.
 
+#### Request Structure
 **Request Body** (`CreateQCollectionDTO`)
 ```json
 {
@@ -446,15 +633,57 @@ This is the primary endpoint for creating new content. It allows you to create a
 }
 ```
 
+#### Example Request
+**Request Body**
+```json
+{
+  "collectionName": "Introduction to Astronomy",
+  "description": "A collection of basic questions about our solar system and beyond.",
+  "isPublic": true,
+  "collecQuestions": [
+    {
+      "questionText": "Which planet is known as the Red Planet?",
+      "isMCQ": true,
+      "questionPoints": 10,
+      "rank": 1,
+      "choices": [
+        {
+          "choiceText": "Venus",
+          "isRightAnswer": false,
+          "rank": 1
+        },
+        {
+          "choiceText": "Mars",
+          "isRightAnswer": true,
+          "rank": 2
+        },
+        {
+          "choiceText": "Jupiter",
+          "isRightAnswer": false,
+          "rank": 3
+        }
+      ]
+    }
+  ]
+}
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An `integer` representing the unique ID of the new collection. |
 | `401 Unauthorized` | No Token | The request lacks a valid `Authorization` header. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+101
 ```
 ---
 ### Get All Collections
@@ -474,7 +703,8 @@ Fetches a lightweight list of all public collections. If the user is authenticat
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendCollectionDTO_Thumb` objects. |
 
-*Example `200 OK` Response (Array of `SendCollectionDTO_Thumb`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendCollectionDTO_Thumb`)
 ```json
 [
   {
@@ -486,6 +716,37 @@ Fetches a lightweight list of all public collections. If the user is authenticat
     "categories": [
       {
         "categoryName": "string"
+      }
+    ]
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "collectionName": "Introduction to Astronomy",
+    "description": "A collection of basic questions about our solar system and beyond.",
+    "isPublic": true,
+    "collectionID": 101,
+    "addedTime": "2024-05-21T13:00:00Z",
+    "categories": [
+      {
+        "categoryName": "Science"
+      }
+    ]
+  },
+  {
+    "collectionName": "World War II History",
+    "description": "Key events and figures from WWII.",
+    "isPublic": true,
+    "collectionID": 102,
+    "addedTime": "2024-05-20T10:00:00Z",
+    "categories": [
+      {
+        "categoryName": "History"
       }
     ]
   }
@@ -504,6 +765,7 @@ Fetches a lightweight list of all public collections. If the user is authenticat
 **Description**
 This method is ideal for making partial updates to a collection's metadata (like its name or description). It uses the JSON Patch standard. Only the collection's owner can perform this action.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -522,6 +784,21 @@ This method is ideal for making partial updates to a collection's metadata (like
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/collections?CollecID=101`
+
+**Request Body**
+```json
+[
+  {
+    "op": "replace",
+    "path": "/description",
+    "value": "An updated, more detailed description of the astronomy collection."
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
@@ -529,7 +806,8 @@ This method is ideal for making partial updates to a collection's metadata (like
 | `403 Forbidden` | Not Owner | The authenticated user is not the owner of the collection. |
 | `404 Not Found` | Not Found | The collection with the specified ID does not exist. |
 
-*Example `200 OK` Response (`SendCollectionDTO_Full`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendCollectionDTO_Full`)
 ```json
 {
   "collectionName": "string",
@@ -555,6 +833,36 @@ This method is ideal for making partial updates to a collection's metadata (like
           "choiceText": "string",
           "rank": 0
         }
+      ]
+    }
+  ]
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "collectionName": "Introduction to Astronomy",
+  "description": "An updated, more detailed description of the astronomy collection.",
+  "isPublic": true,
+  "collectionID": 101,
+  "addedTime": "2024-05-21T13:00:00Z",
+  "likes": 50,
+  "disLikes": 2,
+  "collecQuestions": [
+    {
+      "questionID": 201,
+      "questionText": "Which planet is known as the Red Planet?",
+      "userID": 123,
+      "isMCQ": true,
+      "addedDate": "2024-05-21T13:00:00Z",
+      "questionPoints": 10,
+      "rank": 1,
+      "choices": [
+        { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+        { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+        { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 }
       ]
     }
   ]
@@ -573,10 +881,15 @@ This method is ideal for making partial updates to a collection's metadata (like
 **Description**
 Permanently deletes a collection and all its associated content (questions, choices, submissions, etc.). This is a destructive and irreversible action. Only the owner of the collection can delete it.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollecID` | integer | Yes | The unique ID of the collection to be deleted. |
+
+#### Example Request
+**Request URL**
+`/api/v1/collections?CollecID=102`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -585,9 +898,16 @@ Permanently deletes a collection and all its associated content (questions, choi
 | `403 Forbidden` | Not Owner | The authenticated user is not the owner of the collection. |
 | `404 Not Found` | Not Found | The collection with the specified ID does not exist. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+102
 ```
 ---
 ### Get Collection by ID
@@ -602,10 +922,15 @@ Permanently deletes a collection and all its associated content (questions, choi
 **Description**
 Retrieves a single, complete collection by its unique ID, including all its questions and their choices. This is the primary endpoint to get all data needed to display or administer a quiz. If the collection is public, no authentication is needed. If it's private, the request must be authenticated by the collection's owner.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollecID` | integer | Yes | The unique ID of the collection. |
+
+#### Example Request
+**Request URL**
+`/api/v1/collections/101`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -613,7 +938,8 @@ Retrieves a single, complete collection by its unique ID, including all its ques
 | `200 OK` | Success | A `SendCollectionDTO_Full` object. |
 | `404 Not Found` | Not Found | The collection with the specified ID does not exist. |
 
-*Example `200 OK` Response (`SendCollectionDTO_Full`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendCollectionDTO_Full`)
 ```json
 {
   "collectionName": "string",
@@ -644,6 +970,36 @@ Retrieves a single, complete collection by its unique ID, including all its ques
   ]
 }
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "collectionName": "Introduction to Astronomy",
+  "description": "A collection of basic questions about our solar system and beyond.",
+  "isPublic": true,
+  "collectionID": 101,
+  "addedTime": "2024-05-21T13:00:00Z",
+  "likes": 50,
+  "disLikes": 2,
+  "collecQuestions": [
+    {
+      "questionID": 201,
+      "questionText": "Which planet is known as the Red Planet?",
+      "userID": 123,
+      "isMCQ": true,
+      "addedDate": "2024-05-21T13:00:00Z",
+      "questionPoints": 10,
+      "rank": 1,
+      "choices": [
+        { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+        { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+        { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 }
+      ]
+    }
+  ]
+}
+```
 ---
 ### Search Collections
 <a id="search-collections"></a>
@@ -657,6 +1013,7 @@ Retrieves a single, complete collection by its unique ID, including all its ques
 **Description**
 This endpoint powers the public search functionality, allowing users to discover new collections by searching against fields like `collectionName` and `description`. It supports pagination.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -664,12 +1021,17 @@ This endpoint powers the public search functionality, allowing users to discover
 | `PageNumber` | integer | No | The page number for pagination (e.g., `1`, `2`, `3`...). |
 | `PageSize` | integer | No | The number of results to return per page. |
 
+#### Example Request
+**Request URL**
+`/api/v1/collections/search?SearchText=History&PageNumber=1&PageSize=10`
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendCollectionDTO_Search` objects. |
 
-*Example `200 OK` Response (Array of `SendCollectionDTO_Search`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendCollectionDTO_Search`)
 ```json
 [
   {
@@ -678,6 +1040,20 @@ This endpoint powers the public search functionality, allowing users to discover
     "isPublic": true,
     "collectionID": 0,
     "addedTime": "2024-05-21T12:00:00Z"
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "collectionName": "World War II History",
+    "description": "Key events and figures from WWII.",
+    "isPublic": true,
+    "collectionID": 102,
+    "addedTime": "2024-05-20T10:00:00Z"
   }
 ]
 ```
@@ -694,10 +1070,15 @@ This endpoint powers the public search functionality, allowing users to discover
 **Description**
 Use this to populate a user's public profile page with a list of all the public collections they have created. It returns a "thumbnail" version of each collection, which is a lighter payload suitable for list views.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `UserID` | integer | Yes | The unique ID of the user whose collections to fetch. |
+
+#### Example Request
+**Request URL**
+`/api/v1/collections/users/123`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -705,7 +1086,8 @@ Use this to populate a user's public profile page with a list of all the public 
 | `200 OK` | Success | An array of `SendCollectionDTO_Thumb` objects. |
 | `404 Not Found` | Not Found | The user with the specified ID does not exist. |
 
-*Example `200 OK` Response (Array of `SendCollectionDTO_Thumb`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendCollectionDTO_Thumb`)
 ```json
 [
   {
@@ -717,6 +1099,25 @@ Use this to populate a user's public profile page with a list of all the public 
     "categories": [
       {
         "categoryName": "string"
+      }
+    ]
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "collectionName": "Introduction to Astronomy",
+    "description": "A collection of basic questions about our solar system and beyond.",
+    "isPublic": true,
+    "collectionID": 101,
+    "addedTime": "2024-05-21T13:00:00Z",
+    "categories": [
+      {
+        "categoryName": "Science"
       }
     ]
   }
@@ -743,11 +1144,16 @@ Manages user likes and dislikes on collections.
 **Description**
 Allows an authenticated user to cast a "like" or "dislike" vote on a collection. The system typically handles toggling the vote (e.g., if a user has already liked a collection and sends another "like" request, it may remove the like).
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollectionId` | integer | Yes | The ID of the collection to vote on. |
 | `IsLike` | boolean | Yes | `true` for a like, `false` for a dislike. |
+
+#### Example Request
+**Request URL**
+`/api/v1/collections/likes/Like?CollectionId=101&IsLike=true`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -777,6 +1183,7 @@ Manages user-submitted reviews and ratings for collections.
 **Description**
 Allows an authenticated user to post a review for a collection. A user can typically only review a collection once.
 
+#### Request Structure
 **Request Body** (`MainCollectionsReviewDTO`)
 ```json
 {
@@ -785,6 +1192,18 @@ Allows an authenticated user to post a review for a collection. A user can typic
   "reviewText": "string",
   "reviewValue": 0,
   "reviewDate": "2024-05-21T12:00:00Z"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "collectionID": 101,
+  "userID": 123,
+  "reviewText": "This was a great collection, very informative!",
+  "reviewValue": 5,
+  "reviewDate": "2024-05-21T14:00:00Z"
 }
 ```
 
@@ -808,6 +1227,7 @@ Allows an authenticated user to post a review for a collection. A user can typic
 **Description**
 Allows a user to update their own existing review for a collection using the JSON Patch standard.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -826,6 +1246,26 @@ Allows a user to update their own existing review for a collection using the JSO
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/collections/reviews?CollectionID=101`
+
+**Request Body**
+```json
+[
+  {
+    "op": "replace",
+    "path": "/reviewValue",
+    "value": 4
+  },
+  {
+    "op": "replace",
+    "path": "/reviewText",
+    "value": "This was a good collection, but a bit too short."
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
@@ -833,7 +1273,8 @@ Allows a user to update their own existing review for a collection using the JSO
 | `403 Forbidden` | Not Owner | The user is trying to update a review that is not theirs. |
 | `404 Not Found` | Not Found | The user has not submitted a review for this collection. |
 
-*Example `200 OK` Response (`MainCollectionsReviewDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`MainCollectionsReviewDTO`)
 ```json
 {
   "collectionID": 0,
@@ -841,6 +1282,18 @@ Allows a user to update their own existing review for a collection using the JSO
   "reviewText": "string",
   "reviewValue": 0,
   "reviewDate": "2024-05-21T12:00:00Z"
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "collectionID": 101,
+  "userID": 123,
+  "reviewText": "This was a good collection, but a bit too short.",
+  "reviewValue": 4,
+  "reviewDate": "2024-05-21T14:05:00Z"
 }
 ```
 ---
@@ -856,10 +1309,15 @@ Allows a user to update their own existing review for a collection using the JSO
 **Description**
 Allows a user to delete their own review for a collection.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollectionID` | integer | Yes | The ID of the collection whose review is being deleted. |
+
+#### Example Request
+**Request URL**
+`/api/v1/collections/reviews?CollectionID=101`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -881,6 +1339,7 @@ Allows a user to delete their own review for a collection.
 **Description**
 Retrieves all reviews for a specific collection, with support for pagination.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -891,13 +1350,18 @@ Retrieves all reviews for a specific collection, with support for pagination.
 | :--- | :--- | :--- | :--- |
 | `Page` | integer | No | The page number for pagination (e.g., `1`, `2`, `3`...). |
 
+#### Example Request
+**Request URL**
+`/api/v1/collections/reviews/101?Page=1`
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `MainCollectionsReviewDTO` objects. |
 | `404 Not Found` | Not Found | The specified collection does not exist. |
 
-*Example `200 OK` Response (Array of `MainCollectionsReviewDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `MainCollectionsReviewDTO`)
 ```json
 [
   {
@@ -906,6 +1370,27 @@ Retrieves all reviews for a specific collection, with support for pagination.
     "reviewText": "string",
     "reviewValue": 0,
     "reviewDate": "2024-05-21T12:00:00Z"
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "collectionID": 101,
+    "userID": 123,
+    "reviewText": "This was a good collection, but a bit too short.",
+    "reviewValue": 4,
+    "reviewDate": "2024-05-21T14:05:00Z"
+  },
+  {
+    "collectionID": 101,
+    "userID": 125,
+    "reviewText": "Excellent content!",
+    "reviewValue": 5,
+    "reviewDate": "2024-05-21T15:00:00Z"
   }
 ]
 ```
@@ -930,10 +1415,15 @@ Manages the lifecycle of a user attempting a collection (e.g., taking a quiz).
 **Description**
 Before a user starts answering questions in a collection, call this endpoint to create a "submission" container. The returned `submitionID` is crucial and must be used to associate all subsequent answers with this specific attempt.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollectionID` | integer | Yes | The ID of the collection being attempted. |
+
+#### Example Request
+**Request URL**
+`/api/v1/submitions?CollectionID=101`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -942,9 +1432,16 @@ Before a user starts answering questions in a collection, call this endpoint to 
 | `401 Unauthorized`| No Token | The request lacks a valid `Authorization` header. |
 | `404 Not Found` | Not Found | The specified collection does not exist. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+55
 ```
 ---
 ### Get Submission Details
@@ -959,10 +1456,15 @@ Before a user starts answering questions in a collection, call this endpoint to 
 **Description**
 Retrieves the details and final results of a specific submission attempt after it has been completed.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `SubmissionID` | integer | Yes | The ID of the submission to retrieve, obtained from the [Create a Submission](#create-a-submission) endpoint. |
+
+#### Example Request
+**Request URL**
+`/api/v1/submitions?SubmissionID=55`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -971,13 +1473,25 @@ Retrieves the details and final results of a specific submission attempt after i
 | `403 Forbidden` | Not Owner | You can only view your own submissions. |
 | `404 Not Found` | Not Found | The specified submission does not exist. |
 
-*Example `200 OK` Response (`CollectionSubmissionMainDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`CollectionSubmissionMainDTO`)
 ```json
 {
   "submitDate": "2024-05-21T12:00:00Z",
   "username": "string",
   "totalChosenChoices": 0,
   "totalRightAnswers": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "submitDate": "2024-05-21T16:00:00Z",
+  "username": "newuser",
+  "totalChosenChoices": 10,
+  "totalRightAnswers": 8
 }
 ```
 ---
@@ -993,10 +1507,15 @@ Retrieves the details and final results of a specific submission attempt after i
 **Description**
 Deletes a user's submission record. This might be used to allow a user to clear their attempt history.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `SubmitionID` | integer | Yes | The ID of the submission to delete. |
+
+#### Example Request
+**Request URL**
+`/api/v1/submitions?SubmitionID=55`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1026,6 +1545,7 @@ Manages the questions that belong to collections.
 **Description**
 Use this endpoint to add one or more new questions to a collection that has already been created. This is useful for building a collection incrementally.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1050,13 +1570,35 @@ Use this endpoint to add one or more new questions to a collection that has alre
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/questions?CollectionID=101`
+
+**Request Body**
+```json
+[
+  {
+    "questionText": "What is the largest moon of Saturn?",
+    "isMCQ": true,
+    "questionPoints": 15,
+    "rank": 2,
+    "choices": [
+      { "choiceText": "Europa", "isRightAnswer": false, "rank": 1 },
+      { "choiceText": "Titan", "isRightAnswer": true, "rank": 2 },
+      { "choiceText": "Ganymede", "isRightAnswer": false, "rank": 3 }
+    ]
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendQuestionDTO` for the newly created questions. |
 | `403 Forbidden` | Not Owner | You do not own the collection you are trying to modify. |
 
-*Example `200 OK` Response (Array of `SendQuestionDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendQuestionDTO`)
 ```json
 [
   {
@@ -1078,6 +1620,27 @@ Use this endpoint to add one or more new questions to a collection that has alre
   }
 ]
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "questionID": 202,
+    "questionText": "What is the largest moon of Saturn?",
+    "userID": 123,
+    "isMCQ": true,
+    "addedDate": "2024-05-21T13:10:00Z",
+    "questionPoints": 15,
+    "rank": 2,
+    "choices": [
+      { "choiceID": 304, "questionID": 202, "choiceText": "Europa", "rank": 1 },
+      { "choiceID": 305, "questionID": 202, "choiceText": "Titan", "rank": 2 },
+      { "choiceID": 306, "questionID": 202, "choiceText": "Ganymede", "rank": 3 }
+    ]
+  }
+]
+```
 ---
 ### Get Questions from Collection
 <a id="get-questions-from-collection"></a>
@@ -1091,10 +1654,15 @@ Use this endpoint to add one or more new questions to a collection that has alre
 **Description**
 Retrieves all questions for a given collection. This is a simplified endpoint and may not be the primary way to fetch questions for a quiz (see `GET /api/v1/collections/{CollecID}`).
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `CollectionID` | integer | Yes | The ID of the collection whose questions to fetch. |
+
+#### Example Request
+**Request URL**
+`/api/v1/questions?CollectionID=101`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1102,7 +1670,8 @@ Retrieves all questions for a given collection. This is a simplified endpoint an
 | `200 OK` | Success | A `SendQuestionDTO` object (Note: The schema suggests a single object, which might be an error. It typically should be an array). |
 | `404 Not Found` | Not Found | The specified collection does not exist. |
 
-*Example `200 OK` Response (`SendQuestionDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendQuestionDTO`)
 ```json
 {
   "questionID": 0,
@@ -1119,6 +1688,25 @@ Retrieves all questions for a given collection. This is a simplified endpoint an
       "choiceText": "string",
       "rank": 0
     }
+  ]
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "questionID": 201,
+  "questionText": "Which planet is known as the Red Planet?",
+  "userID": 123,
+  "isMCQ": true,
+  "addedDate": "2024-05-21T13:00:00Z",
+  "questionPoints": 10,
+  "rank": 1,
+  "choices": [
+    { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+    { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+    { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 }
   ]
 }
 ```
@@ -1135,10 +1723,15 @@ Retrieves all questions for a given collection. This is a simplified endpoint an
 **Description**
 Permanently deletes a question and its associated choices.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionID` | integer | Yes | The ID of the question to delete. |
+
+#### Example Request
+**Request URL**
+`/api/v1/questions?QuestionID=202`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1147,9 +1740,16 @@ Permanently deletes a question and its associated choices.
 | `403 Forbidden` | Not Owner | You do not own the question. |
 | `404 Not Found` | Not Found | The specified question does not exist. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+202
 ```
 ---
 ### Get a Single Question
@@ -1164,10 +1764,15 @@ Permanently deletes a question and its associated choices.
 **Description**
 Retrieves a single question by its unique ID, including its choices.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionID` | integer | Yes | The unique ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/questions/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1175,7 +1780,8 @@ Retrieves a single question by its unique ID, including its choices.
 | `200 OK` | Success | A `SendQuestionDTO` object. |
 | `404 Not Found` | Not Found | A question with the specified ID was not found. |
 
-*Example `200 OK` Response (`SendQuestionDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendQuestionDTO`)
 ```json
 {
   "questionID": 0,
@@ -1195,6 +1801,25 @@ Retrieves a single question by its unique ID, including its choices.
   ]
 }
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "questionID": 201,
+  "questionText": "Which planet is known as the Red Planet?",
+  "userID": 123,
+  "isMCQ": true,
+  "addedDate": "2024-05-21T13:00:00Z",
+  "questionPoints": 10,
+  "rank": 1,
+  "choices": [
+    { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+    { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+    { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 }
+  ]
+}
+```
 ---
 ### Update a Question
 <a id="update-a-question"></a>
@@ -1208,6 +1833,7 @@ Retrieves a single question by its unique ID, including its choices.
 **Description**
 Updates specific fields of an existing question (e.g., its text or rank) using the JSON Patch standard.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1226,13 +1852,29 @@ Updates specific fields of an existing question (e.g., its text or rank) using t
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/questions/201`
+
+**Request Body**
+```json
+[
+  {
+    "op": "replace",
+    "path": "/questionText",
+    "value": "Which planet in our solar system is famously known as the Red Planet?"
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | The updated `SendQuestionDTO` object. |
 | `403 Forbidden` | Not Owner | You do not own the question you are trying to modify. |
 
-*Example `200 OK` Response (`SendQuestionDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendQuestionDTO`)
 ```json
 {
   "questionID": 0,
@@ -1252,6 +1894,25 @@ Updates specific fields of an existing question (e.g., its text or rank) using t
   ]
 }
 ```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "questionID": 201,
+  "questionText": "Which planet in our solar system is famously known as the Red Planet?",
+  "userID": 123,
+  "isMCQ": true,
+  "addedDate": "2024-05-21T13:00:00Z",
+  "questionPoints": 10,
+  "rank": 1,
+  "choices": [
+    { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+    { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+    { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 }
+  ]
+}
+```
 ---
 ### Update Question Points
 <a id="update-question-points"></a>
@@ -1265,6 +1926,7 @@ Updates specific fields of an existing question (e.g., its text or rank) using t
 **Description**
 A dedicated, lightweight endpoint to quickly update the point value of a question.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1275,15 +1937,26 @@ A dedicated, lightweight endpoint to quickly update the point value of a questio
 | :--- | :--- | :--- | :--- |
 | `NewPointsVal` | integer | Yes | The new point value for the question. |
 
+#### Example Request
+**Request URL**
+`/api/v1/questions/points/201?NewPointsVal=15`
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An `integer` representing the updated point value. |
 | `403 Forbidden` | Not Owner | You do not own the question. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+15
 ```
 ---
 ### Get Random Questions
@@ -1298,10 +1971,15 @@ A dedicated, lightweight endpoint to quickly update the point value of a questio
 **Description**
 Fetches a set of random questions from a specific collection. This is useful for creating a dynamic quiz experience where the questions are not always in the same order or for sampling a large collection.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `collectionId` | integer | Yes | The ID of the collection to pull random questions from. |
+
+#### Example Request
+**Request URL**
+`/api/v1/questions/random?collectionId=101`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1309,7 +1987,8 @@ Fetches a set of random questions from a specific collection. This is useful for
 | `200 OK` | Success | An array of `QuestionWithChoicesDto` objects. This DTO is lightweight and does not include the `isRightAnswer` field. |
 | `404 Not Found` | Not Found | The specified collection does not exist. |
 
-*Example `200 OK` Response (Array of `QuestionWithChoicesDto`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `QuestionWithChoicesDto`)
 ```json
 [
   {
@@ -1321,6 +2000,23 @@ Fetches a set of random questions from a specific collection. This is useful for
         "choiceID": 0,
         "choiceText": "string"
       }
+    ]
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "questionID": 201,
+    "questionText": "Which planet is known as the Red Planet?",
+    "rank": 1,
+    "choices": [
+      { "choiceID": 301, "choiceText": "Venus" },
+      { "choiceID": 302, "choiceText": "Mars" },
+      { "choiceID": 303, "choiceText": "Jupiter" }
     ]
   }
 ]
@@ -1346,6 +2042,7 @@ Manages the answer choices for questions.
 **Description**
 Creates one or more new choices and associates them with an existing question.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1362,6 +2059,21 @@ Creates one or more new choices and associates them with an existing question.
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/choices?QuestionID=201`
+
+**Request Body**
+```json
+[
+  {
+    "choiceText": "Earth",
+    "isRightAnswer": false,
+    "rank": 4
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
@@ -1369,7 +2081,8 @@ Creates one or more new choices and associates them with an existing question.
 | `400 Bad Request` | Invalid Input | The question ID may be missing or invalid. |
 | `401 Unauthorized`| No Token | The request lacks a valid `Authorization` header. |
 
-*Example `200 OK` Response (Array of `SendChoiceDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendChoiceDTO`)
 ```json
 [
   {
@@ -1377,6 +2090,19 @@ Creates one or more new choices and associates them with an existing question.
     "questionID": 0,
     "choiceText": "string",
     "rank": 0
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "choiceID": 307,
+    "questionID": 201,
+    "choiceText": "Earth",
+    "rank": 4
   }
 ]
 ```
@@ -1393,10 +2119,21 @@ Creates one or more new choices and associates them with an existing question.
 **Description**
 This endpoint allows you to fetch details for a specific list of choices in a single call by providing their IDs in the request body.
 
+#### Request Structure
 **Request Body** (Array of integers)
 ```json
 [
   0
+]
+```
+
+#### Example Request
+**Request Body**
+```json
+[
+  301,
+  302,
+  305
 ]
 ```
 
@@ -1405,7 +2142,8 @@ This endpoint allows you to fetch details for a specific list of choices in a si
 | :--- | :--- | :--- |
 | `200 OK` | Success | A map where keys are question IDs and values are arrays of `SendChoiceDTO` objects, grouping the choices by their parent question. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
 ```json
 {
   "additionalProp1": [
@@ -1415,6 +2153,20 @@ This endpoint allows you to fetch details for a specific list of choices in a si
       "choiceText": "string",
       "rank": 0
     }
+  ]
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "201": [
+    { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+    { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 }
+  ],
+  "202": [
+    { "choiceID": 305, "questionID": 202, "choiceText": "Titan", "rank": 2 }
   ]
 }
 ```
@@ -1431,10 +2183,15 @@ This endpoint allows you to fetch details for a specific list of choices in a si
 **Description**
 Retrieves all available choices for a specific question. This is the standard way to get the options to display to a user taking a quiz. The response does not indicate which answer is correct.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `questionID` | integer | Yes | The ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/choices/questions/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1442,7 +2199,8 @@ Retrieves all available choices for a specific question. This is the standard wa
 | `200 OK` | Success | An array of `SendChoiceDTO` objects. |
 | `404 Not Found` | Not Found | The question was not found. |
 
-*Example `200 OK` Response (Array of `SendChoiceDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendChoiceDTO`)
 ```json
 [
   {
@@ -1451,6 +2209,17 @@ Retrieves all available choices for a specific question. This is the standard wa
     "choiceText": "string",
     "rank": 0
   }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  { "choiceID": 301, "questionID": 201, "choiceText": "Venus", "rank": 1 },
+  { "choiceID": 302, "questionID": 201, "choiceText": "Mars", "rank": 2 },
+  { "choiceID": 303, "questionID": 201, "choiceText": "Jupiter", "rank": 3 },
+  { "choiceID": 307, "questionID": 201, "choiceText": "Earth", "rank": 4 }
 ]
 ```
 ---
@@ -1466,10 +2235,15 @@ Retrieves all available choices for a specific question. This is the standard wa
 **Description**
 This is a protected endpoint used for grading or showing the correct answer(s) after a user has submitted their choice. It retrieves only the choice(s) marked as correct for a given question.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `questionID` | integer | Yes | The ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/choices/answers/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1477,7 +2251,8 @@ This is a protected endpoint used for grading or showing the correct answer(s) a
 | `200 OK` | Success | An array of `SendChoiceDTO` objects that are the correct answers. |
 | `401 Unauthorized`| No Token | The request lacks a valid `Authorization` header. |
 
-*Example `200 OK` Response (Array of `SendChoiceDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendChoiceDTO`)
 ```json
 [
   {
@@ -1485,6 +2260,19 @@ This is a protected endpoint used for grading or showing the correct answer(s) a
     "questionID": 0,
     "choiceText": "string",
     "rank": 0
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "choiceID": 302,
+    "questionID": 201,
+    "choiceText": "Mars",
+    "rank": 2
   }
 ]
 ```
@@ -1501,11 +2289,16 @@ This is a protected endpoint used for grading or showing the correct answer(s) a
 **Description**
 After a user answers a question, use this endpoint to show them whether their choice was right or wrong, and provide the official explanation for the answer.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `choiceId` | integer | Yes | The ID of the choice the user selected. |
 | `questionId` | integer | Yes | The ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/choices/explanation/302/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1513,7 +2306,8 @@ After a user answers a question, use this endpoint to show them whether their ch
 | `200 OK` | Success | A `SendChoiceWithExplanationDTO` object. |
 | `401 Unauthorized`| No Token | The request lacks a valid `Authorization` header. |
 
-*Example `200 OK` Response (`SendChoiceWithExplanationDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendChoiceWithExplanationDTO`)
 ```json
 {
   "choiceID": 0,
@@ -1521,6 +2315,18 @@ After a user answers a question, use this endpoint to show them whether their ch
   "isRightAnswer": true,
   "explanationText": "string",
   "explanationID": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "choiceID": 302,
+  "choiceText": "Mars",
+  "isRightAnswer": true,
+  "explanationText": "Mars is known as the Red Planet due to the iron oxide prevalent on its surface, which gives it a reddish appearance.",
+  "explanationID": 42
 }
 ```
 ---
@@ -1536,6 +2342,7 @@ After a user answers a question, use this endpoint to show them whether their ch
 **Description**
 Updates specific fields of an existing choice (e.g., its text or rank) using the JSON Patch standard.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1554,19 +2361,46 @@ Updates specific fields of an existing choice (e.g., its text or rank) using the
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/choices/302`
+
+**Request Body**
+```json
+[
+  {
+    "op": "replace",
+    "path": "/choiceText",
+    "value": "The Red Planet (Mars)"
+  }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | The updated `SendChoiceDTO` object. |
 | `403 Forbidden` | Not Owner | You do not own the parent question. |
 
-*Example `200 OK` Response (`SendChoiceDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendChoiceDTO`)
 ```json
 {
   "choiceID": 0,
   "questionID": 0,
   "choiceText": "string",
   "rank": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "choiceID": 302,
+  "questionID": 201,
+  "choiceText": "The Red Planet (Mars)",
+  "rank": 2
 }
 ```
 ---
@@ -1582,10 +2416,15 @@ Updates specific fields of an existing choice (e.g., its text or rank) using the
 **Description**
 Permanently deletes a choice from a question.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `ChoiceID` | integer | Yes | The ID of the choice to delete. |
+
+#### Example Request
+**Request URL**
+`/api/v1/choices/307`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1593,9 +2432,16 @@ Permanently deletes a choice from a question.
 | `200 OK` | Success | An `integer` representing the ID of the deleted choice. |
 | `403 Forbidden` | Not Owner | You do not own the parent question. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+307
 ```
 ---
 ---
@@ -1618,11 +2464,21 @@ Manages the recording and retrieval of user answers during a submission attempt.
 **Description**
 As a user answers each question during a quiz, call this endpoint to log their selected choice. This links the user's answer to their specific submission attempt.
 
+#### Request Structure
 **Request Body** (`Add_chosen_choicesDTO`)
 ```json
 {
   "choiceID": 0,
   "submitionID": 0
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "choiceID": 302,
+  "submitionID": 55
 }
 ```
 
@@ -1632,7 +2488,8 @@ As a user answers each question during a quiz, call this endpoint to log their s
 | `200 OK` | Success | A `send_chosen_choicesDTO` object confirming the record was created. |
 | `403 Forbidden` | Not Owner | You cannot add choices to someone else's submission. |
 
-*Example `200 OK` Response (`send_chosen_choicesDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`send_chosen_choicesDTO`)
 ```json
 {
   "chosen_ChoiceID": 0,
@@ -1640,6 +2497,18 @@ As a user answers each question during a quiz, call this endpoint to log their s
   "userID": 0,
   "chosenDate": "2024-05-21T12:00:00Z",
   "submitionID": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "chosen_ChoiceID": 901,
+  "choiceID": 302,
+  "userID": 123,
+  "chosenDate": "2024-05-21T16:05:10Z",
+  "submitionID": 55
 }
 ```
 ---
@@ -1655,6 +2524,7 @@ As a user answers each question during a quiz, call this endpoint to log their s
 **Description**
 Retrieves all the choices a user made for a given submission. This is useful for displaying a summary of a user's answers after a quiz is complete.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1665,13 +2535,21 @@ Retrieves all the choices a user made for a given submission. This is useful for
 | :--- | :--- | :--- | :--- |
 | `QuestionIDs` | Array of integers | No | An optional comma-separated list of question IDs to filter the results for. |
 
+#### Example Request
+**Request URL**
+`/api/v1/choices/chosen/submition/55`
+
+**Headers**
+`QuestionIDs: 201,202`
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | A map where keys are question IDs and values are `send_chosen_choicesDTO` objects. |
 | `403 Forbidden` | Not Owner | You can only view your own chosen choices. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
 ```json
 {
   "additionalProp1": {
@@ -1680,6 +2558,27 @@ Retrieves all the choices a user made for a given submission. This is useful for
     "userID": 0,
     "chosenDate": "2024-05-21T12:00:00Z",
     "submitionID": 0
+  }
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "201": {
+    "chosen_ChoiceID": 901,
+    "choiceID": 302,
+    "userID": 123,
+    "chosenDate": "2024-05-21T16:05:10Z",
+    "submitionID": 55
+  },
+  "202": {
+    "chosen_ChoiceID": 902,
+    "choiceID": 306,
+    "userID": 123,
+    "chosenDate": "2024-05-21T16:05:25Z",
+    "submitionID": 55
   }
 }
 ```
@@ -1704,11 +2603,21 @@ Manages explanations for question answers.
 **Description**
 Creates an explanation for a question's answer. This text is shown to users to help them understand why an answer is correct.
 
+#### Request Structure
 **Request Body** (`AnswerExplanationMainDTO`)
 ```json
 {
   "explanationText": "string",
   "questionID": 0
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "explanationText": "Mars is known as the Red Planet due to the iron oxide prevalent on its surface, which gives it a reddish appearance.",
+  "questionID": 201
 }
 ```
 
@@ -1718,7 +2627,14 @@ Creates an explanation for a question's answer. This text is shown to users to h
 | `200 OK` | Success | A `boolean` (`true`) indicating success. |
 | `403 Forbidden` | Not Owner | You can only add explanations to your own questions. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+boolean
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
 true
 ```
@@ -1735,10 +2651,15 @@ true
 **Description**
 Retrieves all explanations associated with a given question.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionID` | integer | Yes | The ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/explanations/questions/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1746,13 +2667,26 @@ Retrieves all explanations associated with a given question.
 | `200 OK` | Success | An array of `GetAnswerExplanationDTO` objects. |
 | `404 Not Found` | Not Found | The specified question does not exist. |
 
-*Example `200 OK` Response (Array of `GetAnswerExplanationDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `GetAnswerExplanationDTO`)
 ```json
 [
   {
     "explanationText": "string",
     "questionID": 0,
     "addedDate": "2024-05-21T12:00:00Z"
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "explanationText": "Mars is known as the Red Planet due to the iron oxide prevalent on its surface, which gives it a reddish appearance.",
+    "questionID": 201,
+    "addedDate": "2024-05-21T13:15:00Z"
   }
 ]
 ```
@@ -1769,10 +2703,15 @@ Retrieves all explanations associated with a given question.
 **Description**
 Retrieves a single explanation by its unique ID.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `ExplainID` | integer | Yes | The unique ID of the explanation. |
+
+#### Example Request
+**Request URL**
+`/api/v1/explanations/42`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1780,12 +2719,23 @@ Retrieves a single explanation by its unique ID.
 | `200 OK` | Success | A `GetAnswerExplanationDTO` object. |
 | `404 Not Found` | Not Found | The explanation was not found. |
 
-*Example `200 OK` Response (`GetAnswerExplanationDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`GetAnswerExplanationDTO`)
 ```json
 {
   "explanationText": "string",
   "questionID": 0,
   "addedDate": "2024-05-21T12:00:00Z"
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "explanationText": "Mars is known as the Red Planet due to the iron oxide prevalent on its surface, which gives it a reddish appearance.",
+  "questionID": 201,
+  "addedDate": "2024-05-21T13:15:00Z"
 }
 ```
 ---
@@ -1809,10 +2759,19 @@ Manages the creation and retrieval of categories used to classify content.
 **Description**
 Creates a new category that can be used to tag questions and collections. Category names are typically unique.
 
+#### Request Structure
 **Request Body** (`CreateCategoryDTO`)
 ```json
 {
   "categoryName": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "categoryName": "Science"
 }
 ```
 
@@ -1822,11 +2781,21 @@ Creates a new category that can be used to tag questions and collections. Catego
 | `200 OK` | Success | A `SendCategoryDTO` object for the new category. |
 | `400 Bad Request` | Already Exists | A category with that name already exists. |
 
-*Example `200 OK` Response (`SendCategoryDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (`SendCategoryDTO`)
 ```json
 {
   "categoryID": 0,
   "categoryName": "string"
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "categoryID": 10,
+  "categoryName": "Science"
 }
 ```
 ---
@@ -1842,6 +2811,7 @@ Creates a new category that can be used to tag questions and collections. Catego
 **Description**
 Retrieves a list of categories, with optional filtering by name and a limit on the number of results. Useful for populating a category selector or search autocomplete.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1850,19 +2820,35 @@ Retrieves a list of categories, with optional filtering by name and a limit on t
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `CategorySumName` | string | No | A search string to filter category names (e.g., "Phys" would match "Physics"). |
+| `CategorySumName` | string | No | A search string to filter category names (e.g., "Sci" would match "Science"). |
+
+#### Example Request
+**Request URL**
+`/api/v1/categories/10?CategorySumName=Sci`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendCategoryDTO` objects. |
 
-*Example `200 OK` Response (Array of `SendCategoryDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendCategoryDTO`)
 ```json
 [
   {
     "categoryID": 0,
     "categoryName": "string"
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "categoryID": 10,
+    "categoryName": "Science"
   }
 ]
 ```
@@ -1887,10 +2873,15 @@ Manages the relationship between questions and categories.
 **Description**
 Retrieves all categories that have been associated with a specific question.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionID` | integer | Yes | The ID of the question. |
+
+#### Example Request
+**Request URL**
+`/api/v1/categories/questions/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1898,7 +2889,8 @@ Retrieves all categories that have been associated with a specific question.
 | `200 OK` | Success | An array of `SendQuestionsCategoryDTO` objects. |
 | `404 Not Found` | Not Found | The specified question does not exist. |
 
-*Example `200 OK` Response (Array of `SendQuestionsCategoryDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendQuestionsCategoryDTO`)
 ```json
 [
   {
@@ -1906,6 +2898,19 @@ Retrieves all categories that have been associated with a specific question.
     "questionID": 0,
     "categoryID": 0,
     "categoryName": "string"
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "question_CategoryID": 501,
+    "questionID": 201,
+    "categoryID": 10,
+    "categoryName": "Science"
   }
 ]
 ```
@@ -1922,6 +2927,7 @@ Retrieves all categories that have been associated with a specific question.
 **Description**
 Associates one or more existing categories with a question. This "tags" the question, making it discoverable.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -1936,15 +2942,34 @@ Associates one or more existing categories with a question. This "tags" the ques
 ]
 ```
 
+#### Example Request
+**Request URL**
+`/api/v1/categories/questions/201`
+
+**Request Body**
+```json
+[
+  { "categoryID": 10 },
+  { "categoryID": 11 }
+]
+```
+
 **Responses**
 | Status Code | Reason | Response Body Content |
 | :--- | :--- | :--- |
 | `200 OK` | Success | An `integer` representing the number of new associations created. |
 | `403 Forbidden` | Not Owner | You do not own the question. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+2
 ```
 ---
 ### Delete All Categories from a Question
@@ -1959,10 +2984,15 @@ Associates one or more existing categories with a question. This "tags" the ques
 **Description**
 Removes all category associations from a single question. This is a bulk "untag" operation.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionID` | integer | Yes | The ID of the question to remove all category links from. |
+
+#### Example Request
+**Request URL**
+`/api/v1/categories/questions/201`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1970,9 +3000,16 @@ Removes all category associations from a single question. This is a bulk "untag"
 | `200 OK` | Success | An `integer` representing the number of associations removed. |
 | `403 Forbidden` | Not Owner | You do not own the question. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+integer
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
-0
+2
 ```
 ---
 ### Delete a Question-Category Link
@@ -1987,10 +3024,15 @@ Removes all category associations from a single question. This is a bulk "untag"
 **Description**
 Removes a single, specific association between a question and a category. This does not delete the question or the category itself, only the link between them.
 
+#### Request Structure
 **Path Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `QuestionCategoryID` | integer | Yes | The unique ID of the question-category link (the `question_CategoryID` from the `SendQuestionsCategoryDTO` object). |
+
+#### Example Request
+**Request URL**
+`/api/v1/categories/501`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -1999,7 +3041,14 @@ Removes a single, specific association between a question and a category. This d
 | `403 Forbidden` | Not Owner | You do not own the question. |
 | `404 Not Found` | Not Found | The specified question-category link does not exist. |
 
-*Example `200 OK` Response:*
+#### Response Structure
+**`200 OK` Response Body**
+```
+boolean
+```
+
+#### Example Response
+**`200 OK` Response Body**
 ```json
 true
 ```
@@ -2029,7 +3078,8 @@ This endpoint is designed to populate a "featured" or "top" section on a home sc
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendCollectionDTO_Thumb` objects. |
 
-*Example `200 OK` Response (Array of `SendCollectionDTO_Thumb`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendCollectionDTO_Thumb`)
 ```json
 [
   {
@@ -2041,6 +3091,37 @@ This endpoint is designed to populate a "featured" or "top" section on a home sc
     "categories": [
       {
         "categoryName": "string"
+      }
+    ]
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "collectionName": "Introduction to Astronomy",
+    "description": "A collection of basic questions about our solar system and beyond.",
+    "isPublic": true,
+    "collectionID": 101,
+    "addedTime": "2024-05-21T13:00:00Z",
+    "categories": [
+      {
+        "categoryName": "Science"
+      }
+    ]
+  },
+  {
+    "collectionName": "World War II History",
+    "description": "Key events and figures from WWII.",
+    "isPublic": true,
+    "collectionID": 102,
+    "addedTime": "2024-05-20T10:00:00Z",
+    "categories": [
+      {
+        "categoryName": "History"
       }
     ]
   }
@@ -2064,7 +3145,8 @@ This endpoint is designed to populate a "leaderboard" or "top creators" section 
 | :--- | :--- | :--- |
 | `200 OK` | Success | An array of `SendUserDTO` objects. |
 
-*Example `200 OK` Response (Array of `SendUserDTO`):*
+#### Response Structure
+**`200 OK` Response Body** (Array of `SendUserDTO`)
 ```json
 [
   {
@@ -2083,6 +3165,49 @@ This endpoint is designed to populate a "leaderboard" or "top creators" section 
       "preferredLanguageID": 0,
       "personID": 0,
       "joinedDate": "2024-05-21T12:00:00Z"
+    }
+  }
+]
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+[
+  {
+    "userId": 123,
+    "username": "newuser",
+    "person": {
+      "firstName": "Jane",
+      "secondName": "M.",
+      "lastName": "Doe",
+      "address": "789 Pine Street, New City",
+      "gender": false,
+      "countryID": 2,
+      "dateOfBirth": "1995-08-22T00:00:00Z",
+      "email": "jane.doe@example.com",
+      "notes": "Updated my notes.",
+      "preferredLanguageID": 1,
+      "personID": 45,
+      "joinedDate": "2024-05-21T12:30:00Z"
+    }
+  },
+  {
+    "userId": 125,
+    "username": "topcreator",
+    "person": {
+      "firstName": "Alex",
+      "secondName": null,
+      "lastName": "Ray",
+      "address": null,
+      "gender": true,
+      "countryID": 1,
+      "dateOfBirth": "1990-01-15T00:00:00Z",
+      "email": "alex.ray@example.com",
+      "notes": null,
+      "preferredLanguageID": 1,
+      "personID": 47,
+      "joinedDate": "2023-01-10T09:00:00Z"
     }
   }
 ]
@@ -2164,10 +3289,15 @@ A test endpoint for developers to inspect the claims contained within their curr
 **Description**
 A test endpoint for developers to generate a new token for a specific user ID, bypassing the normal login flow.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `userID` | integer | Yes | The ID of the user to generate a token for. |
+
+#### Example Request
+**Request URL**
+`/API/Test/CreateNewToken?userID=123`
 
 **Responses**
 | Status Code | Reason | Response Body Content |
@@ -2187,6 +3317,7 @@ A test endpoint for developers to generate a new token for a specific user ID, b
 **Description**
 A test endpoint for developers to test the file upload functionality.
 
+#### Request Structure
 **Query Parameters**
 | Parameter | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
@@ -2232,11 +3363,21 @@ A test endpoint for developers to trigger a critical-level log event to ensure t
 **Description**
 A test endpoint for developers to simulate an external login flow.
 
+#### Request Structure
 **Request Body** (`ExternalLoginRequestDTO`)
 ```json
 {
   "provider": "string",
   "idToken": "string"
+}
+```
+
+#### Example Request
+**Request Body**
+```json
+{
+  "provider": "TestProvider",
+  "idToken": "test-token-12345"
 }
 ```
 
