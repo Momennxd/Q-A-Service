@@ -1,10 +1,12 @@
-﻿using Core.Authorization_Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Authorization_Services.Interfaces;
 using Core.DTOs.Collections;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using static Core.DTOs.Collections.CollectionsDTOs;
 
 namespace API_Layer.Controllers.Collections
@@ -63,9 +65,9 @@ namespace API_Layer.Controllers.Collections
 
         //TESTED_1_MOMEN_MARCH_26,2024
         [HttpPost]
-        public async Task<IActionResult> AddCollection([FromBody] CollectionsDTOs.CreateQCollectionDTO createDTO)
+        public async Task<ActionResult<int>> AddCollection([FromBody] CollectionsDTOs.CreateQCollectionDTO createDTO)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             return Ok(await _collectionService.CreateCollectionAsync(createDTO, userId));
         }
@@ -74,9 +76,9 @@ namespace API_Layer.Controllers.Collections
 
         //TESTED_1_MOMEN_MARCH_26,2024
         [HttpGet("{CollecID}")]
-        public async Task<IActionResult> GetFullCollection(int CollecID)
+        public async Task<ActionResult<SendCollectionDTO_Full>> GetFullCollection(int CollecID)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsUserCollectionAccess(CollecID, userId))
                 return Unauthorized();
@@ -89,7 +91,7 @@ namespace API_Layer.Controllers.Collections
         //TESTED_1_MOMEN_MARCH_26,2024
         [HttpGet("users/{UserID}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetThumbCollection(int UserID)
+        public async Task<ActionResult<SendCollectionDTO_Thumb>> GetThumbCollection(int UserID)
         {
             return Ok(await _collectionService.GetThumbCollectionsAsync(UserID, true));
 
@@ -102,9 +104,9 @@ namespace API_Layer.Controllers.Collections
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetThumbCollection()
+        public async Task<ActionResult<SendCollectionDTO_Thumb>> GetThumbCollection()
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             return Ok(await _collectionService.GetThumbCollectionsAsync(userId, null));
 
@@ -115,11 +117,11 @@ namespace API_Layer.Controllers.Collections
 
         //TESTED_1_MOMEN_MARCH_26,2024
         [HttpPatch]
-        public async Task<IActionResult> PatchCollection
+        public async Task<ActionResult<SendCollectionDTO_Full>> PatchCollection
             ([FromBody] JsonPatchDocument<CollectionsDTOs.PatchQCollectionDTO> patchDoc, int CollecID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();
@@ -131,10 +133,10 @@ namespace API_Layer.Controllers.Collections
 
         //TESTED_1_MOMEN_MARCH_26,2024
         [HttpDelete]
-        public async Task<IActionResult> DeleteCollection(int CollecID)
+        public async Task<ActionResult<int>> DeleteCollection(int CollecID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();

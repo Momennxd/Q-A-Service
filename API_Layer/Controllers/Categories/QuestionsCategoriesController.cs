@@ -1,4 +1,5 @@
-﻿using Core.Authorization_Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Authorization_Services.Interfaces;
 using Core.Services.Concrete.nsCategories;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ namespace API_Layer.Controllers.Categories
 
         [HttpGet("questions/{QuestionID}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetQuestionCategories(int QuestionID)
+        public async Task<ActionResult<List<SendQuestionsCategoryDTO>>> GetQuestionCategories(int QuestionID)
         {
             return Ok(await _QuestionsCategoriesService.GetQuestionCategoriesAsync(QuestionID));
         }
@@ -39,11 +40,11 @@ namespace API_Layer.Controllers.Categories
 
 
         [HttpPost("questions/{QuestionID}")]
-        public async Task<IActionResult> AddQuestionCategories
+        public async Task<ActionResult<int>> AddQuestionCategories
              ([FromBody] List<CreateQuestionsCategoryDTO> createQuestionsCategoryDTOs, int QuestionID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
                 return Unauthorized();
@@ -55,10 +56,10 @@ namespace API_Layer.Controllers.Categories
 
 
         [HttpDelete("questions/{QuestionID}")]
-        public async Task<IActionResult> DeleteQuestionCategories(int QuestionID)
+        public async Task<ActionResult<int>> DeleteQuestionCategories(int QuestionID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
                 return Unauthorized();
@@ -68,10 +69,10 @@ namespace API_Layer.Controllers.Categories
 
 
         [HttpDelete("{QuestionCategoryID}")]
-        public async Task<IActionResult> DeleteQuestionCategory(int QuestionCategoryID)
+        public async Task<ActionResult<bool>> DeleteQuestionCategory(int QuestionCategoryID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
             var e = await _QuestionsCategoriesService.FindAsync(QuestionCategoryID);
 

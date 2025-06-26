@@ -9,6 +9,7 @@ using System.Security.Claims;
 using static Core.DTOs.Questions.QuestionsDTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Diagnostics;
+using API_Layer.Extensions;
 
 namespace API_Layer.Controllers.Questions
 {
@@ -31,11 +32,11 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuestions(
+        public async Task<ActionResult<List<SendQuestionDTO>>> CreateQuestions(
             [FromBody] List<CreateQuestionDTO> createDtos, int CollectionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
+
 
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, (int)userId))
                 return Unauthorized();
@@ -46,10 +47,10 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpGet]
-        public async Task<IActionResult> GetCollectionQuestions(int CollectionID)
+        public async Task<ActionResult<SendQuestionDTO>> GetCollectionQuestions(int CollectionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
+
 
             //validate if the collection is not the users and its private then reutrn unauth
             if (!await _collectionsAuthService.IsUserCollectionAccess(CollectionID, (int)userId))
@@ -60,11 +61,11 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPatch("{QuestionID}")]
-        public async Task<IActionResult> PatchQuestion
+        public async Task<ActionResult<SendQuestionDTO>> PatchQuestion
            ([FromBody] JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
 
             if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
@@ -77,10 +78,10 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPatch("points/{QuestionID}")]
-        public async Task<IActionResult> PatchQuestionPoints(int QuestionID, int NewPointsVal)
+        public async Task<ActionResult<int>> PatchQuestionPoints(int QuestionID, int NewPointsVal)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
 
             if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
@@ -93,11 +94,10 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteQuestion(int QuestionID)
+        public async Task<ActionResult<int>> DeleteQuestion(int QuestionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
-            if (userId == null) return Unauthorized();
 
             if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, (int)userId))
                 return Unauthorized();
@@ -110,20 +110,21 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpGet("{QuestionID}")]
-        public async Task<IActionResult> GetQuestion(int QuestionID)
+        public async Task<ActionResult<SendQuestionDTO>> GetQuestion(int QuestionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
+            
             if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
                 return Unauthorized();
+            
             return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
         }
 
         [HttpGet("random")]
-        public async Task<ActionResult<List<QuestionsDTOs.QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
+        public async Task<ActionResult<List<QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
+            
             if (collectionId == null)
                 return BadRequest("collectionId is required");
 

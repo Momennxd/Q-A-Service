@@ -39,7 +39,7 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("signup")]
-        public async Task<ActionResult<UsersDTOs.SendUserDTO>> Signup(AddUserDTO addUserDTO)
+        public async Task<ActionResult<SendUserDTO>> Signup(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
             return StatusCode(201, user);

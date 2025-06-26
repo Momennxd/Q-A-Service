@@ -1,10 +1,12 @@
-﻿using Core.DTOs.Collections;
+﻿using API_Layer.Extensions;
+using Core.DTOs.Collections;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static Core.DTOs.Collections.CollectionsReviewsDTOs;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -28,10 +30,9 @@ namespace API_Layer.Controllers.Collections
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
+        public async Task<ActionResult<CollectionsReviewsDTOs.MainCollectionsReviewDTO>> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int? userId = User.GetUserId();
 
             return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
 
@@ -42,16 +43,14 @@ namespace API_Layer.Controllers.Collections
         [HttpDelete]
         public async Task<IActionResult> DeleteReview(int CollectionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
-
+            int? userId = User.GetUserId();
             await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
             return Ok();
         }
 
 
         [HttpGet("{CollectionID}")]
-        public async Task<IActionResult> getAllCollectionReviews(int CollectionID, int Page)
+        public async Task<ActionResult<List<MainCollectionsReviewDTO>>> getAllCollectionReviews(int CollectionID, int Page)
         {
             if (Page < 1)
                 return BadRequest();

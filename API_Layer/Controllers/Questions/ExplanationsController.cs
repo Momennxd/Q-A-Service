@@ -1,4 +1,5 @@
-﻿using Core.Authorization_Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Authorization_Services.Interfaces;
 using Core.DTOs.Questions;
 using Core.Services.Interfaces.Questions;
 using Data.models.Questions;
@@ -25,51 +26,38 @@ namespace API_Layer.Controllers.Questions
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExplain(AnswerExplanationMainDTO addAnswerExplanationDTO)
+        public async Task<ActionResult<bool>> AddExplain(AnswerExplanationMainDTO addAnswerExplanationDTO)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
 
             if (!await _authService.IsUserQuestionOwnerAsync(addAnswerExplanationDTO.QuestionID, (int)userId))
                 return Unauthorized();
-
-
-
 
             return Ok(await _answerExplanationService.AddNewAsync(addAnswerExplanationDTO));
         }
 
 
         [HttpGet("questions/{QuestionID}")]
-        public async Task<IActionResult> GetAnswerExplainationByQuestionID(int QuestionID)
+        public async Task<ActionResult<List<GetAnswerExplanationDTO>>> GetAnswerExplainationByQuestionID(int QuestionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
-
+            int userId = User.GetUserId();
             if (!await _authService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
                 return Unauthorized();
-
-
-
-
             return Ok(await _answerExplanationService.GetAnswerExplanationByQuestionIDAsync(QuestionID));
         }
 
 
 
         [HttpGet("{ExplainID}")]
-        public async Task<IActionResult> GetAnswerExplaination(int ExplainID)
+        public async Task<ActionResult<GetAnswerExplanationDTO>> GetAnswerExplaination(int ExplainID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
+
 
             var result = await _answerExplanationService.GetAnswerExplanationAsync(ExplainID);
 
             if (!await _authService.IsUserQuestionAccessAsync(result.QuestionID, (int)userId))
                 return Unauthorized();
-
-
-
 
             return Ok(result);
         }

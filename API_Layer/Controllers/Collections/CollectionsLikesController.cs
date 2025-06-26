@@ -1,4 +1,5 @@
-﻿using Core.Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,7 @@ namespace API_Layer.Controllers.Collections
         [Authorize]
         public async Task<IActionResult> LikeDislike(int CollectionId, bool IsLike)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int? userId =User.GetUserId();
 
             bool Res = await _collectionService.LikeAsync((int)userId, CollectionId, IsLike);
             return Res ? Ok() : BadRequest();
