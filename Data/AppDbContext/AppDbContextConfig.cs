@@ -22,7 +22,9 @@ namespace Data.DatabaseContext
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             ValidateEntities(); // Run validation before saving changes
+                      
             return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+          
         }
 
         public override int SaveChanges()
