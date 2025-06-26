@@ -23,7 +23,8 @@ namespace Core.Profiles
             CreateMap<QCollection, SendCollectionDTO_Full>();
             CreateMap<QCollection, SendCollectionDTO_Thumb>();
             CreateMap<QCollection, SendCollectionDTO_Search>();
-
+            CreateMap<QCollection, PatchQCollectionDTO>();
+            CreateMap<PatchQCollectionDTO, QCollection>();
 
             CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
            .ForMember(dest => dest.AddedTime, opt => opt.MapFrom(src => DateTime.Now));
