@@ -2,6 +2,7 @@
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Core.DTOs.People.UsersDTOs;
 
 namespace API_Layer.Controllers
 {
@@ -28,7 +29,7 @@ namespace API_Layer.Controllers
 
 
         [HttpGet("followers/top")]
-        public async Task<IActionResult> GetTop10FollowedUsers()
+        public async Task<ActionResult<List<SendUserDTO>>> GetTop10FollowedUsers()
         {
             return Ok(await _userService.GetTopUsersAsync());
         }

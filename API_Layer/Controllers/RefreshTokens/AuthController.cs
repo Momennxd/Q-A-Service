@@ -17,7 +17,6 @@ namespace API_Layer.Controllers.RefreshTokens
         [HttpPost("refresh-token")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-
         public async Task<ActionResult<TokenResponseDto>> RefreshToken([FromBody] RefreshTokenDTO request)
         {
             
