@@ -72,9 +72,7 @@ namespace API_Layer.Controllers.People
         public async Task<ActionResult<GetUserDTO>> GetUser()
         {
             int userId = User.GetUserId();
-            if (userId <= 0) return BadRequest();
-            var user = await _userService.GetUserByIdAsync(userId);
-
+            var user = await _userService.GetUser(userId);
             return Ok(user);
         }
         [HttpPost("logout")]

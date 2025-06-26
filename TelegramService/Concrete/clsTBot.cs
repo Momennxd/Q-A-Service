@@ -8,53 +8,51 @@ namespace TelegramService.Concrete
     public class clsTBot : ITelegramBot
     {
         private readonly ITelegramBotClient _client;
+        private readonly IDictionary<string, Func<Update, Task>> _actions = new Dictionary<string, Func<Update, Task>>();
 
         public clsTBot(ITelegramBotClient client)
         {
             _client = client;
+            StartReceivingAsync();
         }
 
-        //public async Task StartReceivingAsync(CancellationToken cancellationToken = default)
-        //{
-        //    _client.StartReceiving(
-        //        HandleUpdateAsync,
-        //        HandleErrorAsync,
-        //        cancellationToken: cancellationToken
-        //    );
-        //}
+        public void AddAction(string key, Func<Update, Task> action) => _actions[key] = action;
 
-        //private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        //{
-        //    if (update.Type == UpdateType.Message && update.Message!.Text != null)
-        //    {
-        //        var chatId = update.Message.Chat.Id;
-        //        var messageText = update.Message.Text;
 
-        //        await botClient.SendMessage(
-        //            chatId: chatId,
-        //            text: $"انت بعت: {messageText}  على chatID: {chatId}",
-        //            cancellationToken: cancellationToken
-        //        );
-        //    }
-        //}
 
-        //private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        //{
-        //    var errorMessage = exception switch
-        //    {
-        //        ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-        //        _ => exception.ToString()
-        //    };
+        public void StartReceivingAsync(CancellationToken cancellationToken = default)
+        {
+            _client.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                cancellationToken: cancellationToken
+            );
+        }
 
-        //    Console.WriteLine(errorMessage);
-        //    return Task.CompletedTask;
-        //}
+        private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            if (update.Type != UpdateType.Message || update.Message?.Text == null)
+                return;
+
+            var messageText = update.Message.Text.Trim();
+
+            if (_actions.TryGetValue(messageText, out var action))
+            {
+                await action.Invoke(update);
+            }
+
+        }
+
+        private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
 
         public async Task SendMessageAsync(string chatId, string message)
         {
             try
             {
-                await _client?.SendMessage(chatId, message);
+                await _client.SendMessage(chatId, message, ParseMode.Markdown);
             }
             catch { }
         }

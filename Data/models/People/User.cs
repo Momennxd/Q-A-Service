@@ -24,6 +24,6 @@ public partial class User : IBaseEntity<User>
 
     public Person Person { get; set; }
 
-    public byte Permissions { get; set; } = 0;
+    public int Permissions { get; set; } = 0;
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

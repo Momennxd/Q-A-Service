@@ -1,5 +1,7 @@
 ﻿using API_Layer.Authorization;
+using API_Layer.ChatOps;
 using API_Layer.Exceptions;
+using API_Layer.Extensions;
 using API_Layer.Handlers;
 using API_Layer.LogsSettings;
 using API_Layer.Telegram;
@@ -48,6 +50,7 @@ using ExternalAuthentication.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -55,11 +58,14 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Prometheus;
 using Serilog;
 using Services.Concrete;
 using Services.Interfaces;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
+using System.Threading.RateLimiting;
 using Telegram.Bot;
 using TelegramService.Concrete;
 using TelegramService.Interfaces;
@@ -69,10 +75,26 @@ using TelegramService.Interfaces;
 #region init builder
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel((context, options) =>
+
+#region Rate Limiting
+builder.Services.AddRateLimiter(options =>
 {
-    options.Configure(context.Configuration.GetSection("Kestrel"));
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetSlidingWindowLimiter(ip, _ => new SlidingWindowRateLimiterOptions
+        {
+            PermitLimit = 20, // Allowed requests
+            Window = TimeSpan.FromSeconds(30),
+            SegmentsPerWindow = 1,
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        });
+    });
+
+    options.RejectionStatusCode = 429;
 });
+#endregion
 
 #region Configuration
 
@@ -270,10 +292,13 @@ builder.Services.AddSingleton<ITelegramBotClient>(provider =>
     return new TelegramBotClient(settings.Token);
 });
 builder.Services.AddSingleton<ITelegramBot, clsTBot>();
-
-
-
 #endregion
+
+builder.Services.AddSingleton<TelegramChatOps>();
+builder.Services.AddAppMonitoring();
+
+
+
 
 #endregion
 
@@ -328,12 +353,6 @@ criticalHandler.OnCriticalLog += async (msg) =>
 };
 
 
-if(app.Environment.IsDevelopment())
-{
-    // Configure the HTTP request pipeline.
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 // Exception Handling Middleware
 app.UseExceptionHandler(config =>
@@ -383,15 +402,27 @@ app.UseExceptionHandler(config =>
     });
 });
 
+
+
+
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAppMonitoring();
+app.UseRateLimiter();
+app.UseAuthentication();
 app.UseAuthorization();
-
 //app.UseMiddleware<CustomSessionMiddleware>();
 
-
+if (app.Environment.IsDevelopment())
+{
+    // Configure the HTTP request pipeline.
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapControllers();
+
+_ = app.Services.GetRequiredService<TelegramChatOps>();
 
 app.Run();
 
