@@ -125,6 +125,9 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
 
             if (existingItem != null)
             {
+                //if it is the same LikeDislike value, makes no sens to LikeDislike value again
+                if (existingItem.Like_Dislike == IsLike) return false;
+
                 // Toggle the LikeDislike value
                 existingItem.Like_Dislike = !existingItem.Like_Dislike;
                 existingItem.LikeDate = DateTime.Now;
@@ -142,10 +145,11 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
                 };
 
                 await _appDbContext.Collections_Likes.AddAsync(NewItem);
+
             }
 
-            // Save changes and return true if successful
-            return await _appDbContext.SaveChangesAsync(new CancellationToken()) > 0;
+            return true;
+
         }
 
     }

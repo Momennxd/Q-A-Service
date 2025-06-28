@@ -136,8 +136,10 @@ namespace Core.Services.Concrete.Collections
 
         public async Task<bool> LikeAsync(int UserId, int CollectionID, bool IsLike)
         {
-            await _uowCollections.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
-            return await _uowCollections.CompleteAsync() > 0;
+            bool ans = await _uowCollections.EntityRepo.LikeAsync(UserId, CollectionID, IsLike);
+            if (!ans) return true; // If the like operation is false means there is no actual changes to update.
+            await _uowCollections.CompleteAsync();
+            return ans;
         }
 
         public async Task<bool> DeleteLikeAsync(int CollectionID, int UserID)

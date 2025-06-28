@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
 {
+    //this controller is tested and works fine by momen on 28th june 2025
     [Route("api/v1/collections/likes")]
     [ApiController]
     public class CollectionsLikesController : ControllerBase
@@ -20,9 +21,11 @@ namespace API_Layer.Controllers.Collections
 
         [HttpPost("Like")]
         [Authorize]
+        //tested and works fine by moment on 28th june 2025
         public async Task<IActionResult> LikeDislike(int CollectionId, bool IsLike)
         {
             int? userId =User.GetUserId();
+            if (userId == null) return Unauthorized();
 
             bool Res = await _collectionService.LikeAsync((int)userId, CollectionId, IsLike);
             return Res ? Ok() : BadRequest();
