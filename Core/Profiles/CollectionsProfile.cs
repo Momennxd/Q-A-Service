@@ -33,14 +33,12 @@ namespace Core.Profiles
 
 
             // Map CollectionsReview to CollectionsReviewDto
-            CreateMap<Collections_Reviews, MainCollectionsReviewDTO>();
-            //map back from DTO to Entity (if you need two-way mapping)
-            CreateMap<MainCollectionsReviewDTO, Collections_Reviews>();
-            
-            
-            
-            CreateMap<Collections_Reviews, CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO>();
-            CreateMap<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO, Collections_Reviews>();
+            CreateMap<Collections_Reviews, CreateCollectionsReviewDTO>();
+
+            CreateMap<CreateCollectionsReviewDTO, Collections_Reviews>();
+
+
+            CreateMap<Collections_Reviews, SendCollectionsReviewsDTO>();
 
         }
 

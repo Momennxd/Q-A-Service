@@ -20,6 +20,7 @@ namespace Data.models.Collections
 
         public string? ReviewText { get; set; }
 
+        //([ReviewValue]>=(0) AND [ReviewValue]<=(10))
         public byte ReviewValue { get; set; }
 
         public DateTime ReviewDate { get; set; } = DateTime.Now;

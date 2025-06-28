@@ -23,38 +23,44 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpPost]
-        public async Task<IActionResult> AddReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto)
+        //Tested by Momen on June 28, 2025
+        public async Task<IActionResult> AddReview(CreateCollectionsReviewDTO collectionsReviewDto)
         {
-            await _collectionsReviewsService.CreateReview(collectionsReviewDto);
+            int? userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            await _collectionsReviewsService.CreateReview(collectionsReviewDto, (int)userId);
             return Ok();
         }
 
-        [HttpPatch]
-        public async Task<ActionResult<CollectionsReviewsDTOs.MainCollectionsReviewDTO>> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
-        {
-            int? userId = User.GetUserId();
+        //[HttpPatch]
+        //public async Task<ActionResult<CollectionsReviewsDTOs.pa>> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
+        //{
+        //    int? userId = User.GetUserId();
 
-            return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
+        //    return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
 
-        }
-
-
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteReview(int CollectionID)
-        {
-            int? userId = User.GetUserId();
-            await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
-            return Ok();
-        }
+        //}
 
 
-        [HttpGet("{CollectionID}")]
-        public async Task<ActionResult<List<MainCollectionsReviewDTO>>> getAllCollectionReviews(int CollectionID, int Page)
-        {
-            if (Page < 1)
-                return BadRequest();
-            return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID, Page));
-        }
+
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteReview(int CollectionID)
+        //{
+        //    int? userId = User.GetUserId();
+        //    await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
+        //    return Ok();
+        //}
+
+
+        //[HttpGet("{CollectionID}")]
+        //public async Task<ActionResult<List<MainCollectionsReviewDTO>>> getAllCollectionReviews(int CollectionID, int Page)
+        //{
+        //    if (Page < 1)
+        //        return BadRequest();
+        //    return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID, Page));
+        //}
     }
 }
