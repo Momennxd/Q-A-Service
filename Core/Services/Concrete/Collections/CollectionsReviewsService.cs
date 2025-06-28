@@ -22,18 +22,20 @@ namespace Core.Services.Concrete.Collections
 
 
 
-        public async Task CreateReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto)
+        public async Task CreateReview(CreateCollectionsReviewDTO collectionsReviewDto, int UserID)
         {
             var entity = _mapper.Map<Collections_Reviews>(collectionsReviewDto);
+            entity.UserID = UserID;
+            entity.ReviewDate = DateTime.Now;
             await _unitOfWork.EntityRepo.AddItemAsync(entity);
             await _unitOfWork.CompleteAsync();
 
         }
-        public async Task<CollectionsReviewsDTOs.MainCollectionsReviewDTO> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int UserID, int CollectionID)
+        public async Task<CollectionsReviewsDTOs.CreateCollectionsReviewDTO> Patch(JsonPatchDocument<CollectionsReviewsDTOs.CreateCollectionsReviewDTO> patchDoc, int UserID, int CollectionID)
         {
             var entity = await _unitOfWork.EntityRepo.FindByUserIdAndCollectionID(UserID, CollectionID);
-            
-            var dtoToPatch = _mapper.Map<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO>(entity);
+
+            var dtoToPatch = _mapper.Map<CollectionsReviewsDTOs.CreateCollectionsReviewDTO>(entity);
 
             // Apply the patch to the DTO
             patchDoc.ApplyTo(dtoToPatch);
@@ -44,24 +46,24 @@ namespace Core.Services.Concrete.Collections
             // Save changes
             await _unitOfWork.CompleteAsync();
 
-            return _mapper.Map<CollectionsReviewsDTOs.MainCollectionsReviewDTO>(entity);
+            return _mapper.Map<CollectionsReviewsDTOs.CreateCollectionsReviewDTO>(entity);
         }
- 
+
 
         public async Task DeleteReview(int UserID, int CollectionID)
         {
             var entity = await _unitOfWork.EntityRepo.FindByUserIdAndCollectionID(UserID, CollectionID);
-            if(entity == null)
+            if (entity == null)
                 throw new KeyNotFoundException($"Entity not found.");
 
             await _unitOfWork.EntityRepo.DeleteItemAsync(entity.CollectionReviewID);
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page)
+        public async Task<List<SendCollectionsReviewsDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page)
         {
             var reviews = await _unitOfWork.EntityRepo.GetAllCollectionReviewsAsync(CollectionID, Page);
-            return _mapper.Map<List<MainCollectionsReviewDTO>>(reviews);
+            return _mapper.Map<List<SendCollectionsReviewsDTO>>(reviews);
         }
     }
 }

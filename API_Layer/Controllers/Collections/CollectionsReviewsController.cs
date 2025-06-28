@@ -1,10 +1,12 @@
-﻿using Core.DTOs.Collections;
+﻿using API_Layer.Extensions;
+using Core.DTOs.Collections;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static Core.DTOs.Collections.CollectionsReviewsDTOs;
 
 namespace API_Layer.Controllers.Collections
 {
@@ -21,41 +23,44 @@ namespace API_Layer.Controllers.Collections
 
 
         [HttpPost]
-        public async Task<IActionResult> AddReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto)
+        //Tested by Momen on June 28, 2025
+        public async Task<IActionResult> AddReview(CreateCollectionsReviewDTO collectionsReviewDto)
         {
-            await _collectionsReviewsService.CreateReview(collectionsReviewDto);
+            int? userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            await _collectionsReviewsService.CreateReview(collectionsReviewDto, (int)userId);
             return Ok();
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
-        {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+        //[HttpPatch]
+        //public async Task<ActionResult<CollectionsReviewsDTOs.pa>> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> patchDoc, int CollectionID)
+        //{
+        //    int? userId = User.GetUserId();
 
-            return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
+        //    return Ok(await _collectionsReviewsService.Patch(patchDoc, (int)userId, CollectionID));
 
-        }
-
+        //}
 
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteReview(int CollectionID)
-        {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
 
-            await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
-            return Ok();
-        }
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteReview(int CollectionID)
+        //{
+        //    int? userId = User.GetUserId();
+        //    await _collectionsReviewsService.DeleteReview((int)userId, CollectionID);
+        //    return Ok();
+        //}
 
 
-        [HttpGet("{CollectionID}")]
-        public async Task<IActionResult> getAllCollectionReviews(int CollectionID, int Page)
-        {
-            if (Page < 1)
-                return BadRequest();
-            return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID, Page));
-        }
+        //[HttpGet("{CollectionID}")]
+        //public async Task<ActionResult<List<MainCollectionsReviewDTO>>> getAllCollectionReviews(int CollectionID, int Page)
+        //{
+        //    if (Page < 1)
+        //        return BadRequest();
+        //    return Ok(await _collectionsReviewsService.GetAllCollectionReviewsAsync(CollectionID, Page));
+        //}
     }
 }

@@ -39,7 +39,7 @@ namespace API_Layer.Controllers.People
 
 
         [HttpPost("signup")]
-        public async Task<ActionResult<UsersDTOs.SendUserDTO>> Signup(AddUserDTO addUserDTO)
+        public async Task<ActionResult<SendUserDTO>> Signup(AddUserDTO addUserDTO)
         {
             var user = await _userService.CreateUserAsync(addUserDTO);
             return StatusCode(201, user);
@@ -72,9 +72,7 @@ namespace API_Layer.Controllers.People
         public async Task<ActionResult<GetUserDTO>> GetUser()
         {
             int userId = User.GetUserId();
-            if (userId <= 0) return BadRequest();
-            var user = await _userService.GetUserByIdAsync(userId);
-
+            var user = await _userService.GetUser(userId);
             return Ok(user);
         }
         [HttpPost("logout")]

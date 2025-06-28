@@ -23,7 +23,8 @@ namespace Core.Profiles
             CreateMap<QCollection, SendCollectionDTO_Full>();
             CreateMap<QCollection, SendCollectionDTO_Thumb>();
             CreateMap<QCollection, SendCollectionDTO_Search>();
-
+            CreateMap<QCollection, PatchQCollectionDTO>();
+            CreateMap<PatchQCollectionDTO, QCollection>();
 
             CreateMap<CollectionsDTOs.CreateQCollectionDTO, QCollection>()
            .ForMember(dest => dest.AddedTime, opt => opt.MapFrom(src => DateTime.Now));
@@ -32,14 +33,12 @@ namespace Core.Profiles
 
 
             // Map CollectionsReview to CollectionsReviewDto
-            CreateMap<Collections_Reviews, MainCollectionsReviewDTO>();
-            //map back from DTO to Entity (if you need two-way mapping)
-            CreateMap<MainCollectionsReviewDTO, Collections_Reviews>();
-            
-            
-            
-            CreateMap<Collections_Reviews, CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO>();
-            CreateMap<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO, Collections_Reviews>();
+            CreateMap<Collections_Reviews, CreateCollectionsReviewDTO>();
+
+            CreateMap<CreateCollectionsReviewDTO, Collections_Reviews>();
+
+
+            CreateMap<Collections_Reviews, SendCollectionsReviewsDTO>();
 
         }
 

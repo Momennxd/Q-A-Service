@@ -1,4 +1,5 @@
-﻿using Core.Authorization_Services.Interfaces;
+﻿using API_Layer.Extensions;
+using Core.Authorization_Services.Interfaces;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -38,29 +39,23 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPost]
-        public async Task<IActionResult> AddNewChoices([FromBody] List<CreateChoiceDTO> createDtos, int QuestionID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<SendChoiceDTO>>> AddNewChoices([FromBody] List<CreateChoiceDTO> createDtos, int QuestionID)
         {
-
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            if (userId == null) return Unauthorized();
-
-            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(
-                QuestionID, userId == null ? -1 : (int)userId))
-            {
+            int userId = User.GetUserId();
+            if (!await _collectionsAuthService.IsUserQuestionOwnerAsync(QuestionID, userId))
                 return Unauthorized();
-            }
-
             return Ok(await _QuestionsChoicesService.AddChoiceAsync(createDtos, QuestionID));
         }
 
 
 
         [HttpGet("questions/{questionID}")]
-        public async Task<IActionResult> GetChoices(int questionID)
+        public async Task<ActionResult<List<SendChoiceDTO>>> GetChoices(int questionID)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
 
             //to understand why this is commented out READ THE ABOVE paragraph =>
 
@@ -74,12 +69,10 @@ namespace API_Layer.Controllers.Questions
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetChoices([FromBody] HashSet<int> setQuestionIDs)
+        public async Task<ActionResult<Dictionary<int, List<SendChoiceDTO>>>> GetChoices([FromBody] HashSet<int> setQuestionIDs)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
-
             //to understand why this is commented out READ THE ABOVE paragraph =>
+            //int userId = User.GetUserId();
 
             //if (!await _collectionsAuthService.IsUserQuestionAccessAsync(
             //        setQuestionIDs, userId == null ? -1 : (int)userId))
@@ -92,14 +85,13 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpGet("answers/{questionID}")]
-        public async Task<IActionResult> GetRightAnswers(int questionID)
+        public async Task<ActionResult<List<SendChoiceDTO>>> GetRightAnswers(int questionID)
         {
 
             //authorization:
             //1- if the caller is the creater, then no authorization needed.
             //2- if the caller is the consumer, then the consumer must answer the question first to call the API to prevent right answers leak.
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId == null) return Unauthorized();
+            int userId = User.GetUserId();
 
             if (!await _collectionsAuthService.IsRightsAnswersAccessAsync(questionID, (int)userId))
                 return Unauthorized();
@@ -110,11 +102,11 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpPatch("{ChoiceID}")]
-        public async Task<IActionResult> PatchChoice
+        public async Task<ActionResult<SendChoiceDTO>> PatchChoice
            ([FromBody] JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID)
         {
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
 
             if (!await _collectionsAuthService.IsUserChoiceOwnerAsync(ChoiceID, userId))
@@ -127,9 +119,9 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpDelete("{ChoiceID}")]
-        public async Task<IActionResult> DeleteChoice(int ChoiceID)
+        public async Task<ActionResult<int>> DeleteChoice(int ChoiceID)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
 
 
             if (!await _collectionsAuthService.IsUserChoiceOwnerAsync(ChoiceID, userId))
@@ -145,7 +137,7 @@ namespace API_Layer.Controllers.Questions
             [FromRoute] int questionId
             )
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = User.GetUserId();
             var choiceWithExplanation = await _QuestionsChoicesService.GetChoiceWithExplanationAsync(choiceId, questionId);
             if (choiceWithExplanation == null)
                 return NotFound();

@@ -11,13 +11,16 @@ namespace Core.Services.Interfaces
 {
     public interface ICollectionsReviewsService
     {
-        Task CreateReview(CollectionsReviewsDTOs.MainCollectionsReviewDTO collectionsReviewDto);
-        Task<CollectionsReviewsDTOs.MainCollectionsReviewDTO> Patch(JsonPatchDocument<CollectionsReviewsDTOs.UpdateCollectionsReviewsDTO> updateCollectionsReviewsDTO
+        Task CreateReview(CreateCollectionsReviewDTO collectionsReviewDto, int UserID);
+
+
+
+        Task<CreateCollectionsReviewDTO> Patch(JsonPatchDocument<CreateCollectionsReviewDTO> updateCollectionsReviewsDTO
                     , int UserID, int CollectionID);
 
 
         public Task DeleteReview(int UserID, int CollectionID);
 
-        Task<List<MainCollectionsReviewDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page);
+        Task<List<SendCollectionsReviewsDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page);
     }
 }

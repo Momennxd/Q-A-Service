@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Linq;
 using System.Security.Claims;
+using static Core.DTOs.Categories.CategoriesDTOs;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 
 namespace API_Layer.Controllers.Categories
@@ -35,14 +36,14 @@ namespace API_Layer.Controllers.Categories
 
         [HttpGet("{RowsCount}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategories(string CategorySumName, int RowsCount)
+        public async Task<ActionResult<List<SendCategoryDTO>>> GetCategories(string CategorySumName, int RowsCount)
         {
             return Ok(await _CategoriesService.GetCategories(CategorySumName, RowsCount));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory(CategoriesDTOs.CreateCategoryDTO createCategoryDTO)
+        public async Task<ActionResult<SendCategoryDTO>> AddCategory(CategoriesDTOs.CreateCategoryDTO createCategoryDTO)
         {
             return Ok(await _CategoriesService.AddCategory(createCategoryDTO));
         }
