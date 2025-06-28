@@ -126,7 +126,7 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo
             if (existingItem != null)
             {
                 //if it is the same LikeDislike value, makes no sens to LikeDislike value again
-                if (existingItem.Like_Dislike == IsLike) return false;
+                if (existingItem.Like_Dislike == IsLike && existingItem.CollectionID == CollectionID) return false;
 
                 // Toggle the LikeDislike value
                 existingItem.Like_Dislike = !existingItem.Like_Dislike;
