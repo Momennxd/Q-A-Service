@@ -29,7 +29,7 @@ namespace API_Layer.Controllers.Collections
         public async Task<ActionResult<int>> AddSubmission(int CollectionID)
         {
             int UserId = User.GetUserId();
-            if (! await _collectionsAuthService.IsUserCollecOwnerAsync(CollectionID, UserId)) return Unauthorized();
+            if (! await _collectionsAuthService.IsUserCollectionAccess(CollectionID, UserId)) return Unauthorized();
             
 
             int submissionId = await _collectionService.AddSubmission(CollectionID, UserId);
