@@ -9,6 +9,8 @@ using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitio
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
+
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -28,18 +30,21 @@ namespace Core.Authorization_Services.Concrete
         private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
         private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _uowChoices;
         private readonly IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> _uowCollectionsSubmitions;
+        private readonly IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews> _uowCollectionReviews;
 
         public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections,
             IUnitOfWork<IQuestionRepo, Question> uowQuestion,
             IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion,
             IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices,
-            IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> uowCollectionsSubmitions)
+            IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> uowCollectionsSubmitions,
+            IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews> uowCollectionReviews)
         {
             _uowCollecQuestion = uowcollectionsQuestion;
             _uowCollec = uowCollections;
             _uowQuestion = uowQuestion;
             _uowChoices = uowChoices;
             _uowCollectionsSubmitions = uowCollectionsSubmitions;
+            _uowCollectionReviews = uowCollectionReviews;
 
         }
 
@@ -49,15 +54,15 @@ namespace Core.Authorization_Services.Concrete
         {
             var question = await _uowQuestion.EntityRepo.FindAsync(QuestionID);
             if (question == null) throw new ArgumentNullException();
+            if (UserID == question.UserID) return true; //if the user is the owner of the question, then no auth needed
 
             var collectionsQuestions = await _uowCollecQuestion.EntityRepo.GetCollectionQuestionsAsync(QuestionID);
-            if (collectionsQuestions == null) throw new ArgumentNullException();
+            if (collectionsQuestions == null) return true;
 
             var collection = await _uowCollec.EntityRepo.FindAsync(collectionsQuestions.CollectionID);
-            if (collection == null) throw new ArgumentNullException();
+            if (collection == null) return true;
 
-            //if the question is not the users's and the question's collection is private means no access
-            return !(question.UserID != UserID && !collection.IsPublic);
+            return collection.IsPublic;
         }
 
 
@@ -70,7 +75,7 @@ namespace Core.Authorization_Services.Concrete
             var collection = await _uowCollec.EntityRepo.FindAsync(collecID);
 
             // Ensure collection is not null and check if the user is the owner
-            if (collection == null) return false; 
+            if (collection == null) throw new ArgumentNullException(); 
             
             return collection.CreatedByUserId == userID;
         }
@@ -141,6 +146,13 @@ namespace Core.Authorization_Services.Concrete
         {
            var subEntity = await _uowCollectionsSubmitions.EntityRepo.FindAsync(submitionID);
            return subEntity != null && subEntity.SubmittedUserID == UserID;
+        }
+
+        public async Task<bool> IsUserReviewOwnerAsync(int ReviewID, int UserID)
+        {
+            var Entity = await _uowCollectionReviews.EntityRepo.FindAsync(ReviewID);
+            if (Entity == null) throw new ArgumentNullException();
+            return Entity.UserID == UserID;
         }
     }
 }

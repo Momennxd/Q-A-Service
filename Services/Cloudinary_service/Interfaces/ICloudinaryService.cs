@@ -1,9 +1,6 @@
-﻿using System.Xml;
-using Services.Enums;
-using CloudinaryDotNet.Actions;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet.Actions;
 
-namespace Services.Interfaces
+namespace Services.Cloudinary_service.Interfaces
 {
     public interface ICloudinaryService
     {

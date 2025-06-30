@@ -31,11 +31,12 @@ namespace Core.Services.Concrete.Collections
             await _unitOfWork.CompleteAsync();
 
         }
-        public async Task<CollectionsReviewsDTOs.CreateCollectionsReviewDTO> Patch(JsonPatchDocument<CollectionsReviewsDTOs.CreateCollectionsReviewDTO> patchDoc, int UserID, int CollectionID)
+        public async Task<SendCollectionsReviewsDTO> Patch(JsonPatchDocument<CreateCollectionsReviewDTO> patchDoc, int UserID, int ReviewID)
         {
-            var entity = await _unitOfWork.EntityRepo.FindByUserIdAndCollectionID(UserID, CollectionID);
+            var entity = await _unitOfWork.EntityRepo.FindAsync(ReviewID);
+            if (entity == null) throw new KeyNotFoundException();
 
-            var dtoToPatch = _mapper.Map<CollectionsReviewsDTOs.CreateCollectionsReviewDTO>(entity);
+            var dtoToPatch = _mapper.Map<CreateCollectionsReviewDTO>(entity);
 
             // Apply the patch to the DTO
             patchDoc.ApplyTo(dtoToPatch);
@@ -46,17 +47,13 @@ namespace Core.Services.Concrete.Collections
             // Save changes
             await _unitOfWork.CompleteAsync();
 
-            return _mapper.Map<CollectionsReviewsDTOs.CreateCollectionsReviewDTO>(entity);
+            return _mapper.Map<SendCollectionsReviewsDTO>(entity);
         }
 
 
-        public async Task DeleteReview(int UserID, int CollectionID)
+        public async Task DeleteReview(int ReviewID)
         {
-            var entity = await _unitOfWork.EntityRepo.FindByUserIdAndCollectionID(UserID, CollectionID);
-            if (entity == null)
-                throw new KeyNotFoundException($"Entity not found.");
-
-            await _unitOfWork.EntityRepo.DeleteItemAsync(entity.CollectionReviewID);
+            await _unitOfWork.EntityRepo.DeleteItemAsync(ReviewID);
             await _unitOfWork.CompleteAsync();
         }
 

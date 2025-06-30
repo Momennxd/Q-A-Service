@@ -1,24 +1,10 @@
 ﻿using AutoMapper;
-using Core.DTOs.Questions;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
-using Data.models.Collections;
 using Data.models.Questions;
-using Data.Repository.Entities_Repositories.Collections_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Services.Interfaces;
-using System.IO.Compression;
-using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging.Abstractions;
-using Core.DTOs.Pictures;
 using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 using Microsoft.AspNetCore.JsonPatch;
-using Core.DTOs.Collections;
 using Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices;
 
 namespace Core.Services.Concrete.Questions

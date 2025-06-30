@@ -2,19 +2,9 @@
 using Core.DTOs.Pictures;
 using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
-using Data.models.Collections;
 using Data.models.Pictures;
-using Data.models.Questions;
 using Data.Repository.Entities_Repositories.Pictures.Base;
-using Services.Concrete;
-using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Core.DTOs.Collections.CollectionsDTOs;
+using Services.Cloudinary_service.Interfaces;
 
 namespace Core.Services.Concrete.Pictures
 {

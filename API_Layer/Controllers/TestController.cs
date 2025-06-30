@@ -5,7 +5,7 @@ using Core.Services.Interfaces.RefreshTokens;
 using ExternalAuthentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
+using Services.Cloudinary_service.Interfaces;
 using System.Security.Claims;
 
 namespace API_Layer.Controllers.Collections
