@@ -55,40 +55,33 @@ namespace Core.Services.Concrete.Questions
                 QuesEnitity.UserID = UserID;
 
                 await _uowQuestions.EntityRepo.AddItemAsync(QuesEnitity);
+
                 //saving the question itself
                 await _uowQuestions.CompleteAsync();
 
 
+                var sendQuesDto = _mapper.Map<SendQuestionDTO>(QuesEnitity);
+
+                //mapping the other properties
+                sendQuesDto.QuestionPoints = createDto.QuestionPoints;
 
 
-                //var sendChoicesDtos = await _QuestionsChoicesService.AddChoiceAsync
-                //    (createDto.Choices, QuesEnitity.QuestionID);
-
-                //var sendQuesDto = _mapper.Map<SendQuestionDTO>(QuesEnitity);
-
-                ////mapping the other properties
-                //sendQuesDto.Choices = sendChoicesDtos;
-                //sendQuesDto.QuestionPoints = createDto.QuestionPoints;
-
-
-             
-
-                ////mapping the question to a collection by adding the question info to Collections_Questions table
-                //await _uowCollecQues.EntityRepo.AddItemAsync(new Collections_Questions()
-                //{
-                //    CollectionID = CollectionID,
-                //    QuestionID = QuesEnitity.QuestionID,
-                //    QuestionPoints = createDto.QuestionPoints,
-                //    AddedTime = DateTime.Now
-                // });
+                //mapping the question to a collection by adding the question info to Collections_Questions table
+                await _uowCollecQues.EntityRepo.AddItemAsync(new Collections_Questions()
+                {
+                    CollectionID = CollectionID,
+                    QuestionID = QuesEnitity.QuestionID,
+                    QuestionPoints = createDto.QuestionPoints,
+                    AddedTime = DateTime.Now
+                });
 
 
-                ////saving the Collections_Questions row that maps the question to the collection
-                //await _uowCollecQues.CompleteAsync();
+                //saving the Collections_Questions row that maps the question to the collection
+                await _uowCollecQues.CompleteAsync();
 
 
 
-                //output.Add(sendQuesDto);
+                output.Add(sendQuesDto);
 
             }
 

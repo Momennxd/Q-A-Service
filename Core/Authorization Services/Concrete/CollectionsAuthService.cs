@@ -54,15 +54,15 @@ namespace Core.Authorization_Services.Concrete
         {
             var question = await _uowQuestion.EntityRepo.FindAsync(QuestionID);
             if (question == null) throw new ArgumentNullException();
+            if (UserID == question.UserID) return true; //if the user is the owner of the question, then no auth needed
 
             var collectionsQuestions = await _uowCollecQuestion.EntityRepo.GetCollectionQuestionsAsync(QuestionID);
-            if (collectionsQuestions == null) throw new ArgumentNullException();
+            if (collectionsQuestions == null) return true;
 
             var collection = await _uowCollec.EntityRepo.FindAsync(collectionsQuestions.CollectionID);
-            if (collection == null) throw new ArgumentNullException();
+            if (collection == null) return true;
 
-            //if the question is not the users's and the question's collection is private means no access
-            return !(question.UserID != UserID && !collection.IsPublic);
+            return collection.IsPublic;
         }
 
 
@@ -75,7 +75,7 @@ namespace Core.Authorization_Services.Concrete
             var collection = await _uowCollec.EntityRepo.FindAsync(collecID);
 
             // Ensure collection is not null and check if the user is the owner
-            if (collection == null) return false; 
+            if (collection == null) throw new ArgumentNullException(); 
             
             return collection.CreatedByUserId == userID;
         }

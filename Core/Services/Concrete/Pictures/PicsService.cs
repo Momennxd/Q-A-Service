@@ -4,7 +4,7 @@ using Core.Services.Interfaces;
 using Core.Unit_Of_Work;
 using Data.models.Pictures;
 using Data.Repository.Entities_Repositories.Pictures.Base;
-using Services.Cloudnary.Interfaces;
+using Services.Cloudinary_service.Interfaces;
 
 namespace Core.Services.Concrete.Pictures
 {
