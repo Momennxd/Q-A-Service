@@ -94,5 +94,16 @@ namespace Core.Authorization_Services.Interfaces
         /// <returns></returns>
         public Task<bool> IsUserSubmitionOwnerAsync(int submitionID, int UserID);
 
+
+
+        /// <summary>
+        /// Determines if the review is the user's
+        /// </summary>
+        /// <param name="submitionID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Task<bool> IsUserReviewOwnerAsync(int ReviewID, int UserID);
+
+
     }
 }

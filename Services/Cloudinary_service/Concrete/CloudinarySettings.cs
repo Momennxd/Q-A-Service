@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Concrete
+namespace Services.Cloudinary_service.Concrete
 {
     public class CloudinarySettings
     {

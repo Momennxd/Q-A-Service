@@ -9,6 +9,8 @@ using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubmitio
 using Data.Repository.Entities_Repositories.Collections_Repo.Collects_Questions;
 using Data.Repository.Entities_Repositories.Questions_Repo;
 using Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices;
+using Data.Repository.Entities_Repositories.Collections_Repo.CollectionsReviews;
+
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -28,18 +30,21 @@ namespace Core.Authorization_Services.Concrete
         private readonly IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> _uowCollecQuestion;
         private readonly IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> _uowChoices;
         private readonly IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> _uowCollectionsSubmitions;
+        private readonly IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews> _uowCollectionReviews;
 
         public CollectionsAuthService(IUnitOfWork<ICollectionRepo, QCollection> uowCollections,
             IUnitOfWork<IQuestionRepo, Question> uowQuestion,
             IUnitOfWork<ICollectionsQuestionRepo, Collections_Questions> uowcollectionsQuestion,
             IUnitOfWork<IQuestionsChoicesRepo, QuestionsChoices> uowChoices,
-            IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> uowCollectionsSubmitions)
+            IUnitOfWork<ICollectionsSubmitionsRepo, Collections_Submitions> uowCollectionsSubmitions,
+            IUnitOfWork<ICollectionsReviewsRepo, Collections_Reviews> uowCollectionReviews)
         {
             _uowCollecQuestion = uowcollectionsQuestion;
             _uowCollec = uowCollections;
             _uowQuestion = uowQuestion;
             _uowChoices = uowChoices;
             _uowCollectionsSubmitions = uowCollectionsSubmitions;
+            _uowCollectionReviews = uowCollectionReviews;
 
         }
 
@@ -141,6 +146,13 @@ namespace Core.Authorization_Services.Concrete
         {
            var subEntity = await _uowCollectionsSubmitions.EntityRepo.FindAsync(submitionID);
            return subEntity != null && subEntity.SubmittedUserID == UserID;
+        }
+
+        public async Task<bool> IsUserReviewOwnerAsync(int ReviewID, int UserID)
+        {
+            var Entity = await _uowCollectionReviews.EntityRepo.FindAsync(ReviewID);
+            if (Entity == null) throw new ArgumentNullException();
+            return Entity.UserID == UserID;
         }
     }
 }

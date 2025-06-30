@@ -15,11 +15,11 @@ namespace Core.Services.Interfaces
 
 
 
-        Task<CreateCollectionsReviewDTO> Patch(JsonPatchDocument<CreateCollectionsReviewDTO> updateCollectionsReviewsDTO
-                    , int UserID, int CollectionID);
+        Task<SendCollectionsReviewsDTO> Patch(JsonPatchDocument<CreateCollectionsReviewDTO> updateCollectionsReviewsDTO
+                    , int UserID, int ReviewId);
 
 
-        public Task DeleteReview(int UserID, int CollectionID);
+        public Task DeleteReview(int ReviewID);
 
         Task<List<SendCollectionsReviewsDTO>> GetAllCollectionReviewsAsync(int CollectionID, int Page);
     }
