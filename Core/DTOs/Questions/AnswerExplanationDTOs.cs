@@ -19,6 +19,8 @@ namespace Core.DTOs.Questions
 
         public class GetAnswerExplanationDTO : AnswerExplanationMainDTO
         {
+            public int ExplanationID { get; set; }
+
             public DateTime AddedDate { get; set; }
         }
 

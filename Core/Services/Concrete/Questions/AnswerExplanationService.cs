@@ -28,6 +28,8 @@ namespace Core.Services.Concrete.Questions
 
         public async Task<bool> AddNewAsync(AnswerExplanationDTOs.AnswerExplanationMainDTO answerExplanationDTO)
         {
+            var entity = _mapper.Map<AnswerExplanation>(answerExplanationDTO);
+            entity.AddedDate = DateTime.Now;
             await _unitOfWork.EntityRepo.AddExplainationAsync(_mapper.Map<AnswerExplanation>(answerExplanationDTO));
             await _unitOfWork.CompleteAsync();
             return true; 

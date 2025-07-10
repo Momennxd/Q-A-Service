@@ -25,6 +25,7 @@ namespace API_Layer.Controllers.Questions
     [Route("api/v1/choices")]
     [ApiController]
     [Authorize]
+    //THIS CONTROLLER IS FULLY TESTED BY MOMEN AND IT WORKS FINE AT 10 July 2025
     public class ChoicesController : Controller
     {
         private readonly IQuestionsChoicesService _QuestionsChoicesService;
@@ -52,6 +53,7 @@ namespace API_Layer.Controllers.Questions
 
 
 
+
         [HttpGet("questions/{questionID}")]
         public async Task<ActionResult<List<SendChoiceDTO>>> GetChoices(int questionID)
         {
@@ -67,6 +69,9 @@ namespace API_Layer.Controllers.Questions
 
             return Ok(await _QuestionsChoicesService.GetChoicesAsync(questionID));
         }
+
+
+
 
         [HttpGet]
         public async Task<ActionResult<Dictionary<int, List<SendChoiceDTO>>>> GetChoices([FromBody] HashSet<int> setQuestionIDs)
@@ -101,6 +106,8 @@ namespace API_Layer.Controllers.Questions
 
 
 
+
+
         [HttpPatch("{ChoiceID}")]
         public async Task<ActionResult<SendChoiceDTO>> PatchChoice
            ([FromBody] JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID)
@@ -118,6 +125,8 @@ namespace API_Layer.Controllers.Questions
 
 
 
+
+
         [HttpDelete("{ChoiceID}")]
         public async Task<ActionResult<int>> DeleteChoice(int ChoiceID)
         {
@@ -131,18 +140,22 @@ namespace API_Layer.Controllers.Questions
 
         }
 
-        [HttpGet("explanation/{choiceId:int}/{questionId:int}")]
-        public async Task<ActionResult<SendChoiceWithExplanationDTO>> GetChoiceWithExplanation(
-            [FromRoute] int choiceId,
-            [FromRoute] int questionId
-            )
-        {
-            int userId = User.GetUserId();
-            var choiceWithExplanation = await _QuestionsChoicesService.GetChoiceWithExplanationAsync(choiceId, questionId);
-            if (choiceWithExplanation == null)
-                return NotFound();
-            return Ok(choiceWithExplanation);
 
-        }
+
+
+        ///TERMINATED FOR NOW BY MOMEN (There is not point of this endpoint + it does not even work right)
+        //[HttpGet("explanation/{choiceId:int}/{questionId:int}")]
+        //public async Task<ActionResult<SendChoiceWithExplanationDTO>> GetChoiceWithExplanation(
+        //    [FromRoute] int choiceId,
+        //    [FromRoute] int questionId
+        //    )
+        //{
+        //    int userId = User.GetUserId();
+        //    var choiceWithExplanation = await _QuestionsChoicesService.GetChoiceWithExplanationAsync(choiceId, questionId);
+        //    if (choiceWithExplanation == null)
+        //        return NotFound();
+        //    return Ok(choiceWithExplanation);
+
+        //}
     }
 }

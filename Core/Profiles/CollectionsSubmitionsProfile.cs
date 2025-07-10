@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Collections.CollectionsSubmissionsDTOs;
 
 namespace Core.Profiles
 {
@@ -13,8 +14,7 @@ namespace Core.Profiles
     {
         public CollectionsSubmitionsProfile()
         {
-            CreateMap<CollectionsSubmissionsDTOs.MainDTO, Collections_Submitions>();
-            CreateMap<CollectionSubmissionView, CollectionsSubmissionsDTOs.CollectionSubmissionMainDTO>();
+            CreateMap<Collections_Submitions, SendCollectionSubmissionThumbDTO>();
 
         }
     }

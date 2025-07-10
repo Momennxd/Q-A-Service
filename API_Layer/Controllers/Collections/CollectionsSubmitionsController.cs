@@ -13,6 +13,7 @@ namespace API_Layer.Controllers.Collections
 
     [Route("api/v1/submitions")]
     [ApiController]
+    //FULLY TESTED BY MOMEN AT 10/7/2025
     public class CollectionsSubmitionsController : ControllerBase
     {
         ICollectionsSubmitionsService _collectionService;
@@ -52,14 +53,18 @@ namespace API_Layer.Controllers.Collections
                 return BadRequest();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CollectionSubmissionMainDTO>> GetSubmission(int SubmissionID)
-        {
-            int userId = User.GetUserId();
 
+
+        [HttpGet]
+        public async Task<ActionResult<SendCollectionSubmissionThumbDTO>> GetSubmission(int collectionID)
+        {
+            int? userId = User.GetUserId();
+            if (userId == null) return Unauthorized();
+
+            if (!await _collectionsAuthService.IsUserCollecOwnerAsync(collectionID, (int)userId)) return Unauthorized();
 
             //authorization (checking if the sub is the user's) check will make the api slower and it is not really needed here at the moment
-            var submission = await _collectionService.GetBySubmissionID(SubmissionID, (int)userId);
+            var submission = await _collectionService.GetSubmition(collectionID, (int)userId);
             if (submission == null) return NotFound();
 
             return Ok(submission);

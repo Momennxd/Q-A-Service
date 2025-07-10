@@ -45,9 +45,12 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubm
             return (bool)successParam.Value;
         }
 
-        public async Task<models.Collections.CollectionSubmissionView?> GetBySubmissionID(int SubmitionID, int UserID)
+        public async Task<List<Collections_Submitions>> GetSubmitions(int collectionID, int UserID)
         {
-            return await _appDbContext.CollectionSubmissionViews.FirstOrDefaultAsync(c => c.SubmitionID == SubmitionID && c.UserID == UserID);
+            return await _appDbContext.Collections_Submitions
+                .Where(cs => cs.CollectionID == collectionID && cs.SubmittedUserID == UserID)
+                .ToListAsync();
         }
+
     }
 }

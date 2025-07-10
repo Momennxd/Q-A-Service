@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Collections.CollectionsSubmissionsDTOs;
 
 namespace Core.Services.Interfaces
 {
@@ -14,6 +15,6 @@ namespace Core.Services.Interfaces
         public Task<bool> DeleteSubmition(int SubmitionID, int UserID);
 
 
-        public Task<CollectionsSubmissionsDTOs.CollectionSubmissionMainDTO?> GetBySubmissionID(int SubmitionID, int UserID);
+        public Task<List<SendCollectionSubmissionThumbDTO?>> GetSubmition(int collectionID, int UserID);
     }
 }
