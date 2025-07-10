@@ -15,6 +15,7 @@ namespace API_Layer.Controllers.Questions
     [Route("api/v1/choices/chosen")]
     [ApiController]
     [Authorize]
+    //FULLY TESTED BY MOMEN AT 10/7/2025
     public class ChosenChoicesController : Controller
     {
         private readonly IChosenChoicesService _ChosenChoicesService;
@@ -29,7 +30,7 @@ namespace API_Layer.Controllers.Questions
 
 
         [HttpGet("submition/{submitionID}")]
-        public async Task<ActionResult<Dictionary<int, send_chosen_choicesDTO>>> GetChosenChoices([FromHeader] HashSet<int> QuestionIDs, int submitionID)
+        public async Task<ActionResult<Dictionary<int, send_chosen_choicesDTO>>> GetChosenChoices([FromBody] HashSet<int> QuestionIDs, int submitionID)
         {
             int userId = User.GetUserId();
 

@@ -14,6 +14,7 @@ namespace API_Layer.Controllers.Collections
     [Route("api/v1/collections/reviews")]
     [ApiController]
     [Authorize]
+    //FULLY TESTED BY MOMEN
     public class CollectionsReviewsController : ControllerBase
     {
         ICollectionsReviewsService _collectionsReviewsService;

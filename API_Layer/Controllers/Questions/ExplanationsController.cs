@@ -11,6 +11,8 @@ using static Core.DTOs.Questions.AnswerExplanationDTOs;
 
 namespace API_Layer.Controllers.Questions
 {
+
+    //FULLY TESTED BY MOMEN AT 10/7/2025
     [Route("api/v1/explanations")]
     [ApiController]
     [Authorize]
@@ -55,7 +57,7 @@ namespace API_Layer.Controllers.Questions
 
 
             var result = await _answerExplanationService.GetAnswerExplanationAsync(ExplainID);
-
+            
             if (!await _authService.IsUserQuestionAccessAsync(result.QuestionID, (int)userId))
                 return Unauthorized();
 

@@ -79,7 +79,10 @@ namespace API_Layer.Controllers.Collections
         public async Task<ActionResult<SendCollectionDTO_Full>> GetFullCollection(int CollecID)
         {
             int userId = User.GetUserId();
-
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
             if (!await _collectionsAuthService.IsUserCollectionAccess(CollecID, userId))
                 return Unauthorized();
 
@@ -107,7 +110,10 @@ namespace API_Layer.Controllers.Collections
         public async Task<ActionResult<SendCollectionDTO_Thumb>> GetThumbCollection()
         {
             int userId = User.GetUserId();
-
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
             return Ok(await _collectionService.GetThumbCollectionsAsync(userId, null));
 
         }
@@ -122,7 +128,10 @@ namespace API_Layer.Controllers.Collections
         {
 
             int userId = User.GetUserId();
-
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
             if (!await _collectionsAuthService.IsUserCollecOwnerAsync(CollecID, userId))
                 return Unauthorized();
 

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Collections.CollectionsSubmissionsDTOs;
 
 
 namespace Core.Services.Concrete.Collections
@@ -41,11 +42,17 @@ namespace Core.Services.Concrete.Collections
             return isDeleted;
         }
 
-        public async Task<CollectionsSubmissionsDTOs.CollectionSubmissionMainDTO?> GetBySubmissionID(int SubmissionID, int UserID)
+        public async Task<List<SendCollectionSubmissionThumbDTO?>> GetSubmition(int collectionID, int UserID)
         {
-            var collectionSubmissions =await _unitOfWork.EntityRepo.GetBySubmissionID(SubmissionID, UserID);
-            return _mapper.Map<CollectionsSubmissionsDTOs.CollectionSubmissionMainDTO>(collectionSubmissions);
-            
+            var collectionSubmissions = await _unitOfWork.EntityRepo.GetSubmitions(collectionID, UserID);
+
+            var collectionSubmissionsDtos = new List<SendCollectionSubmissionThumbDTO?>();
+            foreach (var submission in collectionSubmissions)
+            {
+                SendCollectionSubmissionThumbDTO? mappedSubmission = _mapper.Map<SendCollectionSubmissionThumbDTO>(submission);
+                collectionSubmissionsDtos.Add(mappedSubmission); // Fixed the incorrect list being used for adding mappedSubmission
+            }
+            return collectionSubmissionsDtos;
         }
     }
 }

@@ -44,23 +44,24 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.ChosenChoices
             return chosenChoices.Count;
         }
 
-        public async Task<Dictionary<int, Chosen_Choices>> GetChosenChoicesAsync(HashSet<int> QuestionIDs, int submitionID, int userID)
+        public async Task<Dictionary<int, Chosen_Choices>> GetChosenChoicesAsync(HashSet<int> questionIDs, int submitionID, int userID)
         {
             var result = await _appDbContext.Chosen_Choices
                 .Where(cc => cc.SubmitionID == submitionID && cc.UserID == userID)
                 .Join(_appDbContext.Questions_Choices,
                       cc => cc.ChoiceID,
-                      ch => ch.ChoiceID,
-                      (cc, ch) => new { ChosenChoice = cc, Choice = ch })
-                .Where(joined => QuestionIDs.Contains(joined.Choice.QuestionID))
-                .GroupBy(joined => joined.Choice.QuestionID)
+                      qc => qc.ChoiceID,
+                      (cc, qc) => new { ChosenChoice = cc, QuestionID = qc.QuestionID, ChosenDate = cc.ChosenDate })
+                .Where(x => questionIDs.Contains(x.QuestionID))
+                .GroupBy(x => x.QuestionID)
                 .Select(g => g
-                    .OrderByDescending(x => x.ChosenChoice.ChosenDate)
+                    .OrderByDescending(x => x.ChosenDate)
                     .First())
-                .ToDictionaryAsync(x => x.Choice.QuestionID, x => x.ChosenChoice);
+                .ToDictionaryAsync(x => x.QuestionID, x => x.ChosenChoice);
 
             return result;
         }
+
 
 
     }

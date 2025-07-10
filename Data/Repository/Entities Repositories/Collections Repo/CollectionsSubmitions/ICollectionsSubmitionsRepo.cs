@@ -16,6 +16,8 @@ namespace Data.Repository.Entities_Repositories.Collections_Repo.CollectionsSubm
         Task<bool> DeleteSubmition(int SubmitionID, int UserID);
 
 
-        public Task<models.Collections.CollectionSubmissionView?> GetBySubmissionID(int SubmitionID, int UserID);
+        public Task<List<Collections_Submitions?>> GetSubmitions(int collectionID, int UserID);
+
+
     }
 }

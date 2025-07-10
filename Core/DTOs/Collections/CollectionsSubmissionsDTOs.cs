@@ -9,16 +9,23 @@ namespace Core.DTOs.Collections
     public class CollectionsSubmissionsDTOs
     {
 
-        public class MainDTO
+        /// <summary>
+        /// A simple DTO for collection submission simple data.
+        /// </summary>
+        public class SendCollectionSubmissionThumbDTO
         {
-            public int CollectionID { get; set; }
-        }
-        public class CollectionSubmissionMainDTO
-        {
+            public int SubmitionID { get; set; }
+
+            public int SubmittedUserID { get; set; }
+
             public DateTime SubmitDate { get; set; }
-            public string Username { get; set; }
-            public int TotalChosenChoices { get; set; }
-            public int TotalRightAnswers { get; set; }
+
+            public int CollectionID { get; set; }
+
         }
+
+
+      
+       
     }
 }
