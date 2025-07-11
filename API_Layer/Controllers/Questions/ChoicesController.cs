@@ -145,13 +145,13 @@ namespace API_Layer.Controllers.Questions
 
         ///TERMINATED FOR NOW BY MOMEN (There is not point of this endpoint + it does not even work right)
         //[HttpGet("explanation/{choiceId:int}/{questionId:int}")]
-        //public async Task<ActionResult<SendChoiceWithExplanationDTO>> GetChoiceWithExplanation(
+        //public async Task<ActionResult<SendExplanationWithRightAnswerDTO>> GetChoiceWithExplanation(
         //    [FromRoute] int choiceId,
         //    [FromRoute] int questionId
         //    )
         //{
         //    int userId = User.GetUserId();
-        //    var choiceWithExplanation = await _QuestionsChoicesService.GetChoiceWithExplanationAsync(choiceId, questionId);
+        //    var choiceWithExplanation = await _QuestionsChoicesService.GetRightChoiceWithExplanationAsync(choiceId, questionId);
         //    if (choiceWithExplanation == null)
         //        return NotFound();
         //    return Ok(choiceWithExplanation);

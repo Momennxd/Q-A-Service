@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Data.models._SP_
 {
-    public class SP_ChoiceWithExplanation
+    public class SP_RightChoiceWithExplanation
     {
         public int ChoiceID { get; set; }
-        public int QuestionID { get; set; }
-        public string ChoiceText { get; set; }
-        public bool IsRightAnswer { get; set; }
         public string? ExplanationText { get; set; }
         public int? ExplanationID { get; set; }
     }

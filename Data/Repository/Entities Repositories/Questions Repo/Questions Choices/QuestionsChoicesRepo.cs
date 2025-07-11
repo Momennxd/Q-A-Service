@@ -70,19 +70,6 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo.Questions_Choices
                Where(c => c.QuestionID == Questionid && c.IsRightAnswer).ToListAsync();
         }
 
-        public async Task<SP_ChoiceWithExplanation?> GetChoiceWithExplanationAsync(int choiceId, int questionId)
-        {
-            var questionIdParam = new SqlParameter("@QuestionID", questionId);
-            var choiceIdParam = new SqlParameter("@ChoiceID", choiceId);
-
-            var result = await _appDbContext.Set<SP_ChoiceWithExplanation>()
-                .FromSqlRaw("EXEC GetChoiceWithRandomExplanation @QuestionID, @ChoiceID", questionIdParam, choiceIdParam)
-                .AsNoTracking()
-                .ToListAsync();
-
-            return result.FirstOrDefault();
-
-        }
 
         public async Task<List<QuestionsChoices>> GetCollectionChoices(int CollectionID)
         {

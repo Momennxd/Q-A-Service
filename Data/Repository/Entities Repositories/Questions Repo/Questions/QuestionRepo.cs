@@ -142,5 +142,18 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
             return NewPointsVal;
 
         }
+
+
+        public async Task<SP_RightChoiceWithExplanation?> GetRightChoiceWithExplanationAsync(int questionId)
+        {
+            var questionIdParam = new SqlParameter("@QuestionID", questionId);
+
+            var result = await _appDbContext.Set<SP_RightChoiceWithExplanation>()
+                .FromSqlRaw("EXEC SP_GetRightAnswerWithExplanation @QuestionID", questionIdParam)
+                .AsNoTracking()
+                .ToListAsync();
+            return result.FirstOrDefault();
+
+        }
     }
 }

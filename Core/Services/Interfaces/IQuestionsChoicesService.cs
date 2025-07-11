@@ -41,7 +41,6 @@ namespace Core.Services.Interfaces
         public Task<SendChoiceDTO> PatchChoiceAsync(JsonPatchDocument<PatchChoiceDTO> patchDoc, int ChoiceID);
 
 
-        public Task<SendChoiceWithExplanationDTO?> GetChoiceWithExplanationAsync(int choiceId, int questionId);
 
 
     }

@@ -32,9 +32,6 @@ namespace Core.Profiles
             CreateMap<SendSimpleChoiceDTO, QuestionsChoices>();
             CreateMap<QuestionsChoices, SendSimpleChoiceDTO>();
 
-            CreateMap<SP_ChoiceWithExplanation, SendChoiceWithExplanationDTO>();
-            CreateMap<SendChoiceWithExplanationDTO ,  SP_ChoiceWithExplanation>();
-
         }
 
     }

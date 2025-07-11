@@ -16,7 +16,7 @@ namespace API_Layer.Controllers.Questions
 
     [Route("api/v1/questions")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     //THIS CONTROLLER IS FULLY TESTED BY MOMEN ON 30/6/2025
     public class QuestionsController : Controller
     {
@@ -119,21 +119,33 @@ namespace API_Layer.Controllers.Questions
         public async Task<ActionResult<SendQuestionDTO>> GetQuestion(int QuestionID)
         {
             int userId = User.GetUserId();
-            
+
             if (!await _collectionsAuthService.IsUserQuestionAccessAsync(QuestionID, (int)userId))
                 return Unauthorized();
-            
+
             return Ok(await _QuestionsService.GetQuestionAsync(QuestionID));
         }
 
         [HttpGet("random")]
         public async Task<ActionResult<List<QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
-        {            
+        {
             if (collectionId == null)
                 return BadRequest("collectionId is required");
 
             return Ok(await _QuestionsService.GetRandomQuestionsWithChoicesAsync(collectionId.Value));
         }
 
+
+        [HttpGet("right-answer-with-explanation/{questionID}")]
+        public async Task<ActionResult<SendExplanationWithRightAnswerDTO>> GetRightAnswerWithExplanation(int questionID)
+        {
+            int userId = User.GetUserId();
+
+            if (!await _collectionsAuthService.IsRightsAnswersAccessAsync(questionID, (int)userId))
+                return Unauthorized();
+
+            return Ok(await _QuestionsService.GetRightAnswerWithExplnanation(questionID));
+
+        }
     }
 }
