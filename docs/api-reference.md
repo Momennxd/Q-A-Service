@@ -62,6 +62,7 @@ Most endpoints in this API are protected and require a JSON Web Token (JWT) for 
 | | [Update a Question](QuestionsController.md#update-a-question) | `PATCH` | `/api/v1/questions/{QuestionID}` |
 | | [Update Question Points](QuestionsController.md#update-question-points) | `PATCH` | `/api/v1/questions/points/{QuestionID}` |
 | | [Get Random Questions](QuestionsController.md#get-random-questions) | `GET` | `/api/v1/questions/random` |
+| | [Get Right Answer and Explanation for a Question](QuestionsController.md#get-right-answer-and-explanation-for-a-question) | `GET` | `/api/v1/questions/right-answer-with-explanation/{questionID}` |
 | [**Choices Controller**](ChoicesController.md) | | | |
 | | [Add Choices to Question](ChoicesController.md#add-choices-to-question) | `POST` | `/api/v1/choices` |
 | | [Get Choices by IDs](ChoicesController.md#get-choices-by-ids) | `GET` | `/api/v1/choices` |
