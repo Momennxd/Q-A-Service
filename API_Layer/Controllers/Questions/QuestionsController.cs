@@ -128,9 +128,7 @@ namespace API_Layer.Controllers.Questions
 
         [HttpGet("random")]
         public async Task<ActionResult<List<QuestionWithChoicesDto>>> GetRandomQuestionsWithChoices([FromQuery] int? collectionId)
-        {
-            int userId = User.GetUserId();
-            
+        {            
             if (collectionId == null)
                 return BadRequest("collectionId is required");
 
