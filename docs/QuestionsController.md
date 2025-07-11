@@ -493,5 +493,55 @@ Fetches a set of random questions from a specific collection. This is useful for
   }
 ]
 ```
+
+---
+### Get Right Answer and Explanation for a Question
+<a id="get-right-answer-and-explanation-for-a-question"></a>
+
+> `GET /api/v1/questions/right-answer-with-explanation/{questionID}`
+
+| Method | Path | Authentication |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/questions/right-answer-with-explanation/{questionID}` | **Required** |
+
+**Description**
+Retrieves the correct answer choice ID and an optional explanation for a specific question. This is useful for providing feedback to users after they have answered a question. Requires authentication to access.
+
+#### Request Structure
+**Path Parameters**
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `questionID` | integer | Yes | The unique ID of the question for which to retrieve the right answer and explanation. |
+
+#### Example Request
+**Request URL**
+`/api/v1/questions/right-answer-with-explanation/201`
+
+**Responses**
+| Status Code | Reason | Response Body Content |
+| :--- | :--- | :--- |
+| `200 OK` | Success | A `SendExplanationWithRightAnswerDTO` object containing the ID of the correct answer choice and an optional explanation. |
+| `401 Unauthorized` | Unauthorized | Authentication credentials are required. |
+
+#### Response Structure
+**`200 OK` Response Body** (`SendExplanationWithRightAnswerDTO`)
+```json
+{
+  "rightAnswerChoiceID": 0,
+  "explanationText": "string",
+  "explanationID": 0
+}
+```
+
+#### Example Response
+**`200 OK` Response Body**
+```json
+{
+  "rightAnswerChoiceID": 302,
+  "explanationText": "Mars is often called the Red Planet due to the presence of iron oxide on its surface, which gives it a reddish appearance.",
+  "explanationID": 401
+}
+```
 ---
 ---
+
