@@ -51,11 +51,9 @@ namespace Core.DTOs.Questions
             public string ChoiceText { get; set; }
         }
 
-        public class SendChoiceWithExplanationDTO
+        public class SendExplanationWithRightAnswerDTO
         {
-            public int ChoiceID { get; set; }
-            public string ChoiceText { get; set; }
-            public bool IsRightAnswer { get; set; }
+            public int RightAnswerChoiceID { get; set; }
             public string? ExplanationText { get; set; }
             public int? ExplanationID { get; set; }
         }

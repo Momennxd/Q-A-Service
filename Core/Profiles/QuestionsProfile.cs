@@ -39,6 +39,12 @@ namespace Core.Profiles
             CreateMap<Question, QuestionWithChoicesDto>()
                 .ForMember(dest => dest.Choices, opt => opt.MapFrom(src => src.Choices));
 
+
+
+            CreateMap<SP_RightChoiceWithExplanation, SendExplanationWithRightAnswerDTO>();
+            CreateMap<SendExplanationWithRightAnswerDTO, SP_RightChoiceWithExplanation>();
+
+
         }
 
 

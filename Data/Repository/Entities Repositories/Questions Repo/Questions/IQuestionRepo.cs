@@ -36,6 +36,8 @@ namespace Data.Repository.Entities_Repositories.Questions_Repo
         public Task<int> DeleteQuestionAsync(int QuestionIDs);
 
 
+        public Task<SP_RightChoiceWithExplanation?> GetRightChoiceWithExplanationAsync(int questionId);
+
 
 
     }

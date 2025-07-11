@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.Questions;
+using Data.models._SP_;
 using Data.models.Questions;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.DTOs.Questions.QuestionsChoicesDTOs;
 using static Core.DTOs.Questions.QuestionsDTOs;
 
 namespace Core.Services.Interfaces
@@ -37,6 +39,7 @@ namespace Core.Services.Interfaces
         public Task<List<QuestionsDTOs.QuestionWithChoicesDto>> GetRandomQuestionsWithChoicesAsync(int CollectionID);
 
 
+        public Task<SendExplanationWithRightAnswerDTO> GetRightAnswerWithExplnanation(int questionID);
 
     }
 }

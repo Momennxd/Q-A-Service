@@ -143,6 +143,13 @@ namespace Core.Services.Concrete.Questions
             return output;
         }
 
+        public async Task<QuestionsChoicesDTOs.SendExplanationWithRightAnswerDTO> GetRightAnswerWithExplnanation(int questionID)
+        {
+            var entity = await _uowQuestions.EntityRepo.GetRightChoiceWithExplanationAsync(questionID);
+            var dto = _mapper.Map<QuestionsChoicesDTOs.SendExplanationWithRightAnswerDTO>(entity);
+            return dto;
+        }
+
         public async Task<SendQuestionDTO> PatchQuestionAsync(JsonPatchDocument<PatchQuestionDTO> patchDoc, int QuestionID)
         {
 
@@ -183,5 +190,6 @@ namespace Core.Services.Concrete.Questions
 
             return NewPointsVal;
         }
+
     }
 }
