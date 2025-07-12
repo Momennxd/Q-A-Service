@@ -53,7 +53,7 @@ namespace Core.DTOs.Questions
 
         public class SendExplanationWithRightAnswerDTO
         {
-            public int RightAnswerChoiceID { get; set; }
+            public int ChoiceID { get; set; }
             public string? ExplanationText { get; set; }
             public int? ExplanationID { get; set; }
         }
