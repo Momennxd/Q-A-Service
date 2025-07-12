@@ -13,10 +13,9 @@ using API_Layer.Extensions;
 
 namespace API_Layer.Controllers.Questions
 {
-
     [Route("api/v1/questions")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     //THIS CONTROLLER IS FULLY TESTED BY MOMEN ON 30/6/2025
     public class QuestionsController : Controller
     {
